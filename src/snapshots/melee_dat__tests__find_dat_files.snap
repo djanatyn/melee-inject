@@ -4,1056 +4,6 @@ expression: files
 ---
 [
     File {
-        name: "1padv.ssm",
-        offset: 1194910176,
-        size: 161184,
-    },
-    File {
-        name: "1pend.ssm",
-        offset: 1195071360,
-        size: 364160,
-    },
-    File {
-        name: "1p_qk.hps",
-        offset: 1008965088,
-        size: 1004288,
-    },
-    File {
-        name: "akaneia.hps",
-        offset: 1009969376,
-        size: 4518752,
-    },
-    File {
-        name: "baloon.hps",
-        offset: 1014488128,
-        size: 2138208,
-    },
-    File {
-        name: "bigblue.hps",
-        offset: 1016626336,
-        size: 4174272,
-    },
-    File {
-        name: "bigblue.ssm",
-        offset: 1195435520,
-        size: 35200,
-    },
-    File {
-        name: "captain.ssm",
-        offset: 1195470720,
-        size: 445440,
-    },
-    File {
-        name: "castle.hps",
-        offset: 1020800608,
-        size: 3290784,
-    },
-    File {
-        name: "castle.ssm",
-        offset: 1195916160,
-        size: 176736,
-    },
-    File {
-        name: "clink.ssm",
-        offset: 1196092896,
-        size: 301312,
-    },
-    File {
-        name: "continue.hps",
-        offset: 1024091392,
-        size: 255808,
-    },
-    File {
-        name: "corneria.hps",
-        offset: 1024347200,
-        size: 2569344,
-    },
-    File {
-        name: "corneria.ssm",
-        offset: 1196394208,
-        size: 443584,
-    },
-    File {
-        name: "dk.ssm",
-        offset: 1196837792,
-        size: 208064,
-    },
-    File {
-        name: "docmari.hps",
-        offset: 1026916544,
-        size: 2888736,
-    },
-    File {
-        name: "drmario.ssm",
-        offset: 1197045856,
-        size: 433312,
-    },
-    File {
-        name: "emblem.ssm",
-        offset: 1197479168,
-        size: 498848,
-    },
-    File {
-        name: "end.ssm",
-        offset: 1197978016,
-        size: 1632,
-    },
-    File {
-        name: "ending.hps",
-        offset: 914182268,
-        size: 256256,
-    },
-    File {
-        name: "ending.ssm",
-        offset: 1197979648,
-        size: 1170784,
-    },
-    File {
-        name: "falco.ssm",
-        offset: 1199150432,
-        size: 603968,
-    },
-    File {
-        name: "famidemo.hps",
-        offset: 1029805280,
-        size: 931296,
-    },
-    File {
-        name: "ff_1p01.hps",
-        offset: 1030736576,
-        size: 204672,
-    },
-    File {
-        name: "ff_1p02.hps",
-        offset: 1030941248,
-        size: 222976,
-    },
-    File {
-        name: "ff_bad.hps",
-        offset: 1031164224,
-        size: 102976,
-    },
-    File {
-        name: "ff_dk.hps",
-        offset: 1031267200,
-        size: 263264,
-    },
-    File {
-        name: "ff_emb.hps",
-        offset: 1031530464,
-        size: 382144,
-    },
-    File {
-        name: "ff_flat.hps",
-        offset: 1031912608,
-        size: 228480,
-    },
-    File {
-        name: "ff_fox.hps",
-        offset: 1032141088,
-        size: 238976,
-    },
-    File {
-        name: "ff_fzero.hps",
-        offset: 1032380064,
-        size: 224064,
-    },
-    File {
-        name: "ff_good.hps",
-        offset: 1032604128,
-        size: 123712,
-    },
-    File {
-        name: "ff_ice.hps",
-        offset: 1032727840,
-        size: 280032,
-    },
-    File {
-        name: "ff_kirby.hps",
-        offset: 1033007872,
-        size: 157408,
-    },
-    File {
-        name: "ff_link.hps",
-        offset: 1033165280,
-        size: 259904,
-    },
-    File {
-        name: "ff_mario.hps",
-        offset: 1033425184,
-        size: 295776,
-    },
-    File {
-        name: "ff_nes.hps",
-        offset: 1033720960,
-        size: 345408,
-    },
-    File {
-        name: "ff_poke.hps",
-        offset: 1034066368,
-        size: 287008,
-    },
-    File {
-        name: "ff_samus.hps",
-        offset: 1034353376,
-        size: 216320,
-    },
-    File {
-        name: "ff_step1.hps",
-        offset: 1034569696,
-        size: 134176,
-    },
-    File {
-        name: "ff_step2.hps",
-        offset: 1034703872,
-        size: 142880,
-    },
-    File {
-        name: "ff_step3.hps",
-        offset: 1034846752,
-        size: 157280,
-    },
-    File {
-        name: "ff_yoshi.hps",
-        offset: 1035004032,
-        size: 374528,
-    },
-    File {
-        name: "flatzone.hps",
-        offset: 1035378560,
-        size: 3970656,
-    },
-    File {
-        name: "fourside.hps",
-        offset: 1039349216,
-        size: 4326208,
-    },
-    File {
-        name: "fourside.ssm",
-        offset: 1199754400,
-        size: 78752,
-    },
-    File {
-        name: "fox.ssm",
-        offset: 1199833152,
-        size: 577312,
-    },
-    File {
-        name: "gameover.hps",
-        offset: 1043675424,
-        size: 151904,
-    },
-    File {
-        name: "ganon.ssm",
-        offset: 1200410464,
-        size: 429984,
-    },
-    File {
-        name: "garden.hps",
-        offset: 1043827328,
-        size: 8006176,
-    },
-    File {
-        name: "garden.ssm",
-        offset: 1200840448,
-        size: 429408,
-    },
-    File {
-        name: "gkoopa.ssm",
-        offset: 1201269856,
-        size: 490464,
-    },
-    File {
-        name: "greatbay.hps",
-        offset: 1051833504,
-        size: 1735968,
-    },
-    File {
-        name: "greatbay.ssm",
-        offset: 1201760320,
-        size: 491200,
-    },
-    File {
-        name: "greens.hps",
-        offset: 1053569472,
-        size: 3732448,
-    },
-    File {
-        name: "greens.ssm",
-        offset: 1202251520,
-        size: 144928,
-    },
-    File {
-        name: "gw.ssm",
-        offset: 1202396448,
-        size: 166944,
-    },
-    File {
-        name: "howto.hps",
-        offset: 649282940,
-        size: 2963712,
-    },
-    File {
-        name: "howto_s.hps",
-        offset: 1057301920,
-        size: 3812256,
-    },
-    File {
-        name: "hyaku.hps",
-        offset: 1061114176,
-        size: 3717984,
-    },
-    File {
-        name: "hyaku2.hps",
-        offset: 1064832160,
-        size: 3354112,
-    },
-    File {
-        name: "ice.ssm",
-        offset: 1202563392,
-        size: 480864,
-    },
-    File {
-        name: "icemt.hps",
-        offset: 1068186272,
-        size: 4033472,
-    },
-    File {
-        name: "inis1_01.hps",
-        offset: 1072219744,
-        size: 3287136,
-    },
-    File {
-        name: "inis1_02.hps",
-        offset: 1075506880,
-        size: 1434176,
-    },
-    File {
-        name: "inis2_01.hps",
-        offset: 1076941056,
-        size: 1861664,
-    },
-    File {
-        name: "inis2_02.hps",
-        offset: 1078802720,
-        size: 416544,
-    },
-    File {
-        name: "intro_es.hps",
-        offset: 1079219264,
-        size: 125120,
-    },
-    File {
-        name: "intro_nm.hps",
-        offset: 1079344384,
-        size: 269856,
-    },
-    File {
-        name: "item_h.hps",
-        offset: 1079614240,
-        size: 196384,
-    },
-    File {
-        name: "item_s.hps",
-        offset: 1079810624,
-        size: 183840,
-    },
-    File {
-        name: "izumi.hps",
-        offset: 1079994464,
-        size: 5944864,
-    },
-    File {
-        name: "kirby.ssm",
-        offset: 1203044256,
-        size: 590048,
-    },
-    File {
-        name: "kirbytm.ssm",
-        offset: 1203634304,
-        size: 576640,
-    },
-    File {
-        name: "klaid.ssm",
-        offset: 1204210944,
-        size: 305024,
-    },
-    File {
-        name: "kongo.hps",
-        offset: 1085939328,
-        size: 7054208,
-    },
-    File {
-        name: "kongo.ssm",
-        offset: 1204515968,
-        size: 360288,
-    },
-    File {
-        name: "koopa.ssm",
-        offset: 1204876256,
-        size: 529536,
-    },
-    File {
-        name: "kraid.hps",
-        offset: 1092993536,
-        size: 5439904,
-    },
-    File {
-        name: "last.ssm",
-        offset: 1205405792,
-        size: 663584,
-    },
-    File {
-        name: "link.ssm",
-        offset: 1206069376,
-        size: 331424,
-    },
-    File {
-        name: "luigi.ssm",
-        offset: 1206400800,
-        size: 373696,
-    },
-    File {
-        name: "main.ssm",
-        offset: 1206774496,
-        size: 2065152,
-    },
-    File {
-        name: "mario.ssm",
-        offset: 1208839648,
-        size: 375072,
-    },
-    File {
-        name: "mars.ssm",
-        offset: 1209214720,
-        size: 509152,
-    },
-    File {
-        name: "menu01.hps",
-        offset: 1098433440,
-        size: 2085824,
-    },
-    File {
-        name: "menu02.hps",
-        offset: 1100519264,
-        size: 2020960,
-    },
-    File {
-        name: "menu3.hps",
-        offset: 1102540224,
-        size: 2222976,
-    },
-    File {
-        name: "mewtwo.ssm",
-        offset: 1209723872,
-        size: 567008,
-    },
-    File {
-        name: "mhands.ssm",
-        offset: 1210290880,
-        size: 565376,
-    },
-    File {
-        name: "mrider.hps",
-        offset: 1104763200,
-        size: 4794944,
-    },
-    File {
-        name: "mutecity.hps",
-        offset: 1109558144,
-        size: 3878784,
-    },
-    File {
-        name: "mutecity.ssm",
-        offset: 1210856256,
-        size: 150976,
-    },
-    File {
-        name: "ness.ssm",
-        offset: 1211007232,
-        size: 511648,
-    },
-    File {
-        name: "nr_1p.ssm",
-        offset: 1211518880,
-        size: 122720,
-    },
-    File {
-        name: "nr_name.ssm",
-        offset: 1211641600,
-        size: 352064,
-    },
-    File {
-        name: "nr_select.ssm",
-        offset: 1211993664,
-        size: 239232,
-    },
-    File {
-        name: "nr_title.ssm",
-        offset: 1212232896,
-        size: 153408,
-    },
-    File {
-        name: "nr_vs.ssm",
-        offset: 1212386304,
-        size: 54720,
-    },
-    File {
-        name: "old_dk.hps",
-        offset: 1113436928,
-        size: 5750272,
-    },
-    File {
-        name: "old_kb.hps",
-        offset: 1119187200,
-        size: 2482240,
-    },
-    File {
-        name: "old_ys.hps",
-        offset: 1121669440,
-        size: 2164672,
-    },
-    File {
-        name: "onett.ssm",
-        offset: 1212441024,
-        size: 54752,
-    },
-    File {
-        name: "onetto.hps",
-        offset: 1123834112,
-        size: 4216544,
-    },
-    File {
-        name: "onetto2.hps",
-        offset: 1128050656,
-        size: 6802176,
-    },
-    File {
-        name: "opening.hps",
-        offset: 779283356,
-        size: 3439200,
-    },
-    File {
-        name: "peach.ssm",
-        offset: 1212495776,
-        size: 418976,
-    },
-    File {
-        name: "pichu.ssm",
-        offset: 1212914752,
-        size: 582656,
-    },
-    File {
-        name: "pikachu.ssm",
-        offset: 1213497408,
-        size: 615904,
-    },
-    File {
-        name: "pokemon.ssm",
-        offset: 1214113312,
-        size: 565088,
-    },
-    File {
-        name: "pokesta.hps",
-        offset: 1134852832,
-        size: 3581408,
-    },
-    File {
-        name: "pstadium.hps",
-        offset: 1138434240,
-        size: 2303488,
-    },
-    File {
-        name: "pstadium.ssm",
-        offset: 1214678400,
-        size: 101792,
-    },
-    File {
-        name: "pupupu.ssm",
-        offset: 1214780192,
-        size: 123488,
-    },
-    File {
-        name: "pura.hps",
-        offset: 1140737728,
-        size: 5514720,
-    },
-    File {
-        name: "purin.ssm",
-        offset: 1214903680,
-        size: 303808,
-    },
-    File {
-        name: "rcruise.hps",
-        offset: 1146252448,
-        size: 3308192,
-    },
-    File {
-        name: "samus.ssm",
-        offset: 1215207488,
-        size: 320992,
-    },
-    File {
-        name: "saria.hps",
-        offset: 1149560640,
-        size: 1324512,
-    },
-    File {
-        name: "shrine.hps",
-        offset: 1150885152,
-        size: 3795904,
-    },
-    File {
-        name: "siren.hps",
-        offset: 1154681056,
-        size: 2739968,
-    },
-    File {
-        name: "smari3.hps",
-        offset: 1157421024,
-        size: 3508800,
-    },
-    File {
-        name: "smash2.sem",
-        offset: 1008700540,
-        size: 132364,
-    },
-    File {
-        name: "sp_end.hps",
-        offset: 1160929824,
-        size: 3270336,
-    },
-    File {
-        name: "sp_giga.hps",
-        offset: 1164200160,
-        size: 3178912,
-    },
-    File {
-        name: "sp_metal.hps",
-        offset: 1167379072,
-        size: 2069568,
-    },
-    File {
-        name: "sp_zako.hps",
-        offset: 1169448640,
-        size: 3146688,
-    },
-    File {
-        name: "swm_15min.hps",
-        offset: 514833212,
-        size: 30918144,
-    },
-    File {
-        name: "s_info1.hps",
-        offset: 1172595328,
-        size: 122560,
-    },
-    File {
-        name: "s_info2.hps",
-        offset: 1172717888,
-        size: 117952,
-    },
-    File {
-        name: "s_info3.hps",
-        offset: 1172835840,
-        size: 104256,
-    },
-    File {
-        name: "s_new1.hps",
-        offset: 1172940096,
-        size: 76096,
-    },
-    File {
-        name: "s_new2.hps",
-        offset: 1173016192,
-        size: 171424,
-    },
-    File {
-        name: "s_newcom.hps",
-        offset: 1173187616,
-        size: 193760,
-    },
-    File {
-        name: "s_select.hps",
-        offset: 1173381376,
-        size: 196384,
-    },
-    File {
-        name: "target.hps",
-        offset: 1173577760,
-        size: 1542976,
-    },
-    File {
-        name: "1padv.ssm",
-        offset: 1215528480,
-        size: 161184,
-    },
-    File {
-        name: "1pend.ssm",
-        offset: 1215689664,
-        size: 364160,
-    },
-    File {
-        name: "bigblue.ssm",
-        offset: 1216053824,
-        size: 35200,
-    },
-    File {
-        name: "captain.ssm",
-        offset: 1216089024,
-        size: 433344,
-    },
-    File {
-        name: "castle.ssm",
-        offset: 1216522368,
-        size: 176736,
-    },
-    File {
-        name: "clink.ssm",
-        offset: 1216699104,
-        size: 301312,
-    },
-    File {
-        name: "corneria.ssm",
-        offset: 1217000416,
-        size: 400000,
-    },
-    File {
-        name: "dk.ssm",
-        offset: 1217400416,
-        size: 208064,
-    },
-    File {
-        name: "drmario.ssm",
-        offset: 1217608480,
-        size: 416480,
-    },
-    File {
-        name: "emblem.ssm",
-        offset: 1218024960,
-        size: 484928,
-    },
-    File {
-        name: "end.ssm",
-        offset: 1218509888,
-        size: 1632,
-    },
-    File {
-        name: "ending.ssm",
-        offset: 1218511520,
-        size: 1170784,
-    },
-    File {
-        name: "falco.ssm",
-        offset: 1219682304,
-        size: 511392,
-    },
-    File {
-        name: "fourside.ssm",
-        offset: 1220193696,
-        size: 78752,
-    },
-    File {
-        name: "fox.ssm",
-        offset: 1220272448,
-        size: 478240,
-    },
-    File {
-        name: "ganon.ssm",
-        offset: 1220750688,
-        size: 419744,
-    },
-    File {
-        name: "garden.ssm",
-        offset: 1221170432,
-        size: 429408,
-    },
-    File {
-        name: "gkoopa.ssm",
-        offset: 1221599840,
-        size: 490464,
-    },
-    File {
-        name: "greatbay.ssm",
-        offset: 1222090304,
-        size: 491200,
-    },
-    File {
-        name: "greens.ssm",
-        offset: 1222581504,
-        size: 144928,
-    },
-    File {
-        name: "gw.ssm",
-        offset: 1222726432,
-        size: 161408,
-    },
-    File {
-        name: "ice.ssm",
-        offset: 1222887840,
-        size: 465888,
-    },
-    File {
-        name: "kirby.ssm",
-        offset: 1223353728,
-        size: 580704,
-    },
-    File {
-        name: "kirbytm.ssm",
-        offset: 1223934432,
-        size: 576640,
-    },
-    File {
-        name: "klaid.ssm",
-        offset: 1224511072,
-        size: 305024,
-    },
-    File {
-        name: "kongo.ssm",
-        offset: 1224816096,
-        size: 360288,
-    },
-    File {
-        name: "koopa.ssm",
-        offset: 1225176384,
-        size: 518176,
-    },
-    File {
-        name: "last.ssm",
-        offset: 1225694560,
-        size: 663584,
-    },
-    File {
-        name: "link.ssm",
-        offset: 1226358144,
-        size: 320000,
-    },
-    File {
-        name: "luigi.ssm",
-        offset: 1226678144,
-        size: 375552,
-    },
-    File {
-        name: "main.ssm",
-        offset: 1227053696,
-        size: 2065152,
-    },
-    File {
-        name: "mario.ssm",
-        offset: 1229118848,
-        size: 375072,
-    },
-    File {
-        name: "mars.ssm",
-        offset: 1229493920,
-        size: 516416,
-    },
-    File {
-        name: "mewtwo.ssm",
-        offset: 1230010336,
-        size: 454912,
-    },
-    File {
-        name: "mhands.ssm",
-        offset: 1230465248,
-        size: 565376,
-    },
-    File {
-        name: "mutecity.ssm",
-        offset: 1231030624,
-        size: 150976,
-    },
-    File {
-        name: "ness.ssm",
-        offset: 1231181600,
-        size: 511648,
-    },
-    File {
-        name: "nr_1p.ssm",
-        offset: 1231693248,
-        size: 122720,
-    },
-    File {
-        name: "nr_name.ssm",
-        offset: 1231815968,
-        size: 339328,
-    },
-    File {
-        name: "nr_select.ssm",
-        offset: 1232155296,
-        size: 240960,
-    },
-    File {
-        name: "nr_title.ssm",
-        offset: 1232396256,
-        size: 153408,
-    },
-    File {
-        name: "nr_vs.ssm",
-        offset: 1232549664,
-        size: 54720,
-    },
-    File {
-        name: "onett.ssm",
-        offset: 1232604384,
-        size: 54752,
-    },
-    File {
-        name: "peach.ssm",
-        offset: 1232659136,
-        size: 404832,
-    },
-    File {
-        name: "pichu.ssm",
-        offset: 1233063968,
-        size: 561408,
-    },
-    File {
-        name: "pikachu.ssm",
-        offset: 1233625376,
-        size: 607072,
-    },
-    File {
-        name: "pokemon.ssm",
-        offset: 1234232448,
-        size: 497792,
-    },
-    File {
-        name: "pstadium.ssm",
-        offset: 1234730240,
-        size: 101792,
-    },
-    File {
-        name: "pupupu.ssm",
-        offset: 1234832032,
-        size: 123488,
-    },
-    File {
-        name: "purin.ssm",
-        offset: 1234955520,
-        size: 336224,
-    },
-    File {
-        name: "samus.ssm",
-        offset: 1235291744,
-        size: 311392,
-    },
-    File {
-        name: "smash2.sem",
-        offset: 1008832904,
-        size: 132184,
-    },
-    File {
-        name: "venom.ssm",
-        offset: 1235603136,
-        size: 340576,
-    },
-    File {
-        name: "yoshi.ssm",
-        offset: 1235943712,
-        size: 323872,
-    },
-    File {
-        name: "zebes.ssm",
-        offset: 1236267584,
-        size: 388960,
-    },
-    File {
-        name: "zs.ssm",
-        offset: 1236656544,
-        size: 584544,
-    },
-    File {
-        name: "venom.hps",
-        offset: 1175120736,
-        size: 2303552,
-    },
-    File {
-        name: "venom.ssm",
-        offset: 1237241088,
-        size: 384128,
-    },
-    File {
-        name: "vl_battle.hps",
-        offset: 1177424288,
-        size: 320736,
-    },
-    File {
-        name: "vl_castle.hps",
-        offset: 1177745024,
-        size: 297568,
-    },
-    File {
-        name: "vl_corneria.hps",
-        offset: 1178042592,
-        size: 465216,
-    },
-    File {
-        name: "vl_cosmos.hps",
-        offset: 1178507808,
-        size: 294304,
-    },
-    File {
-        name: "vl_figure1.hps",
-        offset: 1178802112,
-        size: 296352,
-    },
-    File {
-        name: "vl_figure2.hps",
-        offset: 1179098464,
-        size: 174048,
-    },
-    File {
-        name: "vl_fzero.hps",
-        offset: 1179272512,
-        size: 174112,
-    },
-    File {
-        name: "vl_last_v2.hps",
-        offset: 1179446624,
-        size: 339840,
-    },
-    File {
-        name: "vs_hyou1.hps",
-        offset: 1179786464,
-        size: 1127808,
-    },
-    File {
-        name: "vs_hyou2.hps",
-        offset: 1180914272,
-        size: 1127104,
-    },
-    File {
-        name: "yorster.hps",
-        offset: 1182041376,
-        size: 1983264,
-    },
-    File {
-        name: "yoshi.ssm",
-        offset: 1237625216,
-        size: 316352,
-    },
-    File {
-        name: "ystory.hps",
-        offset: 1184024640,
-        size: 4347232,
-    },
-    File {
-        name: "zebes.hps",
-        offset: 1188371872,
-        size: 6538304,
-    },
-    File {
-        name: "zebes.ssm",
-        offset: 1237941568,
-        size: 388960,
-    },
-    File {
-        name: "zs.ssm",
-        offset: 1238330528,
-        size: 594784,
-    },
-    File {
         name: "DbCo.dat",
         offset: 1252753408,
         size: 15345,
@@ -1274,404 +224,14 @@ expression: files
         size: 32894,
     },
     File {
-        name: "GmPause.usd",
-        offset: 1459847040,
-        size: 32894,
-    },
-    File {
         name: "GmRegClr.dat",
         offset: 1459159040,
-        size: 185685,
-    },
-    File {
-        name: "GmRegClr.usd",
-        offset: 1458963284,
         size: 185685,
     },
     File {
         name: "GmRegEnd.dat",
         offset: 1252982784,
         size: 322590,
-    },
-    File {
-        name: "GmRegEnd.usd",
-        offset: 1240927520,
-        size: 312550,
-    },
-    File {
-        name: "GmRegendAdventureCaptain.thp",
-        offset: 19451348,
-        size: 91948,
-    },
-    File {
-        name: "GmRegendAdventureClink.thp",
-        offset: 19543296,
-        size: 97518,
-    },
-    File {
-        name: "GmRegendAdventureDonkey.thp",
-        offset: 19640816,
-        size: 94372,
-    },
-    File {
-        name: "GmRegendAdventureDrmario.thp",
-        offset: 19735188,
-        size: 92861,
-    },
-    File {
-        name: "GmRegendAdventureFalco.thp",
-        offset: 19828052,
-        size: 81066,
-    },
-    File {
-        name: "GmRegendAdventureFox.thp",
-        offset: 19909120,
-        size: 95186,
-    },
-    File {
-        name: "GmRegendAdventureGamewatch.thp",
-        offset: 20004308,
-        size: 84700,
-    },
-    File {
-        name: "GmRegendAdventureGanon.thp",
-        offset: 20089008,
-        size: 96085,
-    },
-    File {
-        name: "GmRegendAdventureKirby.thp",
-        offset: 20185096,
-        size: 84606,
-    },
-    File {
-        name: "GmRegendAdventureKoopa.thp",
-        offset: 20269704,
-        size: 89614,
-    },
-    File {
-        name: "GmRegendAdventureLink.thp",
-        offset: 20359320,
-        size: 94324,
-    },
-    File {
-        name: "GmRegendAdventureLuigi.thp",
-        offset: 20453644,
-        size: 98450,
-    },
-    File {
-        name: "GmRegendAdventureMario.thp",
-        offset: 20552096,
-        size: 89108,
-    },
-    File {
-        name: "GmRegendAdventureMarth.thp",
-        offset: 20641204,
-        size: 94598,
-    },
-    File {
-        name: "GmRegendAdventureMewtwo.thp",
-        offset: 20735804,
-        size: 96109,
-    },
-    File {
-        name: "GmRegendAdventureNess.thp",
-        offset: 20831916,
-        size: 87178,
-    },
-    File {
-        name: "GmRegendAdventurePeach.thp",
-        offset: 20919096,
-        size: 87918,
-    },
-    File {
-        name: "GmRegendAdventurePichu.thp",
-        offset: 21007016,
-        size: 89504,
-    },
-    File {
-        name: "GmRegendAdventurePikachu.thp",
-        offset: 21096520,
-        size: 75257,
-    },
-    File {
-        name: "GmRegendAdventurePoponana.thp",
-        offset: 21171780,
-        size: 74959,
-    },
-    File {
-        name: "GmRegendAdventurePurin.thp",
-        offset: 21246740,
-        size: 96687,
-    },
-    File {
-        name: "GmRegendAdventureRoy.thp",
-        offset: 21343428,
-        size: 90501,
-    },
-    File {
-        name: "GmRegendAdventureSamus.thp",
-        offset: 21433932,
-        size: 91112,
-    },
-    File {
-        name: "GmRegendAdventureYoshi.thp",
-        offset: 21525044,
-        size: 86174,
-    },
-    File {
-        name: "GmRegendAdventureZeldaseak.thp",
-        offset: 21611220,
-        size: 98218,
-    },
-    File {
-        name: "GmRegendAllstarCaptain.thp",
-        offset: 21709440,
-        size: 89869,
-    },
-    File {
-        name: "GmRegendAllstarClink.thp",
-        offset: 21799312,
-        size: 95983,
-    },
-    File {
-        name: "GmRegendAllstarDonkey.thp",
-        offset: 21895296,
-        size: 83591,
-    },
-    File {
-        name: "GmRegendAllstarDrmario.thp",
-        offset: 21978888,
-        size: 97253,
-    },
-    File {
-        name: "GmRegendAllstarFalco.thp",
-        offset: 22076144,
-        size: 75586,
-    },
-    File {
-        name: "GmRegendAllstarFox.thp",
-        offset: 22151732,
-        size: 92941,
-    },
-    File {
-        name: "GmRegendAllstarGamewatch.thp",
-        offset: 22244676,
-        size: 98181,
-    },
-    File {
-        name: "GmRegendAllstarGanon.thp",
-        offset: 22342860,
-        size: 90654,
-    },
-    File {
-        name: "GmRegendAllstarKirby.thp",
-        offset: 22433516,
-        size: 89835,
-    },
-    File {
-        name: "GmRegendAllstarKoopa.thp",
-        offset: 22523352,
-        size: 90161,
-    },
-    File {
-        name: "GmRegendAllstarLink.thp",
-        offset: 22613516,
-        size: 95292,
-    },
-    File {
-        name: "GmRegendAllstarLuigi.thp",
-        offset: 22708808,
-        size: 90080,
-    },
-    File {
-        name: "GmRegendAllstarMario.thp",
-        offset: 22798888,
-        size: 96655,
-    },
-    File {
-        name: "GmRegendAllstarMarth.thp",
-        offset: 22895544,
-        size: 79452,
-    },
-    File {
-        name: "GmRegendAllstarMewtwo.thp",
-        offset: 22974996,
-        size: 95838,
-    },
-    File {
-        name: "GmRegendAllstarNess.thp",
-        offset: 23070836,
-        size: 96232,
-    },
-    File {
-        name: "GmRegendAllstarPeach.thp",
-        offset: 23167068,
-        size: 69101,
-    },
-    File {
-        name: "GmRegendAllstarPichu.thp",
-        offset: 23236172,
-        size: 82067,
-    },
-    File {
-        name: "GmRegendAllstarPikachu.thp",
-        offset: 23318240,
-        size: 80868,
-    },
-    File {
-        name: "GmRegendAllstarPoponana.thp",
-        offset: 23399108,
-        size: 86390,
-    },
-    File {
-        name: "GmRegendAllstarPurin.thp",
-        offset: 23485500,
-        size: 90330,
-    },
-    File {
-        name: "GmRegendAllstarRoy.thp",
-        offset: 23575832,
-        size: 94622,
-    },
-    File {
-        name: "GmRegendAllstarSamus.thp",
-        offset: 23670456,
-        size: 91835,
-    },
-    File {
-        name: "GmRegendAllstarYoshi.thp",
-        offset: 23762292,
-        size: 93338,
-    },
-    File {
-        name: "GmRegendAllstarZeldaseak.thp",
-        offset: 23855632,
-        size: 84814,
-    },
-    File {
-        name: "GmRegendSimpleCaptain.thp",
-        offset: 23940448,
-        size: 99353,
-    },
-    File {
-        name: "GmRegendSimpleClink.thp",
-        offset: 24039804,
-        size: 96558,
-    },
-    File {
-        name: "GmRegendSimpleDonkey.thp",
-        offset: 24136364,
-        size: 94645,
-    },
-    File {
-        name: "GmRegendSimpleDrmario.thp",
-        offset: 24231012,
-        size: 95772,
-    },
-    File {
-        name: "GmRegendSimpleFalco.thp",
-        offset: 24326784,
-        size: 80803,
-    },
-    File {
-        name: "GmRegendSimpleFox.thp",
-        offset: 24407588,
-        size: 96978,
-    },
-    File {
-        name: "GmRegendSimpleGamewatch.thp",
-        offset: 24504568,
-        size: 93579,
-    },
-    File {
-        name: "GmRegendSimpleGanon.thp",
-        offset: 24598148,
-        size: 87395,
-    },
-    File {
-        name: "GmRegendSimpleKirby.thp",
-        offset: 24685544,
-        size: 84557,
-    },
-    File {
-        name: "GmRegendSimpleKoopa.thp",
-        offset: 24770104,
-        size: 92441,
-    },
-    File {
-        name: "GmRegendSimpleLink.thp",
-        offset: 24862548,
-        size: 88513,
-    },
-    File {
-        name: "GmRegendSimpleLuigi.thp",
-        offset: 24951064,
-        size: 89902,
-    },
-    File {
-        name: "GmRegendSimpleMario.thp",
-        offset: 25040968,
-        size: 94969,
-    },
-    File {
-        name: "GmRegendSimpleMarth.thp",
-        offset: 25135940,
-        size: 96375,
-    },
-    File {
-        name: "GmRegendSimpleMewtwo.thp",
-        offset: 25232316,
-        size: 71801,
-    },
-    File {
-        name: "GmRegendSimpleNess.thp",
-        offset: 25304120,
-        size: 81299,
-    },
-    File {
-        name: "GmRegendSimplePeach.thp",
-        offset: 25385420,
-        size: 94556,
-    },
-    File {
-        name: "GmRegendSimplePichu.thp",
-        offset: 25479976,
-        size: 91311,
-    },
-    File {
-        name: "GmRegendSimplePikachu.thp",
-        offset: 25571288,
-        size: 93806,
-    },
-    File {
-        name: "GmRegendSimplePoponana.thp",
-        offset: 25665096,
-        size: 94382,
-    },
-    File {
-        name: "GmRegendSimplePurin.thp",
-        offset: 25759480,
-        size: 90567,
-    },
-    File {
-        name: "GmRegendSimpleRoy.thp",
-        offset: 25850048,
-        size: 92175,
-    },
-    File {
-        name: "GmRegendSimpleSamus.thp",
-        offset: 25942224,
-        size: 88002,
-    },
-    File {
-        name: "GmRegendSimpleYoshi.thp",
-        offset: 26030228,
-        size: 94918,
-    },
-    File {
-        name: "GmRegendSimpleZeldaseak.thp",
-        offset: 26125148,
-        size: 85406,
     },
     File {
         name: "GmRgEBG2.dat",
@@ -1692,11 +252,6 @@ expression: files
         name: "GmRst.dat",
         offset: 1443168256,
         size: 476574,
-    },
-    File {
-        name: "GmRst.usd",
-        offset: 1442677652,
-        size: 476318,
     },
     File {
         name: "GmRstMCa.dat",
@@ -1839,18 +394,8 @@ expression: files
         size: 305695,
     },
     File {
-        name: "GmTitle.usd",
-        offset: 1241240072,
-        size: 250727,
-    },
-    File {
         name: "GmTou1p.dat",
         offset: 1256325120,
-        size: 126193,
-    },
-    File {
-        name: "GmTou1p.usd",
-        offset: 1241490800,
         size: 126193,
     },
     File {
@@ -1859,19 +404,9 @@ expression: files
         size: 132333,
     },
     File {
-        name: "GmTou2p.usd",
-        offset: 1241616996,
-        size: 119821,
-    },
-    File {
         name: "GmTou3p.dat",
         offset: 1256620032,
         size: 489373,
-    },
-    File {
-        name: "GmTou3p.usd",
-        offset: 1241736820,
-        size: 400813,
     },
     File {
         name: "GmTou4p.dat",
@@ -1879,29 +414,14 @@ expression: files
         size: 241681,
     },
     File {
-        name: "GmTou4p.usd",
-        offset: 1242137636,
-        size: 241297,
-    },
-    File {
         name: "GmTrain.dat",
         offset: 1257373696,
         size: 79383,
     },
     File {
-        name: "GmTrain.usd",
-        offset: 1242378936,
-        size: 81879,
-    },
-    File {
         name: "GmTtAll.dat",
         offset: 1437171712,
         size: 381781,
-    },
-    File {
-        name: "GmTtAll.usd",
-        offset: 1436895452,
-        size: 276257,
     },
     File {
         name: "GrBb.dat",
@@ -1912,11 +432,6 @@ expression: files
         name: "GrCn.dat",
         offset: 1259765760,
         size: 1730938,
-    },
-    File {
-        name: "GrCn.usd",
-        offset: 1242460816,
-        size: 1649626,
     },
     File {
         name: "GrCs.dat",
@@ -1971,11 +486,6 @@ expression: files
     File {
         name: "GrHr.dat",
         offset: 1269202944,
-        size: 779836,
-    },
-    File {
-        name: "GrHr.usd",
-        offset: 1244110444,
         size: 779836,
     },
     File {
@@ -2069,11 +579,6 @@ expression: files
         size: 1145019,
     },
     File {
-        name: "GrOt.usd",
-        offset: 1244890280,
-        size: 1128320,
-    },
-    File {
         name: "GrOy.dat",
         offset: 1286897664,
         size: 247034,
@@ -2082,11 +587,6 @@ expression: files
         name: "GrPs.dat",
         offset: 1287159808,
         size: 1468544,
-    },
-    File {
-        name: "GrPs.usd",
-        offset: 1246018600,
-        size: 1461024,
     },
     File {
         name: "GrPs1.dat",
@@ -2269,11 +769,6 @@ expression: files
         size: 2315996,
     },
     File {
-        name: "GrVe.usd",
-        offset: 1247479624,
-        size: 2234684,
-    },
-    File {
         name: "GrYt.dat",
         offset: 1304363008,
         size: 569164,
@@ -2289,11 +784,6 @@ expression: files
         size: 901564,
     },
     File {
-        name: "IfAll.usd",
-        offset: 1435993888,
-        size: 901564,
-    },
-    File {
         name: "IfCoGet.dat",
         offset: 1459912704,
         size: 11716,
@@ -2304,19 +794,9 @@ expression: files
         size: 333137,
     },
     File {
-        name: "IfComSn.usd",
-        offset: 1249714308,
-        size: 333137,
-    },
-    File {
         name: "IfHrNoCn.dat",
         offset: 1306198016,
         size: 12078,
-    },
-    File {
-        name: "IfHrNoCn.usd",
-        offset: 1250047448,
-        size: 8950,
     },
     File {
         name: "IfHrReco.dat",
@@ -2324,19 +804,9 @@ expression: files
         size: 35978,
     },
     File {
-        name: "IfHrReco.usd",
-        offset: 1250056400,
-        size: 36746,
-    },
-    File {
         name: "IfPrize.dat",
         offset: 1306296320,
         size: 47994,
-    },
-    File {
-        name: "IfPrize.usd",
-        offset: 1250093148,
-        size: 38958,
     },
     File {
         name: "IfVsCam.dat",
@@ -2344,28 +814,13 @@ expression: files
         size: 72958,
     },
     File {
-        name: "IfVsCam.usd",
-        offset: 1250132108,
-        size: 76726,
-    },
-    File {
         name: "IrAls.dat",
         offset: 1458274304,
         size: 298222,
     },
     File {
-        name: "IrAls.usd",
-        offset: 1458645292,
-        size: 296654,
-    },
-    File {
         name: "IrEzFigG.dat",
         offset: 1306460160,
-        size: 342722,
-    },
-    File {
-        name: "IrEzFigG.usd",
-        offset: 1250208836,
         size: 342722,
     },
     File {
@@ -2374,18 +829,8 @@ expression: files
         size: 269794,
     },
     File {
-        name: "IrEzTarg.usd",
-        offset: 1250551560,
-        size: 269794,
-    },
-    File {
         name: "IrEzTuki.dat",
         offset: 1307115520,
-        size: 316214,
-    },
-    File {
-        name: "IrEzTuki.usd",
-        offset: 1250821356,
         size: 316214,
     },
     File {
@@ -2394,29 +839,14 @@ expression: files
         size: 777499,
     },
     File {
-        name: "IrNml.usd",
-        offset: 1456755492,
-        size: 699611,
-    },
-    File {
         name: "IrRdMap.dat",
         offset: 1458601984,
-        size: 21336,
-    },
-    File {
-        name: "IrRdMap.usd",
-        offset: 1458941948,
         size: 21336,
     },
     File {
         name: "ItCo.dat",
         offset: 1429110784,
         size: 2949760,
-    },
-    File {
-        name: "ItCo.usd",
-        offset: 1433020468,
-        size: 2973420,
     },
     File {
         name: "LbAd.dat",
@@ -2434,18 +864,8 @@ expression: files
         size: 20158,
     },
     File {
-        name: "LbMcGame.usd",
-        offset: 1437570948,
-        size: 20158,
-    },
-    File {
         name: "LbMcSnap.dat",
         offset: 1440022528,
-        size: 7804,
-    },
-    File {
-        name: "LbMcSnap.usd",
-        offset: 1437598144,
         size: 7804,
     },
     File {
@@ -2464,19 +884,9 @@ expression: files
         size: 1309449,
     },
     File {
-        name: "MnExtAll.usd",
-        offset: 1450197872,
-        size: 1315321,
-    },
-    File {
         name: "MnMaAll.dat",
         offset: 1440055296,
         size: 2150919,
-    },
-    File {
-        name: "MnMaAll.usd",
-        offset: 1437605948,
-        size: 2155311,
     },
     File {
         name: "MnNamedef.dat",
@@ -2489,159 +899,9 @@ expression: files
         size: 3812581,
     },
     File {
-        name: "MnSlChr.usd",
-        offset: 1446386468,
-        size: 3811401,
-    },
-    File {
         name: "MnSlMap.dat",
         offset: 1307475968,
         size: 681443,
-    },
-    File {
-        name: "MnSlMap.usd",
-        offset: 1251137572,
-        size: 636811,
-    },
-    File {
-        name: "MvEndCaptain.mth",
-        offset: 782722556,
-        size: 4784256,
-    },
-    File {
-        name: "MvEndClink.mth",
-        offset: 787506812,
-        size: 4716320,
-    },
-    File {
-        name: "MvEndDonkey.mth",
-        offset: 792223132,
-        size: 4659648,
-    },
-    File {
-        name: "MvEndDrmario.mth",
-        offset: 796882780,
-        size: 5331744,
-    },
-    File {
-        name: "MvEndFalco.mth",
-        offset: 802214524,
-        size: 4468544,
-    },
-    File {
-        name: "MvEndFox.mth",
-        offset: 806683068,
-        size: 4449120,
-    },
-    File {
-        name: "MvEndGamewatch.mth",
-        offset: 811132188,
-        size: 7051392,
-    },
-    File {
-        name: "MvEndGanon.mth",
-        offset: 818183580,
-        size: 3922848,
-    },
-    File {
-        name: "MvEndKirby.mth",
-        offset: 822106428,
-        size: 5475936,
-    },
-    File {
-        name: "MvEndKoopa.mth",
-        offset: 827582364,
-        size: 4633920,
-    },
-    File {
-        name: "MvEndLink.mth",
-        offset: 832216284,
-        size: 5579552,
-    },
-    File {
-        name: "MvEndLuigi.mth",
-        offset: 837795836,
-        size: 5638720,
-    },
-    File {
-        name: "MvEndMario.mth",
-        offset: 843434556,
-        size: 4840256,
-    },
-    File {
-        name: "MvEndMarth.mth",
-        offset: 848274812,
-        size: 5284448,
-    },
-    File {
-        name: "MvEndMewtwo.mth",
-        offset: 853559260,
-        size: 4522208,
-    },
-    File {
-        name: "MvEndNess.mth",
-        offset: 858081468,
-        size: 5264928,
-    },
-    File {
-        name: "MvEndPeach.mth",
-        offset: 863346396,
-        size: 5592832,
-    },
-    File {
-        name: "MvEndPichu.mth",
-        offset: 868939228,
-        size: 6485280,
-    },
-    File {
-        name: "MvEndPikachu.mth",
-        offset: 875424508,
-        size: 5007488,
-    },
-    File {
-        name: "MvEndPoponana.mth",
-        offset: 880431996,
-        size: 5885376,
-    },
-    File {
-        name: "MvEndPurin.mth",
-        offset: 886317372,
-        size: 5580800,
-    },
-    File {
-        name: "MvEndRoy.mth",
-        offset: 891898172,
-        size: 5836992,
-    },
-    File {
-        name: "MvEndSamus.mth",
-        offset: 897735164,
-        size: 4024192,
-    },
-    File {
-        name: "MvEndYoshi.mth",
-        offset: 901759356,
-        size: 7034624,
-    },
-    File {
-        name: "MvEndZelda.mth",
-        offset: 908793980,
-        size: 5388288,
-    },
-    File {
-        name: "MvHowto.mth",
-        offset: 545751356,
-        size: 103531584,
-    },
-    File {
-        name: "MvOmake15.mth",
-        offset: 26210556,
-        size: 488622656,
-    },
-    File {
-        name: "MvOpen.mth",
-        offset: 652246652,
-        size: 127036704,
     },
     File {
         name: "NtAppro.dat",
@@ -2649,19 +909,9 @@ expression: files
         size: 157813,
     },
     File {
-        name: "NtAppro.usd",
-        offset: 1251774384,
-        size: 150377,
-    },
-    File {
         name: "NtMemAc.dat",
         offset: 1439924224,
         size: 4351,
-    },
-    File {
-        name: "NtMemAc.usd",
-        offset: 1437591108,
-        size: 4159,
     },
     File {
         name: "NtMsgWin.dat",
@@ -2672,11 +922,6 @@ expression: files
         name: "NtProge.dat",
         offset: 1308327936,
         size: 23804,
-    },
-    File {
-        name: "opening.bnr",
-        offset: 19444852,
-        size: 6496,
     },
     File {
         name: "PdPm.dat",
@@ -2737,11 +982,6 @@ expression: files
         name: "PlCaRe.dat",
         offset: 1333035008,
         size: 525771,
-    },
-    File {
-        name: "PlCaRe.usd",
-        offset: 1251924764,
-        size: 558539,
     },
     File {
         name: "PlCaWh.dat",
@@ -4059,19 +2299,9 @@ expression: files
         size: 1706,
     },
     File {
-        name: "SdClr.usd",
-        offset: 1459148972,
-        size: 202,
-    },
-    File {
         name: "SdDec.dat",
         offset: 1459388416,
         size: 90757,
-    },
-    File {
-        name: "SdDec.usd",
-        offset: 1459149176,
-        size: 9861,
     },
     File {
         name: "SdIntro.dat",
@@ -4084,19 +2314,9 @@ expression: files
         size: 317509,
     },
     File {
-        name: "SdMenu.usd",
-        offset: 1439761260,
-        size: 87557,
-    },
-    File {
         name: "SdMsgBox.dat",
         offset: 1439989760,
         size: 16540,
-    },
-    File {
-        name: "SdMsgBox.usd",
-        offset: 1437595268,
-        size: 2876,
     },
     File {
         name: "SdPrize.dat",
@@ -4104,19 +2324,9 @@ expression: files
         size: 93146,
     },
     File {
-        name: "SdPrize.usd",
-        offset: 1252483304,
-        size: 17274,
-    },
-    File {
         name: "SdProge.dat",
         offset: 1308459008,
         size: 2258,
-    },
-    File {
-        name: "SdProge.usd",
-        offset: 1252500580,
-        size: 786,
     },
     File {
         name: "SdRst.dat",
@@ -4124,19 +2334,9 @@ expression: files
         size: 96363,
     },
     File {
-        name: "SdRst.usd",
-        offset: 1443153972,
-        size: 14283,
-    },
-    File {
         name: "SdSlChr.dat",
         offset: 1456668672,
         size: 67348,
-    },
-    File {
-        name: "SdSlChr.usd",
-        offset: 1451513196,
-        size: 10900,
     },
     File {
         name: "SdStRoll.dat",
@@ -4149,19 +2349,9 @@ expression: files
         size: 70615,
     },
     File {
-        name: "SdTou.usd",
-        offset: 1252501368,
-        size: 15159,
-    },
-    File {
         name: "SdToy.dat",
         offset: 1442545664,
         size: 37096,
-    },
-    File {
-        name: "SdToy.usd",
-        offset: 1439848820,
-        size: 9866,
     },
     File {
         name: "SdToyExp.dat",
@@ -4169,29 +2359,14 @@ expression: files
         size: 646863,
     },
     File {
-        name: "SdToyExp.usd",
-        offset: 1252516528,
-        size: 221649,
-    },
-    File {
         name: "SdTrain.dat",
         offset: 1309474816,
         size: 16709,
     },
     File {
-        name: "SdTrain.usd",
-        offset: 1252738180,
-        size: 13445,
-    },
-    File {
         name: "SdVsCam.dat",
         offset: 1309507584,
         size: 10769,
-    },
-    File {
-        name: "SdVsCam.usd",
-        offset: 1252751628,
-        size: 1777,
     },
     File {
         name: "SmSt.dat",
@@ -4391,11 +2566,6 @@ expression: files
     File {
         name: "TyDatai.dat",
         offset: 1459486720,
-        size: 19347,
-    },
-    File {
-        name: "TyDatai.usd",
-        offset: 1459532908,
         size: 19347,
     },
     File {
@@ -5189,19 +3359,9 @@ expression: files
         size: 206990,
     },
     File {
-        name: "TyMnDisp.usd",
-        offset: 914438524,
-        size: 186254,
-    },
-    File {
         name: "TyMnFigp.dat",
         offset: 974979072,
         size: 217845,
-    },
-    File {
-        name: "TyMnFigp.usd",
-        offset: 914624780,
-        size: 222593,
     },
     File {
         name: "TyMnInfo.dat",
@@ -5209,18 +3369,8 @@ expression: files
         size: 21027,
     },
     File {
-        name: "TyMnInfo.usd",
-        offset: 914847376,
-        size: 20419,
-    },
-    File {
         name: "TyMnView.dat",
         offset: 975241216,
-        size: 80298,
-    },
-    File {
-        name: "TyMnView.usd",
-        offset: 914867796,
         size: 80298,
     },
     File {
@@ -5987,11 +4137,6 @@ expression: files
         name: "TyZkWmen.dat",
         offset: 1008631808,
         size: 64929,
-    },
-    File {
-        name: "usa.ini",
-        offset: 4587520,
-        size: 0,
     },
     File {
         name: "Vi0102.dat",
