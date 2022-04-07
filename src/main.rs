@@ -1,13 +1,13 @@
 #![feature(pattern)]
 
-use gc_gcm::GcmFile;
+use gc_gcm::{FsNode, GcmFile};
 use std::{io, str::pattern::Pattern};
 
 const ISO_PATH: &str = "ssbm.iso";
 
-fn dat_files(iso: &GcmFile) -> impl Iterator<Item = &gc_gcm::FsNode> {
+fn dat_files(iso: &GcmFile) -> impl Iterator<Item = &FsNode> {
     iso.filesystem.files.iter().filter(|e| match e {
-        gc_gcm::FsNode::File { name, .. } => ".dat".is_suffix_of(name),
+        FsNode::File { name, .. } => ".dat".is_suffix_of(name),
         _ => false,
     })
 }
