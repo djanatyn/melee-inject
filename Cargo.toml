@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 gc-gcm = "0.10"
 insta = "1.14.0"
+binread = "2.2"

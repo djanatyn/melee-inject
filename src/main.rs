@@ -24,8 +24,9 @@ fn main() -> io::Result<()> {
 #[cfg(test)]
 mod tests {
     use super::{dat_files, ISO_PATH};
-    use gc_gcm::GcmFile;
+    use gc_gcm::{FsNode, GcmFile};
     use insta;
+    use std::str::pattern::Pattern;
 
     #[test]
     fn load_iso() {
@@ -37,5 +38,20 @@ mod tests {
         let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
         let files = dat_files(&iso).collect::<Vec<_>>();
         insta::assert_debug_snapshot!(files);
+    }
+
+    #[test]
+    fn find_yoshi() {
+        let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
+        let files = dat_files(&iso)
+            .filter(|file| match file {
+                FsNode::File { name, .. } => "TyYoshi.dat".is_suffix_of(name),
+                _ => false,
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(files.len(), 1);
+
+        let yoshi = files.first().expect("no yoshi").clone();
+        insta::assert_debug_snapshot!(yoshi);
     }
 }
