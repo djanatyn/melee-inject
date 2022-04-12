@@ -1,9 +1,0 @@
----
-source: src/main.rs
-expression: yoshi
----
-File {
-    name: "TyYoshi.dat",
-    offset: 1006174208,
-    size: 398857,
-}

@@ -42,7 +42,7 @@ mod tests {
     }
 
     #[test]
-    fn find_yoshi() {
+    fn find_yoshi_header() {
         let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
         let files = dat_files(&iso)
             .filter(|file| match file {
@@ -65,8 +65,12 @@ mod tests {
                     .read_to_end(&mut contents)
                     .expect("failed to read yoshi");
 
+                // header is first 32 bytes
+                // https://smashboards.com/threads/melee-dat-format.292603/
+                let header = &contents[..32];
+
                 assert_eq!(contents.len(), *size as usize);
-                insta::assert_debug_snapshot!(yoshi)
+                insta::assert_debug_snapshot!(header)
             }
             _ => panic!("failed to find yoshi"),
         };
