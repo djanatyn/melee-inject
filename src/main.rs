@@ -70,7 +70,7 @@ mod tests {
                 let header = &contents[..32];
 
                 assert_eq!(contents.len(), *size as usize);
-                insta::assert_debug_snapshot!(header)
+                insta::assert_yaml_snapshot!(format!("{header:x?}"))
             }
             _ => panic!("failed to find yoshi"),
         };
