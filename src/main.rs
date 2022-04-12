@@ -26,6 +26,7 @@ mod tests {
     use super::{dat_files, ISO_PATH};
     use gc_gcm::{FsNode, GcmFile};
     use insta;
+    use std::io::{Read, Seek, SeekFrom};
     use std::str::pattern::Pattern;
 
     #[test]
@@ -49,9 +50,25 @@ mod tests {
                 _ => false,
             })
             .collect::<Vec<_>>();
+
+        // there is only one yoshi
         assert_eq!(files.len(), 1);
 
-        let yoshi = files.first().expect("no yoshi").clone();
-        insta::assert_debug_snapshot!(yoshi);
+        match files.first() {
+            Some(yoshi @ FsNode::File { size, offset, .. }) => {
+                let mut file = std::fs::File::open(ISO_PATH).expect("could not open ISO");
+                let mut contents = Vec::with_capacity(*size as usize);
+                file.seek(SeekFrom::Start(*offset as u64))
+                    .expect("failed to seek to yoshi");
+                file.by_ref()
+                    .take(*size as u64)
+                    .read_to_end(&mut contents)
+                    .expect("failed to read yoshi");
+
+                assert_eq!(contents.len(), *size as usize);
+                insta::assert_debug_snapshot!(yoshi)
+            }
+            _ => panic!("failed to find yoshi"),
+        };
     }
 }
