@@ -101,19 +101,19 @@ mod tests {
     fn check_dat_headers() {
         let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
         let headers = dat_files(&iso)
-            // skip animation files
-            .filter(|dat| match dat {
-                FsNode::File { name, .. } => !"AJ.dat".is_suffix_of(name),
-                _ => panic!("returned directory"),
-            })
-            .map(|dat| {
+            .filter_map(|dat| {
                 println!("checking header for {dat:#?}");
 
                 // get file size of FsNode entry
-                let size = match dat {
-                    FsNode::File { size, .. } => size,
+                let (name, size) = match dat {
+                    FsNode::File { name, size, .. } => (name, size),
                     _ => panic!("returned directory"),
                 };
+
+                // skip animation files
+                if "AJ.dat".is_suffix_of(name) {
+                    return None;
+                }
 
                 // parse header
                 let header = read_node(dat).expect("could not read node");
@@ -121,7 +121,7 @@ mod tests {
 
                 // compare FsNode size with DatHeader size
                 assert_eq!(header.file_size, *size as i32);
-                header
+                Some(header)
             })
             .collect::<Vec<_>>();
         insta::assert_debug_snapshot!(headers)
