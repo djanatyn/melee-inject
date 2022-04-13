@@ -1,5 +1,6 @@
 #![feature(pattern)]
 
+use binrw::BinRead;
 use gc_gcm::{FsNode, GcmFile};
 use std::{io, str::pattern::Pattern};
 
@@ -21,9 +22,21 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
+#[derive(Debug, BinRead)]
+#[br(big)]
+struct DatHeader {
+    file_size: i32,
+    data_block_size: i32,
+    relocation_table_count: i32,
+    root_count1: i32,
+    #[br(pad_after = 3)]
+    root_count2: i32,
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{dat_files, ISO_PATH};
+    use super::{dat_files, DatHeader, ISO_PATH};
+    use binrw::{io::Cursor, BinRead};
     use gc_gcm::{FsNode, GcmFile};
     use insta;
     use std::io::{Read, Seek, SeekFrom};
@@ -67,10 +80,11 @@ mod tests {
 
                 // header is first 32 bytes
                 // https://smashboards.com/threads/melee-dat-format.292603/
-                let header = &contents[..32];
+                let header = DatHeader::read(&mut Cursor::new(&contents[..32]))
+                    .expect("could not read header");
 
-                assert_eq!(contents.len(), *size as usize);
-                insta::assert_yaml_snapshot!(format!("{header:x?}"))
+                assert_eq!(header.file_size, *size as i32);
+                insta::assert_debug_snapshot!(header)
             }
             _ => panic!("failed to find yoshi"),
         };

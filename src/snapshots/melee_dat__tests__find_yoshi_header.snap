@@ -1,6 +1,11 @@
 ---
 source: src/main.rs
-expression: "format!(\"{header:x?}\")"
+expression: header
 ---
-"[0, 6, 16, 9, 0, 6, 11, 98, 0, 0, 1, c, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]"
-
+DatHeader {
+    file_size: 398857,
+    data_block_size: 397720,
+    relocation_table_count: 268,
+    root_count1: 1,
+    root_count2: 0,
+}
