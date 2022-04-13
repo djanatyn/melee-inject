@@ -112,6 +112,7 @@ mod tests {
 
                 // parse header
                 let header = read_node(dat).expect("could not read node");
+                println!("header: {header:#?}");
 
                 // compare FsNode size with DatHeader size
                 assert_eq!(header.file_size, *size as i32);
