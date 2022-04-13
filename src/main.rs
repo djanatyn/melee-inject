@@ -111,7 +111,7 @@ mod tests {
 
                 // get file size of FsNode entry
                 let size = match dat {
-                    FsNode::File { name, size, .. } => size,
+                    FsNode::File { size, .. } => size,
                     _ => panic!("returned directory"),
                 };
 
