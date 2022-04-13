@@ -101,6 +101,11 @@ mod tests {
     fn check_dat_headers() {
         let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
         let headers = dat_files(&iso)
+            // skip animation files
+            .filter(|dat| match dat {
+                FsNode::File { name, .. } => !"AJ.dat".is_suffix_of(name),
+                _ => panic!("returned directory"),
+            })
             .map(|dat| {
                 println!("checking header for {dat:#?}");
 
