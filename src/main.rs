@@ -25,7 +25,7 @@ struct DatHeader {
 #[clap(version = "1.0", author = "Jonathan Strickland <djanatyn@gmail.com>")]
 pub struct Args {
     /// Path to Melee ISO.
-    #[clap(parse(from_os_str), long)]
+    #[clap(parse(from_os_str), short, long)]
     pub melee_iso: PathBuf,
 
     #[clap(subcommand)]
@@ -36,8 +36,14 @@ pub struct Args {
 pub enum SubCommand {
     /// Show FST bytes.
     ShowFST,
-    // /// Search (and display) a specific DAT file.
-    // SearchDAT(SearchDAT)
+    /// Search (and display) a specific DAT file.
+    SearchDAT(SearchDAT),
+}
+
+#[derive(Parser, Debug)]
+pub struct SearchDAT {
+    #[clap(short, long)]
+    pub dat_query: String,
 }
 
 fn dat_files(iso: &GcmFile) -> impl Iterator<Item = &FsNode> {
@@ -48,10 +54,44 @@ fn dat_files(iso: &GcmFile) -> impl Iterator<Item = &FsNode> {
 }
 
 fn show_fst(iso: &PathBuf) -> io::Result<()> {
-    let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
+    let iso = GcmFile::open(iso).expect("could not open ISO");
     io::stdout().write(&iso.fst_bytes)?;
 
     Ok(())
+}
+
+fn search_dat(iso_path: &PathBuf, args: &SearchDAT) -> io::Result<()> {
+    let iso = GcmFile::open(iso_path).expect("could not open ISO");
+    let files = dat_files(&iso)
+        .filter(|file| match file {
+            FsNode::File { name, .. } => args.dat_query == name.to_string(),
+            _ => false,
+        })
+        .collect::<Vec<_>>();
+
+    let length = files.len();
+
+    // check that we matched one file
+    if length != 1 {
+        panic!("query didn't match one file: {length}");
+    }
+
+    match files.first() {
+        Some(FsNode::File { size, offset, .. }) => {
+            let mut file = std::fs::File::open(ISO_PATH)?;
+            let mut contents = Vec::with_capacity(*size as usize);
+            file.seek(SeekFrom::Start(*offset as u64))?;
+            Read::by_ref(&mut file)
+                // file.by_ref()
+                .take(*size as u64)
+                .read_to_end(&mut contents)?;
+
+            io::stdout().write(&contents)?;
+
+            Ok(())
+        }
+        _ => panic!("unknown error"),
+    }
 }
 
 fn main() -> io::Result<()> {
@@ -59,6 +99,7 @@ fn main() -> io::Result<()> {
 
     match args.subcmd {
         SubCommand::ShowFST => show_fst(&args.melee_iso),
+        SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
     }
 
     // TODO: search and find specific DAT file, output it
