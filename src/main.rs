@@ -1,8 +1,10 @@
 #![feature(pattern)]
 
 use binrw::{io::Cursor, BinRead};
+use clap::Parser;
 use gc_gcm::{FsNode, GcmFile};
-use std::io::{self, Read, Seek, SeekFrom};
+use std::io::{self, Read, Seek, SeekFrom, Write};
+use std::path::PathBuf;
 use std::str::pattern::Pattern;
 
 const ISO_PATH: &str = "ssbm.iso";
@@ -19,6 +21,25 @@ struct DatHeader {
     root_count2: i32,
 }
 
+#[derive(Parser, Debug)]
+#[clap(version = "1.0", author = "Jonathan Strickland <djanatyn@gmail.com>")]
+pub struct Args {
+    /// Path to Melee ISO.
+    #[clap(parse(from_os_str), long)]
+    pub melee_iso: PathBuf,
+
+    #[clap(subcommand)]
+    pub subcmd: SubCommand,
+}
+
+#[derive(Parser, Debug)]
+pub enum SubCommand {
+    /// Show FST bytes.
+    ShowFST,
+    // /// Search (and display) a specific DAT file.
+    // SearchDAT(SearchDAT)
+}
+
 fn dat_files(iso: &GcmFile) -> impl Iterator<Item = &FsNode> {
     iso.filesystem.files.iter().filter(|e| match e {
         FsNode::File { name, .. } => ".dat".is_suffix_of(name),
@@ -26,13 +47,21 @@ fn dat_files(iso: &GcmFile) -> impl Iterator<Item = &FsNode> {
     })
 }
 
-fn main() -> io::Result<()> {
+fn show_fst(iso: &PathBuf) -> io::Result<()> {
     let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
-    let files = dat_files(&iso).collect::<Vec<_>>();
-
-    println!("{files:#?}");
+    io::stdout().write(&iso.fst_bytes)?;
 
     Ok(())
+}
+
+fn main() -> io::Result<()> {
+    let args: Args = Args::parse();
+
+    match args.subcmd {
+        SubCommand::ShowFST => show_fst(&args.melee_iso),
+    }
+
+    // TODO: search and find specific DAT file, output it
 }
 
 #[allow(dead_code)]
@@ -42,7 +71,8 @@ fn read_node(file: &FsNode) -> io::Result<DatHeader> {
             let mut file = std::fs::File::open(ISO_PATH)?;
             let mut contents = Vec::with_capacity(*size as usize);
             file.seek(SeekFrom::Start(*offset as u64))?;
-            file.by_ref()
+            Read::by_ref(&mut file)
+                // file.by_ref()
                 .take(*size as u64)
                 .read_to_end(&mut contents)?;
 
@@ -64,6 +94,13 @@ mod tests {
     #[test]
     fn load_iso() {
         GcmFile::open(ISO_PATH).expect("could not open ISO");
+    }
+
+    #[test]
+    fn check_fst() {
+        let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
+        let bytes = format!("{:#02x?}", iso.fst_bytes);
+        insta::assert_snapshot!("fst", bytes)
     }
 
     #[test]
