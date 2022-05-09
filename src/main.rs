@@ -9,6 +9,29 @@ use std::str::pattern::Pattern;
 
 const ISO_PATH: &str = "ssbm.iso";
 
+pub mod characters {
+    //! Supported character files for replacement.
+
+    #[allow(dead_code)]
+    /// DAT files for Captain Falcon, used as replacement targets.
+    enum CaptainFalcon {
+        /// NTSC data & shared textures.
+        PlCa,
+        /// Blue costume.
+        PlCaBu,
+        /// Green costume.
+        PlCaGr,
+        /// Gray costume.
+        PlCaGy,
+        /// Neutral costume.
+        PlCaNr,
+        /// Red costume.
+        PlCaRe,
+        /// White costume.
+        PlCaWh,
+    }
+}
+
 #[allow(dead_code)]
 #[derive(Debug, BinRead)]
 #[br(big)]
@@ -101,8 +124,6 @@ fn main() -> io::Result<()> {
         SubCommand::ShowFST => show_fst(&args.melee_iso),
         SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
     }
-
-    // TODO: search and find specific DAT file, output it
 }
 
 #[allow(dead_code)]
