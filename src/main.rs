@@ -12,9 +12,9 @@ const ISO_PATH: &str = "ssbm.iso";
 pub mod characters {
     //! Supported character files for replacement.
 
-    #[allow(dead_code)]
     /// DAT files for Captain Falcon, used as replacement targets.
-    enum CaptainFalcon {
+    #[allow(dead_code)]
+    pub enum CaptainFalcon {
         /// NTSC data & shared textures.
         PlCa,
         /// Blue costume.
@@ -30,6 +30,39 @@ pub mod characters {
         /// White costume.
         PlCaWh,
     }
+
+    pub enum Character {
+        CaptainFalcon(CaptainFalcon),
+    }
+}
+
+use characters::Character;
+
+/// A queued replacement to be executed later.
+///
+/// This potential replacement is guaranteed to match a file in the FST.
+#[allow(dead_code)]
+pub struct Replacement {
+    /// Which file to replace?
+    pub target: Character,
+    /// Path to replacement data.
+    pub replacement: PathBuf,
+}
+
+/// Given a set of potential replacements, attempt to rebuild the FST.
+///
+/// This function should:
+/// - update offsets for files after the replacement, and
+/// - apply padding between files (4 bytes)
+#[allow(dead_code)]
+fn rebuild_fst(_fst: &Vec<u8>, _replacements: &Vec<Replacement>) -> Vec<u8> {
+    todo!()
+}
+
+/// Attempt to build a new ISO given a set of replacements.
+#[allow(dead_code)]
+fn build_iso(_path: PathBuf, _dest: PathBuf, _replacements: &Vec<Replacement>) {
+    todo!()
 }
 
 #[allow(dead_code)]
