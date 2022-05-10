@@ -14,7 +14,8 @@ pub mod characters {
 
     /// DAT files for Captain Falcon, used as replacement targets.
     #[allow(dead_code)]
-    pub enum CaptainFalcon {
+    #[derive(Debug)]
+    pub enum CaptainFalconFile {
         /// NTSC data & shared textures.
         PlCa,
         /// Blue costume.
@@ -31,8 +32,18 @@ pub mod characters {
         PlCaWh,
     }
 
+    #[derive(Debug)]
     pub enum Character {
-        CaptainFalcon(CaptainFalcon),
+        CaptainFalcon(CaptainFalconFile),
+    }
+
+    impl Character {
+        pub fn filename(character: &Self) -> &'static str {
+            match character {
+                Character::CaptainFalcon(CaptainFalconFile::PlCa) => "PlCa.dat",
+                _ => todo!(),
+            }
+        }
     }
 }
 
@@ -42,11 +53,31 @@ use characters::Character;
 ///
 /// This potential replacement is guaranteed to match a file in the FST.
 #[allow(dead_code)]
+#[derive(Debug)]
 pub struct Replacement {
     /// Which file to replace?
     pub target: Character,
     /// Path to replacement data.
     pub replacement: PathBuf,
+}
+
+#[allow(dead_code)]
+fn find_character<'a>(target: &Character, iso: &'a GcmFile) -> Option<&'a FsNode> {
+    let mut found = iso
+        .filesystem
+        .files
+        .iter()
+        .filter(|e| match e {
+            FsNode::File { name, .. } => Character::filename(target).is_suffix_of(name),
+            _ => false,
+        })
+        .collect::<Vec<_>>();
+
+    if found.len() != 1 {
+        panic!("did not match character: {found:#?}");
+    }
+
+    found.pop()
 }
 
 /// Given a set of potential replacements, attempt to rebuild the FST.
@@ -55,8 +86,17 @@ pub struct Replacement {
 /// - update offsets for files after the replacement, and
 /// - apply padding between files (4 bytes)
 #[allow(dead_code)]
-fn rebuild_fst(_fst: &Vec<u8>, _replacements: &Vec<Replacement>) -> Vec<u8> {
-    todo!()
+fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
+    let new_fst = iso.fst_bytes.clone();
+
+    for _replacement in replacements {
+        // TODO: find file in FST
+        // TODO: calculate offset adjustment (w/padding) for subsequent files
+        // TODO: update offsets in new_fst
+        // TODO: replace data in new_fst
+    }
+
+    new_fst
 }
 
 /// Attempt to build a new ISO given a set of replacements.
@@ -181,9 +221,15 @@ fn read_node(file: &FsNode) -> io::Result<DatHeader> {
 
 #[cfg(test)]
 mod tests {
-    use super::{dat_files, read_node, ISO_PATH};
+    use super::{
+        characters::{CaptainFalconFile, Character},
+        dat_files, read_node, rebuild_fst, Replacement, ISO_PATH,
+    };
     use gc_gcm::{FsNode, GcmFile};
     use insta;
+    use std::collections::hash_map::DefaultHasher;
+    use std::hash::{Hash, Hasher};
+    use std::path::PathBuf;
     use std::str::pattern::Pattern;
 
     #[test]
@@ -257,5 +303,40 @@ mod tests {
             })
             .collect::<Vec<_>>();
         insta::assert_debug_snapshot!(headers)
+    }
+
+    #[test]
+    fn try_replace_dat() {
+        let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
+
+        let replacements = vec![
+            // replace common files
+            Replacement {
+                target: Character::CaptainFalcon(CaptainFalconFile::PlCa),
+                replacement: PathBuf::from("n64-falcon/PlCa.dat"),
+            },
+            // replace neutral skin
+            Replacement {
+                target: Character::CaptainFalcon(CaptainFalconFile::PlCaNr),
+                replacement: PathBuf::from("n64-falcon/PlCaNr.dat"),
+            },
+        ];
+
+        // rebuild FST using replacements
+        let new_fst = rebuild_fst(&iso, &replacements);
+
+        // calculate hashes for each FST
+        let mut hasher1 = DefaultHasher::new();
+        let mut hasher2 = DefaultHasher::new();
+        iso.fst_bytes.hash(&mut hasher1);
+        new_fst.hash(&mut hasher2);
+        let original_hash = hasher1.finish();
+        let new_hash = hasher2.finish();
+
+        // fst should be modified, hashes shoule be different
+        assert_ne!(original_hash, new_hash);
+
+        // store hash, it should remain the same
+        insta::assert_debug_snapshot!("modified_fst_hash", new_hash)
     }
 }
