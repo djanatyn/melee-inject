@@ -41,6 +41,7 @@ pub mod characters {
         pub fn filename(character: &Self) -> &'static str {
             match character {
                 Character::CaptainFalcon(CaptainFalconFile::PlCa) => "PlCa.dat",
+                Character::CaptainFalcon(CaptainFalconFile::PlCaNr) => "PlCaNr.dat",
                 _ => todo!(),
             }
         }
@@ -89,8 +90,12 @@ fn find_character<'a>(target: &Character, iso: &'a GcmFile) -> Option<&'a FsNode
 fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
     let new_fst = iso.fst_bytes.clone();
 
-    for _replacement in replacements {
-        // TODO: find file in FST
+    for replacement in replacements {
+        let (offset, size) = match find_character(&replacement.target, iso) {
+            Some(FsNode::File { offset, size, .. }) => (offset, size),
+            _ => panic!("failed to find character: {replacement:#?}"),
+        };
+
         // TODO: calculate offset adjustment (w/padding) for subsequent files
         // TODO: update offsets in new_fst
         // TODO: replace data in new_fst
