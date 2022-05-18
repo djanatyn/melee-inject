@@ -95,7 +95,8 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
             Some(FsNode::File { offset, size, .. }) => (offset, size),
             _ => panic!("failed to find character: {replacement:#?}"),
         };
-        // information from YAGCD: https://www.gc-forever.com/yagcd/chap13.html
+        // information from YAGCD:
+        // $ pandoc -f html -t haddock 'https://www.gc-forever.com/yagcd/chap13.html'
         //
         // 13.4 Format of the FST
         // ======================
