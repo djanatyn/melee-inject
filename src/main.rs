@@ -1,5 +1,8 @@
 #![feature(pattern)]
 
+// TODO: output logs with tracing
+// TODO: update README.md with goals, direction
+
 use binrw::{io::Cursor, BinRead};
 use clap::Parser;
 use gc_gcm::{FsNode, GcmFile};
@@ -138,7 +141,10 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
         // \---------------------------- flag (directory)
         //
         // TODO: calculate offset adjustment (w/padding) for subsequent files
-        // TODO: update offsets in new_fst
+        // TODO: use binrw to parse raw FST
+        // TODO: transform binrw FsNode definition given replacement
+        // TODO: function to adjust offset on subsequent FsNode definitions
+        // TODO: rebuild FST
         // TODO: replace data in new_fst
     }
 
