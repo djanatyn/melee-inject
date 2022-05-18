@@ -95,7 +95,40 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
             Some(FsNode::File { offset, size, .. }) => (offset, size),
             _ => panic!("failed to find character: {replacement:#?}"),
         };
-
+        // information from YAGCD: https://www.gc-forever.com/yagcd/chap13.html
+        //
+        // 13.4 Format of the FST
+        // ======================
+        // +-----------+---------+----------+---------------------------------+
+        // |   start   |   end   |   size   |   Description                   |
+        // +-----------+---------+----------+---------------------------------+
+        // | @0x00@    | @0x0c@  | @0x0c@   | Root Directory Entry            |
+        // +-----------+---------+----------+---------------------------------+
+        // | @0x0c@    | @...@   | @0x0c@   | more File- or Directory Entries |
+        // +-----------+---------+----------+---------------------------------+
+        // | @...@     | @...@   | @...@    | String table                    |
+        // +-----------+---------+----------+---------------------------------+
+        //
+        // 13.4.1 Format of a File Entry
+        // =============================
+        // +-----------+---------+----------+------------------------------+
+        // |   start   |   end   |   size   |   Description                |
+        // +-----------+---------+----------+------------------------------+
+        // | ``0x00``  |         | ``1``    | flags; 0: file 1: directory  |
+        // +-----------+---------+----------+------------------------------+
+        // | ``0x01``  |         | ``3``    | filename, offset into string |
+        // |           |         |          | table                        |
+        // +-----------+---------+----------+------------------------------+
+        // | ``0x04``  |         | ``4``    | file_offset or parent_offset |
+        // |           |         |          | (dir)                        |
+        // +-----------+---------+----------+------------------------------+
+        // | ``0x08``  |         | ``4``    | file_length or num_entries   |
+        // |           |         |          | (root) or next_offset (dir)  |
+        // +-----------+---------+----------+------------------------------+
+        //
+        // v1.02 NTSC GALE01 Root Directory Entry:
+        // 0100 0000 0000 0000 0000 04bc 01
+        //
         // TODO: calculate offset adjustment (w/padding) for subsequent files
         // TODO: update offsets in new_fst
         // TODO: replace data in new_fst
