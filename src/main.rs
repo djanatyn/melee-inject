@@ -126,8 +126,15 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
         // |           |         |          | (root) or next_offset (dir)  |
         // +-----------+---------+----------+------------------------------+
         //
-        // v1.02 NTSC GALE01 Root Directory Entry:
-        // 0100 0000 0000 0000 0000 04bc 01
+        // v1.02 NTSC GALE01 Root Directory Entry
+        // ======================================
+        // 0001 0203 0405 0607 0809 0a0b
+        // ---- ---- ---- ---- ---- ----
+        // 0100 0000 0000 0000 0000 04bc
+        // ^ ^       ^         ^-------- num_entries (0x000004bc) (1212 entries)
+        // | |       \------------------ parent_offset (0x00000000)
+        // | \-------------------------- filename string table offset (0x000000)
+        // \---------------------------- flag (directory)
         //
         // TODO: calculate offset adjustment (w/padding) for subsequent files
         // TODO: update offsets in new_fst
