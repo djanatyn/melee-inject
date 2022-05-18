@@ -102,11 +102,11 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
         // +-----------+---------+----------+---------------------------------+
         // |   start   |   end   |   size   |   Description                   |
         // +-----------+---------+----------+---------------------------------+
-        // | @0x00@    | @0x0c@  | @0x0c@   | Root Directory Entry            |
+        // |  0x00     |  0x0c   |  0x0c    | Root Directory Entry            |
         // +-----------+---------+----------+---------------------------------+
-        // | @0x0c@    | @...@   | @0x0c@   | more File- or Directory Entries |
+        // |  0x0c     |  ...    |  0x0c    | more File- or Directory Entries |
         // +-----------+---------+----------+---------------------------------+
-        // | @...@     | @...@   | @...@    | String table                    |
+        // |  ...      |  ...    |  ...     | String table                    |
         // +-----------+---------+----------+---------------------------------+
         //
         // 13.4.1 Format of a File Entry
@@ -114,15 +114,15 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
         // +-----------+---------+----------+------------------------------+
         // |   start   |   end   |   size   |   Description                |
         // +-----------+---------+----------+------------------------------+
-        // | ``0x00``  |         | ``1``    | flags; 0: file 1: directory  |
+        // |   0x00    |         |   1      | flags; 0: file 1: directory  |
         // +-----------+---------+----------+------------------------------+
-        // | ``0x01``  |         | ``3``    | filename, offset into string |
+        // |   0x01    |         |   3      | filename, offset into string |
         // |           |         |          | table                        |
         // +-----------+---------+----------+------------------------------+
-        // | ``0x04``  |         | ``4``    | file_offset or parent_offset |
+        // |   0x04    |         |   4      | file_offset or parent_offset |
         // |           |         |          | (dir)                        |
         // +-----------+---------+----------+------------------------------+
-        // | ``0x08``  |         | ``4``    | file_length or num_entries   |
+        // |   0x08    |         |   4      | file_length or num_entries   |
         // |           |         |          | (root) or next_offset (dir)  |
         // +-----------+---------+----------+------------------------------+
         //
