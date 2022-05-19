@@ -84,68 +84,114 @@ fn find_character<'a>(target: &Character, iso: &'a GcmFile) -> Option<&'a FsNode
     found.pop()
 }
 
+struct FstFile {
+    name: String,
+    offset: u32,
+    size: u32,
+    data: Vec<u8>,
+}
+
+fn read_file(file: &FsNode) -> io::Result<FstFile> {
+    match file {
+        FsNode::File { size, offset, name } => {
+            let mut file = std::fs::File::open(ISO_PATH)?;
+            let mut data = Vec::with_capacity(*size as usize);
+            file.seek(SeekFrom::Start(*offset as u64))?;
+            Read::by_ref(&mut file)
+                // file.by_ref()
+                .take(*size as u64)
+                .read_to_end(&mut data)?;
+
+            Ok(FstFile {
+                name: name.to_string(),
+                offset: *offset,
+                size: *size,
+                data,
+            })
+        }
+        _ => panic!("failure"),
+    }
+}
+
 /// Given a set of potential replacements, attempt to rebuild the FST.
 ///
 /// This function should:
 /// - update offsets for files after the replacement, and
 /// - apply padding between files (4 bytes)
+///
+/// 13.4 Format of the FST
+/// ======================
+/// +-----------+---------+----------+---------------------------------+
+/// |   start   |   end   |   size   |   Description                   |
+/// +-----------+---------+----------+---------------------------------+
+/// |  0x00     |  0x0c   |  0x0c    | Root Directory Entry            |
+/// +-----------+---------+----------+---------------------------------+
+/// |  0x0c     |  ...    |  0x0c    | more File- or Directory Entries |
+/// +-----------+---------+----------+---------------------------------+
+/// |  ...      |  ...    |  ...     | String table                    |
+/// +-----------+---------+----------+---------------------------------+
+///
+/// 13.4.1 Format of a File Entry
+/// =============================
+/// +-----------+---------+----------+------------------------------+
+/// |   start   |   end   |   size   |   Description                |
+/// +-----------+---------+----------+------------------------------+
+/// |   0x00    |         |   1      | flags; 0: file 1: directory  |
+/// +-----------+---------+----------+------------------------------+
+/// |   0x01    |         |   3      | filename, offset into string |
+/// |           |         |          | table                        |
+/// +-----------+---------+----------+------------------------------+
+/// |   0x04    |         |   4      | file_offset or parent_offset |
+/// |           |         |          | (dir)                        |
+/// +-----------+---------+----------+------------------------------+
+/// |   0x08    |         |   4      | file_length or num_entries   |
+/// |           |         |          | (root) or next_offset (dir)  |
+/// +-----------+---------+----------+------------------------------+
+///
+/// (information from YAGCD)
+/// $ pandoc -f html -t haddock 'https://www.gc-forever.com/yagcd/chap13.html'
+///
+/// v1.02 NTSC GALE01 Root Directory Entry
+/// ======================================
+/// 0001 0203 0405 0607 0809 0a0b
+/// ---- ---- ---- ---- ---- ----
+/// 0100 0000 0000 0000 0000 04bc
+/// ^ ^       ^         ^-------- num_entries (0x000004bc) (1212 entries)
+/// | |       \------------------ parent_offset (0x00000000)
+/// | \-------------------------- filename string table offset (0x000000)
+/// \---------------------------- flag (directory)
+///
 #[allow(dead_code)]
 fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
     let new_fst = iso.fst_bytes.clone();
 
+    let files: Vec<FstFile> = iso
+        .filesystem
+        .files
+        .iter()
+        .filter_map(|e| match e {
+            file @ FsNode::File { .. } => Some((read_file(file)).expect("failed to read file")),
+            _ => None,
+        })
+        .collect();
+
     for replacement in replacements {
-        let (offset, size) = match find_character(&replacement.target, iso) {
-            Some(FsNode::File { offset, size, .. }) => (offset, size),
+        let (original_offset, original_size) = match find_character(&replacement.target, iso) {
+            Some(FsNode::File {
+                offset, size, name, ..
+            }) => {
+                eprintln!("found {name}");
+                (offset, size)
+            }
             _ => panic!("failed to find character: {replacement:#?}"),
         };
-        // information from YAGCD:
-        // $ pandoc -f html -t haddock 'https://www.gc-forever.com/yagcd/chap13.html'
-        //
-        // 13.4 Format of the FST
-        // ======================
-        // +-----------+---------+----------+---------------------------------+
-        // |   start   |   end   |   size   |   Description                   |
-        // +-----------+---------+----------+---------------------------------+
-        // |  0x00     |  0x0c   |  0x0c    | Root Directory Entry            |
-        // +-----------+---------+----------+---------------------------------+
-        // |  0x0c     |  ...    |  0x0c    | more File- or Directory Entries |
-        // +-----------+---------+----------+---------------------------------+
-        // |  ...      |  ...    |  ...     | String table                    |
-        // +-----------+---------+----------+---------------------------------+
-        //
-        // 13.4.1 Format of a File Entry
-        // =============================
-        // +-----------+---------+----------+------------------------------+
-        // |   start   |   end   |   size   |   Description                |
-        // +-----------+---------+----------+------------------------------+
-        // |   0x00    |         |   1      | flags; 0: file 1: directory  |
-        // +-----------+---------+----------+------------------------------+
-        // |   0x01    |         |   3      | filename, offset into string |
-        // |           |         |          | table                        |
-        // +-----------+---------+----------+------------------------------+
-        // |   0x04    |         |   4      | file_offset or parent_offset |
-        // |           |         |          | (dir)                        |
-        // +-----------+---------+----------+------------------------------+
-        // |   0x08    |         |   4      | file_length or num_entries   |
-        // |           |         |          | (root) or next_offset (dir)  |
-        // +-----------+---------+----------+------------------------------+
-        //
-        // v1.02 NTSC GALE01 Root Directory Entry
-        // ======================================
-        // 0001 0203 0405 0607 0809 0a0b
-        // ---- ---- ---- ---- ---- ----
-        // 0100 0000 0000 0000 0000 04bc
-        // ^ ^       ^         ^-------- num_entries (0x000004bc) (1212 entries)
-        // | |       \------------------ parent_offset (0x00000000)
-        // | \-------------------------- filename string table offset (0x000000)
-        // \---------------------------- flag (directory)
-        //
-        // TODO: calculate offset adjustment (w/padding) for subsequent files
-        // TODO: use binrw to parse raw FST
-        // TODO: transform binrw FsNode definition given replacement
-        // TODO: function to adjust offset on subsequent FsNode definitions
-        // TODO: rebuild FST
-        // TODO: replace data in new_fst
+
+        let new_data: Vec<u8> = std::fs::read(&replacement.replacement).expect("could not open");
+        let new_data_length = new_data.len();
+        let length_delta = dbg!(original_size - new_data_length as u32);
+        let new_offset = dbg!(original_offset + length_delta);
+
+        // TODO: we need to adjust both the subsequent offsets and associated data
     }
 
     new_fst
