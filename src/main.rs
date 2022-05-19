@@ -156,13 +156,13 @@ fn read_file(file: &FsNode) -> io::Result<FstFile> {
 /// 0001 0203 0405 0607 0809 0a0b
 /// ---- ---- ---- ---- ---- ----
 /// 0100 0000 0000 0000 0000 04bc
-/// ^ ^       ^         ^-------- num_entries (0x000004bc) (1212 entries)
-/// | |       \------------------ parent_offset (0x00000000)
-/// | \-------------------------- filename string table offset (0x000000)
+/// ^ ^       ^         ^-------- num_entries (0x04bc) (1212 entries)
+/// | |       \------------------ parent_offset (0x00)
+/// | \-------------------------- filename string table offset (0x00)
 /// \---------------------------- flag (directory)
 ///
-/// there are 0x4BC entries, each 0xC long
-/// string table offset starts at (0x4BC * 0xC) = 0x38d0
+/// there are 0x4bc entries, each 0x0c long
+/// string table offset starts at (0x04bc * 0x0c) = 0x38d0
 ///
 #[allow(dead_code)]
 fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
