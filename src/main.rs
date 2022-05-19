@@ -168,7 +168,7 @@ fn read_file(file: &FsNode) -> io::Result<FstFile> {
 fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
     let new_fst = iso.fst_bytes.clone();
 
-    let files: Vec<FstFile> = iso
+    let mut files: Vec<FstFile> = iso
         .filesystem
         .files
         .iter()
@@ -179,6 +179,8 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
             _ => None,
         })
         .collect();
+
+    files.sort_by(|a, b| a.offset.cmp(&b.offset));
 
     for replacement in replacements {
         let (original_offset, original_size) = match find_character(&replacement.target, iso) {
@@ -196,6 +198,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
 
         let length_delta = dbg!(original_size - new_data_length as u32);
         let new_offset = dbg!(original_offset + length_delta);
+
         // TODO: we need to adjust both the subsequent offsets and associated data
     }
 
