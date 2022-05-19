@@ -161,6 +161,9 @@ fn read_file(file: &FsNode) -> io::Result<FstFile> {
 /// | \-------------------------- filename string table offset (0x000000)
 /// \---------------------------- flag (directory)
 ///
+/// there are 0x4BC entries, each 0xC long
+/// string table offset starts at (0x4BC * 0xC) = 0x38d0
+///
 #[allow(dead_code)]
 fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
     let new_fst = iso.fst_bytes.clone();
@@ -170,7 +173,9 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
         .files
         .iter()
         .filter_map(|e| match e {
-            file @ FsNode::File { .. } => Some((read_file(file)).expect("failed to read file")),
+            file @ FsNode::File { .. } => {
+                Some((read_file(dbg!(file))).expect("failed to read file"))
+            }
             _ => None,
         })
         .collect();
@@ -188,9 +193,9 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
 
         let new_data: Vec<u8> = std::fs::read(&replacement.replacement).expect("could not open");
         let new_data_length = new_data.len();
+
         let length_delta = dbg!(original_size - new_data_length as u32);
         let new_offset = dbg!(original_offset + length_delta);
-
         // TODO: we need to adjust both the subsequent offsets and associated data
     }
 
