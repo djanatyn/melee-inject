@@ -17,7 +17,7 @@ pub mod characters {
 
     /// DAT files for Captain Falcon, used as replacement targets.
     #[allow(dead_code)]
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub enum CaptainFalconFile {
         /// NTSC data & shared textures.
         PlCa,
@@ -35,7 +35,7 @@ pub mod characters {
         PlCaWh,
     }
 
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub enum Character {
         CaptainFalcon(CaptainFalconFile),
     }
@@ -57,7 +57,7 @@ use characters::Character;
 ///
 /// This potential replacement is guaranteed to match a file in the FST.
 #[allow(dead_code)]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Replacement {
     /// Which file to replace?
     pub target: Character,
@@ -86,7 +86,8 @@ fn find_character<'a>(target: &Character, iso: &'a GcmFile) -> Option<&'a FsNode
 
 struct FstFile {
     name: String,
-    offset: u32,
+    original_offset: u32,
+    new_offset: u32,
     size: u32,
     data: Vec<u8>,
 }
@@ -104,7 +105,8 @@ fn read_file(file: &FsNode) -> io::Result<FstFile> {
 
             Ok(FstFile {
                 name: name.to_string(),
-                offset: *offset,
+                new_offset: *offset,
+                original_offset: *offset,
                 size: *size,
                 data,
             })
@@ -168,7 +170,8 @@ fn read_file(file: &FsNode) -> io::Result<FstFile> {
 fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
     let new_fst = iso.fst_bytes.clone();
 
-    let mut files: Vec<FstFile> = iso
+    // load all files within the FST from the ISO
+    let files: Vec<FstFile> = iso
         .filesystem
         .files
         .iter()
@@ -180,28 +183,36 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
         })
         .collect();
 
-    files.sort_by(|a, b| a.offset.cmp(&b.offset));
-
+    let mut replacement_deltas: Vec<(Replacement, u32, u32)> = Vec::new();
     for replacement in replacements {
-        let (original_offset, original_size) = match find_character(&replacement.target, iso) {
-            Some(FsNode::File {
-                offset, size, name, ..
-            }) => {
-                eprintln!("found {name}");
-                (offset, size)
-            }
-            _ => panic!("failed to find character: {replacement:#?}"),
-        };
+        let (target_original_offset, target_original_size) =
+            match find_character(&replacement.target, iso) {
+                Some(FsNode::File {
+                    offset, size, name, ..
+                }) => {
+                    eprintln!("found offset of {name}: {offset}");
+                    (offset, size)
+                }
+                _ => panic!("failed to find character: {replacement:#?}"),
+            };
 
         let new_data: Vec<u8> = std::fs::read(&replacement.replacement).expect("could not open");
         let new_data_length = new_data.len();
 
-        let length_delta = dbg!(original_size - new_data_length as u32);
-        let new_offset = dbg!(original_offset + length_delta);
+        let length_delta = dbg!(target_original_size - new_data_length as u32);
 
-        // TODO: we need to adjust both the subsequent offsets and associated data
+        replacement_deltas.push((replacement.clone(), *target_original_offset, length_delta));
     }
 
+    for mut file in files {
+        for (replacement, offset, delta) in &replacement_deltas {
+            if *delta > 0 && file.original_offset >= *offset {
+                file.new_offset += delta;
+            }
+        }
+    }
+
+    // TODO: now that we have the updated FST definition, let's rebuild it
     new_fst
 }
 
