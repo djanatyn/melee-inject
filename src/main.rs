@@ -90,7 +90,8 @@ struct UpdateFST {
     name: String,
     original_offset: u32,
     updated_offset: u32,
-    size: u32,
+    original_size: u32,
+    updated_size: u32,
     data: Vec<u8>,
 }
 
@@ -109,7 +110,9 @@ fn read_file(file: &FsNode) -> io::Result<UpdateFST> {
                 name: name.to_string(),
                 updated_offset: *offset,
                 original_offset: *offset,
-                size: *size,
+
+                original_size: *size,
+                updated_size: *size,
                 data,
             })
         }
@@ -214,7 +217,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
         let new_data_length = new_data.len();
 
         // now we can see whether the new data is larger or smaller
-        let length_delta = dbg!(matching.size - new_data_length as u32);
+        let length_delta = dbg!(matching.original_size - new_data_length as u32);
 
         // bump updated_offset by length_delta for FST entries following the original offset
         if length_delta > 0 {
@@ -222,7 +225,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
                 // if we find two matching offsets, this is the replacement target
                 if file.original_offset == matching.original_offset {
                     // bump the size to match the new data
-                    file.size = new_data_length as u32;
+                    file.updated_size = new_data_length as u32;
                 }
 
                 // for everything following this offset,
