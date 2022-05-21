@@ -85,15 +85,16 @@ fn find_character<'a>(target: &Character, iso: &'a GcmFile) -> Option<&'a FsNode
 }
 
 #[derive(Clone)]
-struct FstFile {
+/// An update to execute against the GCM FST.
+struct UpdateFST {
     name: String,
     original_offset: u32,
-    new_offset: u32,
+    updated_offset: u32,
     size: u32,
     data: Vec<u8>,
 }
 
-fn read_file(file: &FsNode) -> io::Result<FstFile> {
+fn read_file(file: &FsNode) -> io::Result<UpdateFST> {
     match file {
         FsNode::File { size, offset, name } => {
             let mut file = std::fs::File::open(ISO_PATH)?;
@@ -104,9 +105,9 @@ fn read_file(file: &FsNode) -> io::Result<FstFile> {
                 .take(*size as u64)
                 .read_to_end(&mut data)?;
 
-            Ok(FstFile {
+            Ok(UpdateFST {
                 name: name.to_string(),
-                new_offset: *offset,
+                updated_offset: *offset,
                 original_offset: *offset,
                 size: *size,
                 data,
@@ -116,7 +117,7 @@ fn read_file(file: &FsNode) -> io::Result<FstFile> {
     }
 }
 
-fn update_fst(updates: &Vec<FstFile>, fst: Vec<u8>) -> Vec<u8> {
+fn update_fst(updates: &Vec<UpdateFST>, fst: Vec<u8>) -> Vec<u8> {
     todo!();
 }
 
@@ -172,48 +173,58 @@ fn update_fst(updates: &Vec<FstFile>, fst: Vec<u8>) -> Vec<u8> {
 /// string table offset starts at (0x04bc * 0x0c) = 0x38d0
 ///
 #[allow(dead_code)]
-fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<FstFile> {
+fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST> {
     let new_fst = iso.fst_bytes.clone();
 
-    // load all files within the FST from the ISO
-    let files = iso.filesystem.files.iter().filter_map(|e| match e {
-        file @ FsNode::File { .. } => Some((read_file(dbg!(file))).expect("failed to read file")),
-        _ => None,
-    });
+    use std::collections::HashMap;
+    let mut replacement_map: HashMap<u32, UpdateFST> = HashMap::new();
+    for file in &iso.filesystem.files {
+        match file {
+            // for each file, insert a mutable UpdateFST, indexed by offset
+            file @ FsNode::File { offset, .. } => {
+                replacement_map.insert(*offset, read_file(&file).expect("failed to read file"))
+            }
+            _ => continue,
+        };
+    }
 
-    let mut replacement_deltas: Vec<(Replacement, u32, u32)> = Vec::new();
     for replacement in replacements {
-        let (target_original_offset, target_original_size) =
-            match find_character(&replacement.target, iso) {
-                Some(FsNode::File {
-                    offset, size, name, ..
-                }) => {
-                    eprintln!("found offset of {name}: {offset}");
-                    (offset, size)
-                }
-                _ => panic!("failed to find character: {replacement:#?}"),
-            };
+        let search = replacement_map.clone();
+        let mut found = search
+            .values()
+            .filter(|update: &&UpdateFST| update.name == Character::filename(&replacement.target))
+            .collect::<Vec<_>>();
+
+        let num_found = found.len();
+        if num_found != 1 {
+            panic!(
+                "did not match character {:?}: {num_found} found",
+                Character::filename(&replacement.target)
+            );
+        }
+
+        let matching: &UpdateFST = found.pop().expect("failed to match character");
 
         let new_data: Vec<u8> = std::fs::read(&replacement.replacement).expect("could not open");
         let new_data_length = new_data.len();
 
-        let length_delta = dbg!(target_original_size - new_data_length as u32);
+        let length_delta = dbg!(matching.size - new_data_length as u32);
 
-        replacement_deltas.push((replacement.clone(), *target_original_offset, length_delta));
-    }
-
-    files
-        .map(|mut file| {
-            for (replacement, offset, delta) in &replacement_deltas {
-                if *delta > 0 && file.original_offset >= *offset {
-                    file.new_offset += delta;
+        // bump updated_offset by length_delta for FST entries following the original offset
+        if length_delta > 0 {
+            for file in replacement_map.values_mut() {
+                if file.original_offset >= matching.original_offset {
+                    file.updated_offset += length_delta;
                 }
             }
-            file
-        })
-        .collect()
+        }
+    }
 
     // TODO: now that we have the updated FST definition, let's rebuild it
+    // walk through each 0x0c byte
+    // - for each targte_original_offset key in replacement_map,
+    // - if the target_original_offset matches
+    todo!();
 }
 
 /// Attempt to build a new ISO given a set of replacements.
