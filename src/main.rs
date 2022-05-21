@@ -6,6 +6,8 @@
 use binrw::{io::Cursor, BinRead};
 use clap::Parser;
 use gc_gcm::{FsNode, GcmFile};
+use std::collections::HashMap;
+use std::fmt;
 use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::PathBuf;
 use std::str::pattern::Pattern;
@@ -45,6 +47,7 @@ pub mod characters {
             match character {
                 Character::CaptainFalcon(CaptainFalconFile::PlCa) => "PlCa.dat",
                 Character::CaptainFalcon(CaptainFalconFile::PlCaNr) => "PlCaNr.dat",
+                Character::CaptainFalcon(CaptainFalconFile::PlCaGr) => "PlCaGr.dat",
                 _ => todo!(),
             }
         }
@@ -93,6 +96,18 @@ struct UpdateFST {
     original_size: u32,
     updated_size: u32,
     data: Vec<u8>,
+}
+
+impl fmt::Debug for UpdateFST {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("UpdateFST")
+            .field("name", &self.name)
+            .field("original_offset", &self.original_offset)
+            .field("updated_offset", &self.updated_offset)
+            .field("original_size", &self.original_size)
+            .field("updated_size", &self.updated_size)
+            .finish()
+    }
 }
 
 fn read_file(file: &FsNode) -> io::Result<UpdateFST> {
@@ -179,7 +194,6 @@ fn update_fst(updates: &Vec<UpdateFST>, fst: Vec<u8>) -> Vec<u8> {
 fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST> {
     let new_fst = iso.fst_bytes.clone();
 
-    use std::collections::HashMap;
     let mut replacement_map: HashMap<u32, UpdateFST> = HashMap::new();
     for file in &iso.filesystem.files {
         match file {
@@ -232,6 +246,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
                 if file.original_offset >= matching.original_offset {
                     // bump the offset to reflect the updated data length
                     file.updated_offset += length_delta;
+                    dbg!(file);
                 }
             }
         }
@@ -241,6 +256,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     // walk through each 0x0c byte
     // - for each targte_original_offset key in replacement_map,
     // - if the target_original_offset matches
+
     todo!();
 }
 
@@ -450,20 +466,36 @@ mod tests {
         insta::assert_debug_snapshot!(headers)
     }
 
+    // #[test]
+    // fn try_replace_dat_same_size() {
+    //     let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
+
+    //     let replacements = vec![
+    //         // replace common files
+    //         Replacement {
+    //             target: Character::CaptainFalcon(CaptainFalconFile::PlCa),
+    //             replacement: PathBuf::from("n64-falcon/PlCa.dat"),
+    //         },
+    //         // replace neutral skin
+    //         Replacement {
+    //             target: Character::CaptainFalcon(CaptainFalconFile::PlCaNr),
+    //             replacement: PathBuf::from("n64-falcon/PlCaNr.dat"),
+    //         },
+    //     ];
+
+    //     // rebuild FST using replacements
+    //     let updates = rebuild_fst(&iso, &replacements);
+    // }
+
     #[test]
-    fn try_replace_dat() {
+    fn try_replace_dat_diff_size() {
         let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
 
         let replacements = vec![
-            // replace common files
+            // replace potemkin
             Replacement {
-                target: Character::CaptainFalcon(CaptainFalconFile::PlCa),
-                replacement: PathBuf::from("n64-falcon/PlCa.dat"),
-            },
-            // replace neutral skin
-            Replacement {
-                target: Character::CaptainFalcon(CaptainFalconFile::PlCaNr),
-                replacement: PathBuf::from("n64-falcon/PlCaNr.dat"),
+                target: Character::CaptainFalcon(CaptainFalconFile::PlCaGr),
+                replacement: PathBuf::from("plcagr-falcon/PlCaGr POTEMKIN FALCON.dat"),
             },
         ];
 
