@@ -189,12 +189,16 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     }
 
     for replacement in replacements {
+        // first, locate the FST entry (within the target ISO) for the replacement
+        // we search through the replacement_map we built up earlier
         let search = replacement_map.clone();
         let mut found = search
             .values()
             .filter(|update: &&UpdateFST| update.name == Character::filename(&replacement.target))
             .collect::<Vec<_>>();
 
+        // we should find exactly one entry for each replacement
+        // if not, abort
         let num_found = found.len();
         if num_found != 1 {
             panic!(
@@ -202,18 +206,28 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
                 Character::filename(&replacement.target)
             );
         }
-
         let matching: &UpdateFST = found.pop().expect("failed to match character");
 
+        // once we have the entry, we need the length of the new data
+        // we load this using the path in the replacement definition
         let new_data: Vec<u8> = std::fs::read(&replacement.replacement).expect("could not open");
         let new_data_length = new_data.len();
 
+        // now we can see whether the new data is larger or smaller
         let length_delta = dbg!(matching.size - new_data_length as u32);
 
         // bump updated_offset by length_delta for FST entries following the original offset
         if length_delta > 0 {
             for file in replacement_map.values_mut() {
+                // if we find two matching offsets, this is the replacement target
+                if file.original_offset == matching.original_offset {
+                    // bump the size to match the new data
+                    file.size = new_data_length as u32;
+                }
+
+                // for everything following this offset,
                 if file.original_offset >= matching.original_offset {
+                    // bump the offset to reflect the updated data length
                     file.updated_offset += length_delta;
                 }
             }
