@@ -68,25 +68,6 @@ pub struct Replacement {
     pub replacement: PathBuf,
 }
 
-#[allow(dead_code)]
-fn find_character<'a>(target: &Character, iso: &'a GcmFile) -> Option<&'a FsNode> {
-    let mut found = iso
-        .filesystem
-        .files
-        .iter()
-        .filter(|e| match e {
-            FsNode::File { name, .. } => Character::filename(target).is_suffix_of(name),
-            _ => false,
-        })
-        .collect::<Vec<_>>();
-
-    if found.len() != 1 {
-        panic!("did not match character: {found:#?}");
-    }
-
-    found.pop()
-}
-
 #[derive(Clone)]
 /// An update to execute against the GCM FST.
 struct UpdateFST {
@@ -108,6 +89,41 @@ impl fmt::Debug for UpdateFST {
             .field("updated_size", &self.updated_size)
             .finish()
     }
+}
+
+#[allow(dead_code)]
+#[derive(Debug, BinRead)]
+#[br(big)]
+struct DatHeader {
+    file_size: i32,
+    data_block_size: i32,
+    relocation_table_count: i32,
+    root_count1: i32,
+    #[br(pad_after = 3)]
+    root_count2: i32,
+}
+
+#[derive(Parser, Debug)]
+#[clap(version = "1.0", author = "Jonathan Strickland <djanatyn@gmail.com>")]
+pub struct Args {
+    /// Path to Melee ISO.
+    #[clap(parse(from_os_str), short, long)]
+    pub melee_iso: PathBuf,
+
+    #[clap(subcommand)]
+    pub subcmd: SubCommand,
+}
+
+#[derive(Parser, Debug)]
+pub enum SubCommand {
+    /// Search (and display) a specific DAT file.
+    SearchDAT(SearchDAT),
+}
+
+#[derive(Parser, Debug)]
+pub struct SearchDAT {
+    #[clap(short, long)]
+    pub dat_query: String,
 }
 
 fn read_file(file: &FsNode) -> io::Result<UpdateFST> {
@@ -266,55 +282,11 @@ fn build_iso(_path: PathBuf, _dest: PathBuf, _replacements: &Vec<Replacement>) {
     todo!()
 }
 
-#[allow(dead_code)]
-#[derive(Debug, BinRead)]
-#[br(big)]
-struct DatHeader {
-    file_size: i32,
-    data_block_size: i32,
-    relocation_table_count: i32,
-    root_count1: i32,
-    #[br(pad_after = 3)]
-    root_count2: i32,
-}
-
-#[derive(Parser, Debug)]
-#[clap(version = "1.0", author = "Jonathan Strickland <djanatyn@gmail.com>")]
-pub struct Args {
-    /// Path to Melee ISO.
-    #[clap(parse(from_os_str), short, long)]
-    pub melee_iso: PathBuf,
-
-    #[clap(subcommand)]
-    pub subcmd: SubCommand,
-}
-
-#[derive(Parser, Debug)]
-pub enum SubCommand {
-    /// Show FST bytes.
-    ShowFST,
-    /// Search (and display) a specific DAT file.
-    SearchDAT(SearchDAT),
-}
-
-#[derive(Parser, Debug)]
-pub struct SearchDAT {
-    #[clap(short, long)]
-    pub dat_query: String,
-}
-
 fn dat_files(iso: &GcmFile) -> impl Iterator<Item = &FsNode> {
     iso.filesystem.files.iter().filter(|e| match e {
         FsNode::File { name, .. } => ".dat".is_suffix_of(name),
         _ => false,
     })
-}
-
-fn show_fst(iso: &PathBuf) -> io::Result<()> {
-    let iso = GcmFile::open(iso).expect("could not open ISO");
-    io::stdout().write(&iso.fst_bytes)?;
-
-    Ok(())
 }
 
 fn search_dat(iso_path: &PathBuf, args: &SearchDAT) -> io::Result<()> {
@@ -351,15 +323,6 @@ fn search_dat(iso_path: &PathBuf, args: &SearchDAT) -> io::Result<()> {
     }
 }
 
-fn main() -> io::Result<()> {
-    let args: Args = Args::parse();
-
-    match args.subcmd {
-        SubCommand::ShowFST => show_fst(&args.melee_iso),
-        SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
-    }
-}
-
 #[allow(dead_code)]
 fn read_node(file: &FsNode) -> io::Result<DatHeader> {
     match file {
@@ -377,6 +340,14 @@ fn read_node(file: &FsNode) -> io::Result<DatHeader> {
             Ok(DatHeader::read(&mut Cursor::new(&contents[..32])).expect("could not read header"))
         }
         _ => panic!("failure"),
+    }
+}
+
+fn main() -> io::Result<()> {
+    let args: Args = Args::parse();
+
+    match args.subcmd {
+        SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
     }
 }
 
