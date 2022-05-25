@@ -91,18 +91,6 @@ impl fmt::Debug for UpdateFST {
     }
 }
 
-#[allow(dead_code)]
-#[derive(Debug, BinRead)]
-#[br(big)]
-struct DatHeader {
-    file_size: i32,
-    data_block_size: i32,
-    relocation_table_count: i32,
-    root_count1: i32,
-    #[br(pad_after = 3)]
-    root_count2: i32,
-}
-
 #[derive(Parser, Debug)]
 #[clap(version = "1.0", author = "Jonathan Strickland <djanatyn@gmail.com>")]
 pub struct Args {
@@ -193,7 +181,7 @@ fn update_fst(updates: &Vec<UpdateFST>, fst: Vec<u8>) -> Vec<u8> {
 /// (information from YAGCD)
 /// $ pandoc -f html -t haddock 'https://www.gc-forever.com/yagcd/chap13.html'
 ///
-/// v1.02 NTSC GALE01 Root Directory Entry
+///tes v1.02 NTSC GALE01 Root Directory Entry
 /// ======================================
 /// 0001 0203 0405 0607 0809 0a0b
 /// ---- ---- ---- ---- ---- ----
@@ -250,7 +238,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
         let length_delta = dbg!(matching.original_size - new_data_length as u32);
 
         // bump updated_offset by length_delta for FST entries following the original offset
-        if length_delta > 0 {
+        if length_delta != 0 {
             for file in replacement_map.values_mut() {
                 // if we find two matching offsets, this is the replacement target
                 if file.original_offset == matching.original_offset {
@@ -272,6 +260,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     // walk through each 0x0c byte
     // - for each targte_original_offset key in replacement_map,
     // - if the target_original_offset matches
+    use std::io::Cursor;
 
     todo!();
 }
@@ -323,26 +312,6 @@ fn search_dat(iso_path: &PathBuf, args: &SearchDAT) -> io::Result<()> {
     }
 }
 
-#[allow(dead_code)]
-fn read_node(file: &FsNode) -> io::Result<DatHeader> {
-    match file {
-        FsNode::File { size, offset, .. } => {
-            let mut file = std::fs::File::open(ISO_PATH)?;
-            let mut contents = Vec::with_capacity(*size as usize);
-            file.seek(SeekFrom::Start(*offset as u64))?;
-            Read::by_ref(&mut file)
-                // file.by_ref()
-                .take(*size as u64)
-                .read_to_end(&mut contents)?;
-
-            // header is first 32 bytes
-            // https://smashboards.com/threads/melee-dat-format.292603/
-            Ok(DatHeader::read(&mut Cursor::new(&contents[..32])).expect("could not read header"))
-        }
-        _ => panic!("failure"),
-    }
-}
-
 fn main() -> io::Result<()> {
     let args: Args = Args::parse();
 
@@ -355,7 +324,7 @@ fn main() -> io::Result<()> {
 mod tests {
     use super::{
         characters::{CaptainFalconFile, Character},
-        dat_files, read_node, rebuild_fst, Replacement, ISO_PATH,
+        dat_files, rebuild_fst, Replacement, ISO_PATH,
     };
     use gc_gcm::{FsNode, GcmFile};
     use insta;
@@ -370,71 +339,10 @@ mod tests {
     }
 
     #[test]
-    fn check_fst() {
-        let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
-        let bytes = format!("{:#02x?}", iso.fst_bytes);
-        insta::assert_snapshot!("fst", bytes)
-    }
-
-    #[test]
     fn find_dat_files() {
         let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
         let files = dat_files(&iso).collect::<Vec<_>>();
         insta::assert_debug_snapshot!(files);
-    }
-
-    #[test]
-    fn find_yoshi_header() {
-        let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
-        let files = dat_files(&iso)
-            .filter(|file| match file {
-                FsNode::File { name, .. } => "TyYoshi.dat".is_suffix_of(name),
-                _ => false,
-            })
-            .collect::<Vec<_>>();
-
-        // there is only one yoshi
-        assert_eq!(files.len(), 1);
-
-        match files.first() {
-            Some(yoshi @ FsNode::File { size, .. }) => {
-                let header = read_node(yoshi).expect("could not read header");
-
-                assert_eq!(header.file_size, *size as i32);
-                insta::assert_debug_snapshot!(header)
-            }
-            _ => panic!("failed to find yoshi"),
-        };
-    }
-
-    #[test]
-    fn check_dat_headers() {
-        let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
-        let headers = dat_files(&iso)
-            .filter_map(|dat| {
-                println!("checking header for {dat:#?}");
-
-                // get file size of FsNode entry
-                let (name, size) = match dat {
-                    FsNode::File { name, size, .. } => (name, size),
-                    _ => panic!("returned directory"),
-                };
-
-                // skip animation files
-                if "AJ.dat".is_suffix_of(name) {
-                    return None;
-                }
-
-                // parse header
-                let header = read_node(dat).expect("could not read node");
-                println!("header: {header:#?}");
-
-                // compare FsNode size with DatHeader size
-                assert_eq!(header.file_size, *size as i32);
-                Some(header)
-            })
-            .collect::<Vec<_>>();
-        insta::assert_debug_snapshot!(headers)
     }
 
     // #[test]
