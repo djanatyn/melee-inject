@@ -197,6 +197,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     }
 
     for replacement in replacements {
+        println!("{replacement:?}");
         // first, locate the FST entry (within the target ISO) for the replacement
         // we search through the replacement_map we built up earlier
         let search = replacement_map.clone();
@@ -237,7 +238,6 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
                 if file.original_offset >= matching.original_offset {
                     // bump the offset to reflect the updated data length
                     file.updated_offset += length_delta;
-                    dbg!(file);
                 }
             }
         }
@@ -265,13 +265,16 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     // read the root node:
     // 0100 0000 0000 0000 0000 04bc
     let mut root = [0; 0xc];
-    dbg!(cursor.read(&mut root));
+    cursor.read(&mut root);
 
     let num_entries = root_node_num_entries(root);
 
     // skip root entry
     for entry_index in 1..num_entries {
-        cursor.seek(SeekFrom::Start((entry_index * 0x0c) as u64));
+        // seek to the correct offset
+        let seek: u64 = (entry_index * 0x0c) as u64;
+        cursor.seek(SeekFrom::Start(seek));
+
         // read node
         let mut node = [0; 0xc];
         cursor.read(&mut node);
@@ -280,9 +283,39 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
         if node_is_directory(node) {
             continue;
         }
+
+        let file_offset = node_file_offset(node);
+
+        match replacement_map.get(&file_offset) {
+            Some(
+                update @ UpdateFST {
+                    name,
+                    updated_offset,
+                    ..
+                },
+            ) => {
+                if file_offset == *updated_offset {
+                    continue;
+                }
+
+                println!(
+                    "fst entry {seek:#0x}: {file_offset:#0x} -> {updated_offset:#0x} [{name}]"
+                );
+            }
+            None => panic!("no replacement map entry found for node: {file_offset:x}"),
+        };
     }
 
     todo!();
+}
+
+fn node_file_offset(node: [u8; 0x0c]) -> u32 {
+    // read bytes 0x04 -> 0x08 as u32 (filename offset)
+    let (filename_offset_bytes, rest) = &node[4..8].split_at(std::mem::size_of::<u32>());
+    let bytes: [u8; 4] = (*filename_offset_bytes)
+        .try_into()
+        .expect("failed to parse root node num_entries");
+    u32::from_be_bytes(bytes)
 }
 
 fn root_node_num_entries(node: [u8; 0x0c]) -> u32 {
@@ -414,7 +447,7 @@ mod tests {
             // replace potemkin
             Replacement {
                 target: Character::CaptainFalcon(CaptainFalconFile::PlCaGr),
-                replacement: PathBuf::from("plcagr-falcon/PlCaGr POTEMKIN FALCON.dat"),
+                replacement: PathBuf::from("falcon/POTEMKIN FALCON.dat"),
             },
         ];
 
