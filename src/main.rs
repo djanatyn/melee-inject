@@ -257,7 +257,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     // \---------------------------- flag (directory)
     //
     // there are 0x4bc entries, each 0x0c long
-    // string table offset starts at (0x04bc * 0x0c) = 0x38d0 (or 1212 in decimal)
+    // string table offset starts at (0x04bc * 0x0c) = 0x38d0
 
     // create cursor over filesystem table
     let mut entry = Cursor::new(new_fst);
