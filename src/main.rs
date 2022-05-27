@@ -260,19 +260,26 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     // string table offset starts at (0x04bc * 0x0c) = 0x38d0
 
     // create cursor over filesystem table
-    let mut entry = Cursor::new(new_fst);
+    let mut cursor = Cursor::new(new_fst);
 
     // read the root node:
     // 0100 0000 0000 0000 0000 04bc
     let mut root = [0; 0xc];
-    dbg!(entry.read(&mut root));
+    dbg!(cursor.read(&mut root));
 
     // read bytes 0x08 -> 0x0c as u32 (num_entries)
     let (num_entries_bytes, rest) = &root[8..0xc].split_at(std::mem::size_of::<u32>());
     let bytes: [u8; 4] = (*num_entries_bytes)
         .try_into()
         .expect("failed to parse root node num_entries");
-    dbg!(u32::from_be_bytes(bytes));
+    let num_entries = u32::from_be_bytes(bytes);
+
+    // skip root entry
+    for entry_index in 1..num_entries {
+        cursor.seek(SeekFrom::Start((entry_index * 0x0c) as u64));
+        let mut node = [0; 0xc];
+        cursor.read(&mut node);
+    }
 
     todo!();
 }
