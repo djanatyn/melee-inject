@@ -252,7 +252,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     // ---- ---- ---- ---- ---- ----
     // 0100 0000 0000 0000 0000 04bc
     // ^ ^       ^         ^-------- num_entries (0x04bc) (1212 entries)
-    // | |       \------------------ parent_offset (0x00)
+    // | |       \------------------ filename or parent_offset (0x00)
     // | \-------------------------- filename string table offset (0x00)
     // \---------------------------- flag (directory)
     //
@@ -267,21 +267,42 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     let mut root = [0; 0xc];
     dbg!(cursor.read(&mut root));
 
-    // read bytes 0x08 -> 0x0c as u32 (num_entries)
-    let (num_entries_bytes, rest) = &root[8..0xc].split_at(std::mem::size_of::<u32>());
-    let bytes: [u8; 4] = (*num_entries_bytes)
-        .try_into()
-        .expect("failed to parse root node num_entries");
-    let num_entries = u32::from_be_bytes(bytes);
+    let num_entries = root_node_num_entries(root);
 
     // skip root entry
     for entry_index in 1..num_entries {
         cursor.seek(SeekFrom::Start((entry_index * 0x0c) as u64));
+        // read node
         let mut node = [0; 0xc];
         cursor.read(&mut node);
+
+        // skip directories
+        if node_is_directory(node) {
+            continue;
+        }
     }
 
     todo!();
+}
+
+fn root_node_num_entries(node: [u8; 0x0c]) -> u32 {
+    // read bytes 0x08 -> 0x0c as u32 (num_entries)
+    let (num_entries_bytes, rest) = &node[8..0xc].split_at(std::mem::size_of::<u32>());
+    let bytes: [u8; 4] = (*num_entries_bytes)
+        .try_into()
+        .expect("failed to parse root node num_entries");
+    u32::from_be_bytes(bytes)
+}
+
+fn node_is_directory(node: [u8; 0x0c]) -> bool {
+    // read bytes 0x00 -> 0x01 as u8 (directory flag)
+    let (file_or_directory, rest) = &node[0..1].split_at(std::mem::size_of::<u8>());
+    let bytes: [u8; 1] = (*file_or_directory)
+        .try_into()
+        .expect("failed to parse directory flag: {node}");
+    let directory_flag = u8::from_be_bytes(bytes);
+
+    directory_flag != 0
 }
 
 /// Attempt to build a new ISO given a set of replacements.
