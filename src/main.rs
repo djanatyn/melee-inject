@@ -181,19 +181,6 @@ fn update_fst(updates: &Vec<UpdateFST>, fst: Vec<u8>) -> Vec<u8> {
 /// (information from YAGCD)
 /// $ pandoc -f html -t haddock 'https://www.gc-forever.com/yagcd/chap13.html'
 ///
-///tes v1.02 NTSC GALE01 Root Directory Entry
-/// ======================================
-/// 0001 0203 0405 0607 0809 0a0b
-/// ---- ---- ---- ---- ---- ----
-/// 0100 0000 0000 0000 0000 04bc
-/// ^ ^       ^         ^-------- num_entries (0x04bc) (1212 entries)
-/// | |       \------------------ parent_offset (0x00)
-/// | \-------------------------- filename string table offset (0x00)
-/// \---------------------------- flag (directory)
-///
-/// there are 0x4bc entries, each 0x0c long
-/// string table offset starts at (0x04bc * 0x0c) = 0x38d0
-///
 #[allow(dead_code)]
 fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST> {
     let new_fst = iso.fst_bytes.clone();
@@ -257,15 +244,35 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     }
 
     // TODO: now that we have the updated FST definition, let's rebuild it
-    // walk through each 0x0c byte
-    // - for each targte_original_offset key in replacement_map,
-    // - if the target_original_offset matches
     use std::io::Cursor;
 
+    // v1.02 NTSC GALE01 Root Directory Entry
+    // ======================================
+    // 0001 0203 0405 0607 0809 0a0b
+    // ---- ---- ---- ---- ---- ----
+    // 0100 0000 0000 0000 0000 04bc
+    // ^ ^       ^         ^-------- num_entries (0x04bc) (1212 entries)
+    // | |       \------------------ parent_offset (0x00)
+    // | \-------------------------- filename string table offset (0x00)
+    // \---------------------------- flag (directory)
+    //
+    // there are 0x4bc entries, each 0x0c long
+    // string table offset starts at (0x04bc * 0x0c) = 0x38d0 (or 1212 in decimal)
+
+    // create cursor over filesystem table
     let mut entry = Cursor::new(new_fst);
+
+    // read the root node:
+    // 0100 0000 0000 0000 0000 04bc
     let mut root = [0; 0xc];
     dbg!(entry.read(&mut root));
-    dbg!(root);
+
+    // read bytes 0x08 -> 0x0c as u32 (num_entries)
+    let (num_entries_bytes, rest) = &root[8..0xc].split_at(std::mem::size_of::<u32>());
+    let bytes: [u8; 4] = (*num_entries_bytes)
+        .try_into()
+        .expect("failed to parse root node num_entries");
+    dbg!(u32::from_be_bytes(bytes));
 
     todo!();
 }
