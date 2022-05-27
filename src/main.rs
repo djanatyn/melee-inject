@@ -262,6 +262,11 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
     // - if the target_original_offset matches
     use std::io::Cursor;
 
+    let mut entry = Cursor::new(new_fst);
+    let mut root = [0; 0xc];
+    dbg!(entry.read(&mut root));
+    dbg!(root);
+
     todo!();
 }
 
