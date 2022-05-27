@@ -3,7 +3,6 @@
 // TODO: output logs with tracing
 // TODO: update README.md with goals, direction
 
-use binrw::{io::Cursor, BinRead};
 use clap::Parser;
 use gc_gcm::{FsNode, GcmFile};
 use std::collections::HashMap;
@@ -54,7 +53,7 @@ pub mod characters {
     }
 }
 
-use characters::{CaptainFalconFile, Character};
+use characters::Character;
 
 /// A queued replacement to be executed later.
 ///
@@ -68,8 +67,8 @@ pub struct Replacement {
     pub replacement: PathBuf,
 }
 
-#[derive(Clone)]
 /// An update to execute against the GCM FST.
+#[derive(Clone)]
 struct UpdateFST {
     name: String,
     original_offset: u32,
@@ -106,6 +105,7 @@ pub struct Args {
 pub enum SubCommand {
     /// Search (and display) a specific DAT file.
     SearchDAT(SearchDAT),
+    ShowFST,
 }
 
 #[derive(Parser, Debug)]
@@ -139,7 +139,8 @@ fn read_file(file: &FsNode) -> io::Result<UpdateFST> {
     }
 }
 
-fn update_fst(updates: &Vec<UpdateFST>, fst: Vec<u8>) -> Vec<u8> {
+#[allow(dead_code)]
+fn update_fst(_updates: &Vec<UpdateFST>, _fst: Vec<u8>) -> Vec<u8> {
     todo!();
 }
 
@@ -181,7 +182,6 @@ fn update_fst(updates: &Vec<UpdateFST>, fst: Vec<u8>) -> Vec<u8> {
 /// (information from YAGCD)
 /// $ pandoc -f html -t haddock 'https://www.gc-forever.com/yagcd/chap13.html'
 ///
-#[allow(dead_code)]
 fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
     let new_fst = iso.fst_bytes.clone();
 
@@ -190,7 +190,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
         match file {
             // for each file, insert a mutable UpdateFST, indexed by offset
             file @ FsNode::File { offset, .. } => {
-                replacement_map.insert((*offset), read_file(&file).expect("failed to read file"))
+                replacement_map.insert(*offset, read_file(&file).expect("failed to read file"))
             }
             _ => continue,
         };
@@ -265,7 +265,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
     // read the root node:
     // 0100 0000 0000 0000 0000 04bc
     let mut root = [0; 0xc];
-    cursor.read(&mut root);
+    cursor.read(&mut root).expect("failed to read root node");
 
     let num_entries = root_node_num_entries(root);
 
@@ -273,11 +273,13 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
     for entry_index in 1..num_entries {
         // seek to the correct offset
         let seek: u64 = (entry_index * 0x0c) as u64;
-        cursor.seek(SeekFrom::Start(seek));
+        cursor
+            .seek(SeekFrom::Start(seek))
+            .expect("failed to seek to fst entry: {seek}");
 
         // read node
         let mut node = [0; 0xc];
-        cursor.read(&mut node);
+        cursor.read(&mut node).expect("failed to read node: {seek}");
 
         // skip directories
         if node_is_directory(node) {
@@ -287,13 +289,11 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
         let file_offset = node_file_offset(node);
 
         match replacement_map.get(&file_offset) {
-            Some(
-                update @ UpdateFST {
-                    name,
-                    updated_offset,
-                    ..
-                },
-            ) => {
+            Some(UpdateFST {
+                name,
+                updated_offset,
+                ..
+            }) => {
                 if file_offset == (*updated_offset as u32) {
                     continue;
                 }
@@ -303,8 +303,12 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
                 );
 
                 // seek to file offset
-                cursor.seek(SeekFrom::Start(seek + 4));
-                cursor.write(&updated_offset.to_be_bytes());
+                cursor
+                    .seek(SeekFrom::Start(seek + 4))
+                    .expect("failed to seek to file offset");
+                cursor
+                    .write(&updated_offset.to_be_bytes())
+                    .expect("failed to write offset");
             }
             None => panic!("no replacement map entry found for node: {seek:#0x}"),
         };
@@ -318,7 +322,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
 
 fn node_file_offset(node: [u8; 0x0c]) -> u32 {
     // read bytes 0x04 -> 0x08 as u32 (filename offset)
-    let (filename_offset_bytes, rest) = &node[4..8].split_at(std::mem::size_of::<u32>());
+    let (filename_offset_bytes, _) = &node[4..8].split_at(std::mem::size_of::<u32>());
     let bytes: [u8; 4] = (*filename_offset_bytes)
         .try_into()
         .expect("failed to parse root node num_entries");
@@ -327,7 +331,7 @@ fn node_file_offset(node: [u8; 0x0c]) -> u32 {
 
 fn root_node_num_entries(node: [u8; 0x0c]) -> u32 {
     // read bytes 0x08 -> 0x0c as u32 (num_entries)
-    let (num_entries_bytes, rest) = &node[8..0xc].split_at(std::mem::size_of::<u32>());
+    let (num_entries_bytes, _) = &node[8..0xc].split_at(std::mem::size_of::<u32>());
     let bytes: [u8; 4] = (*num_entries_bytes)
         .try_into()
         .expect("failed to parse root node num_entries");
@@ -336,7 +340,7 @@ fn root_node_num_entries(node: [u8; 0x0c]) -> u32 {
 
 fn node_is_directory(node: [u8; 0x0c]) -> bool {
     // read bytes 0x00 -> 0x01 as u8 (directory flag)
-    let (file_or_directory, rest) = &node[0..1].split_at(std::mem::size_of::<u8>());
+    let (file_or_directory, _) = &node[0..1].split_at(std::mem::size_of::<u8>());
     let bytes: [u8; 1] = (*file_or_directory)
         .try_into()
         .expect("failed to parse directory flag: {node}");
@@ -356,6 +360,13 @@ fn dat_files(iso: &GcmFile) -> impl Iterator<Item = &FsNode> {
         FsNode::File { name, .. } => ".dat".is_suffix_of(name),
         _ => false,
     })
+}
+
+fn show_fst(iso: &PathBuf) -> io::Result<()> {
+    let iso = GcmFile::open(iso).expect("could not open ISO");
+    io::stdout().write(&iso.fst_bytes[0..(0x04bc * 0x0c)])?;
+
+    Ok(())
 }
 
 fn search_dat(iso_path: &PathBuf, args: &SearchDAT) -> io::Result<()> {
@@ -393,28 +404,12 @@ fn search_dat(iso_path: &PathBuf, args: &SearchDAT) -> io::Result<()> {
 }
 
 fn main() -> io::Result<()> {
-    let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
+    let args: Args = Args::parse();
 
-    let replacements = vec![
-        // replace potemkin
-        Replacement {
-            target: Character::CaptainFalcon(CaptainFalconFile::PlCaGr),
-            replacement: PathBuf::from("falcon/POTEMKIN FALCON.dat"),
-        },
-    ];
-
-    // rebuild FST using replacements
-    let updates = rebuild_fst(&iso, &replacements);
-
-    io::stdout().write(&updates)?;
-
-    Ok(())
-
-    // let args: Args = Args::parse();
-
-    // match args.subcmd {
-    //     SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
-    // }
+    match args.subcmd {
+        SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
+        SubCommand::ShowFST => show_fst(&args.melee_iso),
+    }
 }
 
 #[cfg(test)]
@@ -477,6 +472,8 @@ mod tests {
 
         // rebuild FST using replacements
         let updates = rebuild_fst(&iso, &replacements);
+
+        std::fs::write("potemkin-fst.bin", updates).expect("failed to write file");
 
         // calculate hashes for each FST
         // let mut hasher1 = DefaultHasher::new();
