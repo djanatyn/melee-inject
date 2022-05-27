@@ -54,7 +54,7 @@ pub mod characters {
     }
 }
 
-use characters::Character;
+use characters::{CaptainFalconFile, Character};
 
 /// A queued replacement to be executed later.
 ///
@@ -182,7 +182,7 @@ fn update_fst(updates: &Vec<UpdateFST>, fst: Vec<u8>) -> Vec<u8> {
 /// $ pandoc -f html -t haddock 'https://www.gc-forever.com/yagcd/chap13.html'
 ///
 #[allow(dead_code)]
-fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST> {
+fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
     let new_fst = iso.fst_bytes.clone();
 
     let mut replacement_map: HashMap<u32, UpdateFST> = HashMap::new();
@@ -190,14 +190,14 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
         match file {
             // for each file, insert a mutable UpdateFST, indexed by offset
             file @ FsNode::File { offset, .. } => {
-                replacement_map.insert(*offset, read_file(&file).expect("failed to read file"))
+                replacement_map.insert((*offset), read_file(&file).expect("failed to read file"))
             }
             _ => continue,
         };
     }
 
     for replacement in replacements {
-        println!("{replacement:?}");
+        eprintln!("{replacement:?}");
         // first, locate the FST entry (within the target ISO) for the replacement
         // we search through the replacement_map we built up earlier
         let search = replacement_map.clone();
@@ -294,19 +294,26 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<UpdateFST>
                     ..
                 },
             ) => {
-                if file_offset == *updated_offset {
+                if file_offset == (*updated_offset as u32) {
                     continue;
                 }
 
-                println!(
+                eprintln!(
                     "fst entry {seek:#0x}: {file_offset:#0x} -> {updated_offset:#0x} [{name}]"
                 );
+
+                // seek to file offset
+                cursor.seek(SeekFrom::Start(seek + 4));
+                cursor.write(&updated_offset.to_be_bytes());
             }
-            None => panic!("no replacement map entry found for node: {file_offset:x}"),
+            None => panic!("no replacement map entry found for node: {seek:#0x}"),
         };
     }
 
-    todo!();
+    let updated_fst = cursor.get_ref();
+
+    // we only want the first (0x04bc * 0x0c) u8s
+    updated_fst[0..(0x04bc * 0x0c)].to_vec()
 }
 
 fn node_file_offset(node: [u8; 0x0c]) -> u32 {
@@ -386,11 +393,28 @@ fn search_dat(iso_path: &PathBuf, args: &SearchDAT) -> io::Result<()> {
 }
 
 fn main() -> io::Result<()> {
-    let args: Args = Args::parse();
+    let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
 
-    match args.subcmd {
-        SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
-    }
+    let replacements = vec![
+        // replace potemkin
+        Replacement {
+            target: Character::CaptainFalcon(CaptainFalconFile::PlCaGr),
+            replacement: PathBuf::from("falcon/POTEMKIN FALCON.dat"),
+        },
+    ];
+
+    // rebuild FST using replacements
+    let updates = rebuild_fst(&iso, &replacements);
+
+    io::stdout().write(&updates)?;
+
+    Ok(())
+
+    // let args: Args = Args::parse();
+
+    // match args.subcmd {
+    //     SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
+    // }
 }
 
 #[cfg(test)]
