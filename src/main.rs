@@ -301,8 +301,6 @@ fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Rebu
         }
     }
 
-    // TODO: now that we have the updated FST definition, let's rebuild it
-
     // v1.02 NTSC GALE01 Root Directory Entry
     // ======================================
     // 0001 0203 0405 0607 0809 0a0b
