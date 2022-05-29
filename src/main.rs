@@ -1,4 +1,5 @@
 #![feature(pattern)]
+#![feature(mixed_integer_ops)]
 
 // TODO: output logs with tracing
 // TODO: update README.md with goals, direction
@@ -278,22 +279,25 @@ fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Rebu
         let new_data_length = new_data.len();
 
         // now we can see whether the new data is larger or smaller
-        let length_delta = dbg!(matching.original_size - new_data_length as u32);
+        let length_delta: i32 =
+            ((matching.original_size as i32) - (new_data_length as i32)).wrapping_abs();
+        let offset_adjustment = dbg!(length_delta + length_delta.rem_euclid(4));
 
         // bump updated_offset by length_delta for FST entries following the original offset
-        if length_delta != 0 {
+        if offset_adjustment != 0 {
             for file in replacement_map.values_mut() {
                 // if we find two matching offsets, this is the replacement target
                 if file.original_offset == matching.original_offset {
                     // bump the size to match the new data
                     file.updated_size = new_data_length as u32;
+                    // update the data with the replacement
+                    file.data = new_data.clone();
                 }
 
                 // for everything following this offset,
-                if file.original_offset >= matching.original_offset {
+                if file.original_offset > matching.original_offset {
                     // bump the offset to reflect the updated data length
-                    file.updated_offset += length_delta;
-                    file.updated_offset += file.updated_offset.rem_euclid(4);
+                    file.updated_offset -= offset_adjustment as u32;
                 }
             }
         }
