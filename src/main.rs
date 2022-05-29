@@ -179,7 +179,7 @@ fn build_iso<P: AsRef<Path>>(path: P, fst: &RebuiltFST) -> Vec<u8> {
         .seek(SeekFrom::End(0))
         .expect("failed to seek to end");
 
-    let padding = std::iter::repeat(0).take(end_position.rem_euclid(0x20) as usize);
+    let padding = std::iter::repeat(0).take(end_position.rem_euclid(0x20) as usize + 0x20);
 
     cursor
         .write(&padding.collect::<Vec<_>>())
@@ -472,8 +472,6 @@ fn main() -> io::Result<()> {
     ];
 
     let updates = rebuild_fst(ISO_PATH, &replacements);
-    std::fs::write("potemkin-fst.bin", &updates.new_fst).expect("failed to write file");
-
     let rebuilt_iso = build_iso(ISO_PATH, &updates);
     std::fs::write("potemkin-melee.iso", rebuilt_iso).expect("failed to write file");
 
