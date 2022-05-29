@@ -8,7 +8,7 @@ use gc_gcm::{FsNode, GcmFile};
 use std::collections::HashMap;
 use std::fmt;
 use std::io::{self, Read, Seek, SeekFrom, Write};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::str::pattern::Pattern;
 
 const ISO_PATH: &str = "ssbm.iso";
@@ -182,8 +182,21 @@ fn update_fst(_updates: &Vec<UpdateFST>, _fst: Vec<u8>) -> Vec<u8> {
 /// (information from YAGCD)
 /// $ pandoc -f html -t haddock 'https://www.gc-forever.com/yagcd/chap13.html'
 ///
-fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
-    let new_fst = iso.fst_bytes.clone();
+fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Vec<u8> {
+    let iso = GcmFile::open(&path).expect("could not open ISO");
+
+    // read entire filesystem table (0x456e00 offset, 0x7529 length)
+    // GcmFile#fst_bytes returns a truncated version
+    let mut file = std::fs::File::open(&path).expect("failed to open ISO");
+    let mut fst = Vec::new();
+    file.seek(SeekFrom::Start(0x456e00))
+        .expect("failed to seek to fst");
+    Read::by_ref(&mut file)
+        .take(0x07529)
+        .read_to_end(&mut fst)
+        .expect("failed to read fst");
+
+    let new_fst = fst.clone();
 
     let mut replacement_map: HashMap<u32, UpdateFST> = HashMap::new();
     for file in &iso.filesystem.files {
@@ -298,8 +311,9 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
                     continue;
                 }
 
+                let fst_index = seek + 4;
                 eprintln!(
-                    "fst entry {seek:#0x}: {file_offset:#0x} -> {updated_offset:#0x} [{name}]"
+                    "fst entry {fst_index:#0x}: {file_offset:#0x} -> {updated_offset:#0x} [{name}]"
                 );
 
                 // seek to file offset
@@ -314,10 +328,7 @@ fn rebuild_fst(iso: &GcmFile, replacements: &Vec<Replacement>) -> Vec<u8> {
         };
     }
 
-    let updated_fst = cursor.get_ref();
-
-    // we only want the first (0x04bc * 0x0c) u8s
-    updated_fst[0..(0x04bc * 0x0c)].to_vec()
+    cursor.get_ref().to_vec()
 }
 
 fn node_file_offset(node: [u8; 0x0c]) -> u32 {
@@ -460,8 +471,6 @@ mod tests {
 
     #[test]
     fn try_replace_dat_diff_size() {
-        let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
-
         let replacements = vec![
             // replace potemkin
             Replacement {
@@ -471,7 +480,7 @@ mod tests {
         ];
 
         // rebuild FST using replacements
-        let updates = rebuild_fst(&iso, &replacements);
+        let updates = rebuild_fst(ISO_PATH, &replacements);
 
         std::fs::write("potemkin-fst.bin", updates).expect("failed to write file");
 
