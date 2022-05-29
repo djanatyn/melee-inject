@@ -284,21 +284,19 @@ fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Rebu
         let offset_adjustment = dbg!(length_delta + length_delta.rem_euclid(4));
 
         // bump updated_offset by length_delta for FST entries following the original offset
-        if offset_adjustment != 0 {
-            for file in replacement_map.values_mut() {
-                // if we find two matching offsets, this is the replacement target
-                if file.original_offset == matching.original_offset {
-                    // bump the size to match the new data
-                    file.updated_size = new_data_length as u32;
-                    // update the data with the replacement
-                    file.data = new_data.clone();
-                }
+        for file in replacement_map.values_mut() {
+            // if we find two matching offsets, this is the replacement target
+            if file.original_offset == matching.original_offset {
+                // bump the size to match the new data
+                file.updated_size = new_data_length as u32;
+                // update the data with the replacement
+                file.data = new_data.clone();
+            }
 
-                // for everything following this offset,
-                if file.original_offset > matching.original_offset {
-                    // bump the offset to reflect the updated data length
-                    file.updated_offset -= offset_adjustment as u32;
-                }
+            // for everything following this offset,
+            if offset_adjustment != 0 && file.original_offset > matching.original_offset {
+                // bump the offset to reflect the updated data length
+                file.updated_offset -= offset_adjustment as u32;
             }
         }
     }
