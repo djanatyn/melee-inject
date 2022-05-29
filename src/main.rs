@@ -54,7 +54,7 @@ pub mod characters {
     }
 }
 
-use characters::Character;
+use characters::{CaptainFalconFile, Character};
 
 /// A queued replacement to be executed later.
 ///
@@ -148,9 +148,8 @@ struct RebuiltFST {
     replacements: HashMap<u32, UpdateFST>,
 }
 
-#[allow(dead_code)]
 fn build_iso<P: AsRef<Path>>(path: P, fst: &RebuiltFST) -> Vec<u8> {
-    let mut new_iso = Vec::new();
+    let mut new_iso = Vec::with_capacity(0x456e00);
 
     let mut melee = std::fs::File::open(&path).expect("failed to open ISO");
     Read::by_ref(&mut melee)
@@ -161,7 +160,11 @@ fn build_iso<P: AsRef<Path>>(path: P, fst: &RebuiltFST) -> Vec<u8> {
     new_iso.extend(&fst.new_fst);
 
     let mut cursor = Cursor::new(new_iso);
-    for update in fst.replacements.values() {
+
+    let mut updates = fst.replacements.values().collect::<Vec<_>>();
+    updates.sort_by(|a, b| a.updated_offset.cmp(&b.updated_offset));
+
+    for update in updates {
         println!("{update:?}");
         cursor
             .seek(SeekFrom::Start(update.updated_offset as u64))
@@ -169,6 +172,15 @@ fn build_iso<P: AsRef<Path>>(path: P, fst: &RebuiltFST) -> Vec<u8> {
         cursor.write(&update.data);
     }
 
+    let end_position = cursor
+        .seek(SeekFrom::End(0))
+        .expect("failed to seek to end");
+
+    let padding = std::iter::repeat(0).take(end_position.rem_euclid(0x20) as usize);
+
+    cursor
+        .write(&padding.collect::<Vec<_>>())
+        .expect("failed to write extra padding");
     cursor.get_mut().to_vec()
 }
 
@@ -279,6 +291,7 @@ fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Rebu
                 if file.original_offset >= matching.original_offset {
                     // bump the offset to reflect the updated data length
                     file.updated_offset += length_delta;
+                    file.updated_offset += file.updated_offset.rem_euclid(4);
                 }
             }
         }
@@ -444,12 +457,28 @@ fn search_dat(iso_path: &PathBuf, args: &SearchDAT) -> io::Result<()> {
 }
 
 fn main() -> io::Result<()> {
-    let args: Args = Args::parse();
+    let replacements = vec![
+        // replace potemkin
+        Replacement {
+            target: Character::CaptainFalcon(CaptainFalconFile::PlCaGr),
+            replacement: PathBuf::from("falcon/POTEMKIN FALCON.dat"),
+        },
+    ];
 
-    match args.subcmd {
-        SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
-        SubCommand::ShowFST => show_fst(&args.melee_iso),
-    }
+    let updates = rebuild_fst(ISO_PATH, &replacements);
+    std::fs::write("potemkin-fst.bin", &updates.new_fst).expect("failed to write file");
+
+    let rebuilt_iso = build_iso(ISO_PATH, &updates);
+    std::fs::write("potemkin-melee.iso", rebuilt_iso).expect("failed to write file");
+
+    Ok(())
+
+    // let args: Args = Args::parse();
+
+    // match args.subcmd {
+    //     SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
+    //     SubCommand::ShowFST => show_fst(&args.melee_iso),
+    // }
 }
 
 #[cfg(test)]
