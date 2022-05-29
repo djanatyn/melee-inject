@@ -7,6 +7,7 @@ use clap::Parser;
 use gc_gcm::{FsNode, GcmFile};
 use std::collections::HashMap;
 use std::fmt;
+use std::io::Cursor;
 use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::{Path, PathBuf};
 use std::str::pattern::Pattern;
@@ -139,9 +140,36 @@ fn read_file(file: &FsNode) -> io::Result<UpdateFST> {
     }
 }
 
+/// Struct containing a rebuilt FST, with offsets adjusted.
+///
+/// Can be used to create a bootable ISO.
+struct RebuiltFST {
+    new_fst: Vec<u8>,
+    replacements: HashMap<u32, UpdateFST>,
+}
+
 #[allow(dead_code)]
-fn update_fst(_updates: &Vec<UpdateFST>, _fst: Vec<u8>) -> Vec<u8> {
-    todo!();
+fn build_iso<P: AsRef<Path>>(path: P, fst: &RebuiltFST) -> Vec<u8> {
+    let mut new_iso = Vec::new();
+
+    let mut melee = std::fs::File::open(&path).expect("failed to open ISO");
+    Read::by_ref(&mut melee)
+        .take(0x456e00)
+        .read_to_end(&mut new_iso)
+        .expect("failed to read melee up to FST");
+
+    new_iso.extend(&fst.new_fst);
+
+    let mut cursor = Cursor::new(new_iso);
+    for update in fst.replacements.values() {
+        println!("{update:?}");
+        cursor
+            .seek(SeekFrom::Start(update.updated_offset as u64))
+            .expect("failed to seek");
+        cursor.write(&update.data);
+    }
+
+    cursor.get_mut().to_vec()
 }
 
 /// Given a set of potential replacements, attempt to rebuild the FST.
@@ -182,7 +210,7 @@ fn update_fst(_updates: &Vec<UpdateFST>, _fst: Vec<u8>) -> Vec<u8> {
 /// (information from YAGCD)
 /// $ pandoc -f html -t haddock 'https://www.gc-forever.com/yagcd/chap13.html'
 ///
-fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Vec<u8> {
+fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> RebuiltFST {
     let iso = GcmFile::open(&path).expect("could not open ISO");
 
     // read entire filesystem table (0x456e00 offset, 0x7529 length)
@@ -257,7 +285,6 @@ fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Vec<
     }
 
     // TODO: now that we have the updated FST definition, let's rebuild it
-    use std::io::Cursor;
 
     // v1.02 NTSC GALE01 Root Directory Entry
     // ======================================
@@ -305,12 +332,9 @@ fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Vec<
             Some(UpdateFST {
                 name,
                 updated_offset,
+                updated_size,
                 ..
             }) => {
-                if file_offset == (*updated_offset as u32) {
-                    continue;
-                }
-
                 let fst_index = seek + 4;
                 eprintln!(
                     "fst entry {fst_index:#0x}: {file_offset:#0x} -> {updated_offset:#0x} [{name}]"
@@ -323,12 +347,23 @@ fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Vec<
                 cursor
                     .write(&updated_offset.to_be_bytes())
                     .expect("failed to write offset");
+
+                // seek to size offset
+                cursor
+                    .seek(SeekFrom::Start(seek + 8))
+                    .expect("failed to seek to file offset");
+                cursor
+                    .write(&updated_size.to_be_bytes())
+                    .expect("failed to write size");
             }
             None => panic!("no replacement map entry found for node: {seek:#0x}"),
         };
     }
 
-    cursor.get_ref().to_vec()
+    RebuiltFST {
+        new_fst: cursor.get_ref().to_vec(),
+        replacements: replacement_map,
+    }
 }
 
 fn node_file_offset(node: [u8; 0x0c]) -> u32 {
@@ -358,12 +393,6 @@ fn node_is_directory(node: [u8; 0x0c]) -> bool {
     let directory_flag = u8::from_be_bytes(bytes);
 
     directory_flag != 0
-}
-
-/// Attempt to build a new ISO given a set of replacements.
-#[allow(dead_code)]
-fn build_iso(_path: PathBuf, _dest: PathBuf, _replacements: &Vec<Replacement>) {
-    todo!()
 }
 
 fn dat_files(iso: &GcmFile) -> impl Iterator<Item = &FsNode> {
@@ -426,6 +455,7 @@ fn main() -> io::Result<()> {
 #[cfg(test)]
 mod tests {
     use super::{
+        build_iso,
         characters::{CaptainFalconFile, Character},
         dat_files, rebuild_fst, Replacement, ISO_PATH,
     };
@@ -441,12 +471,12 @@ mod tests {
         GcmFile::open(ISO_PATH).expect("could not open ISO");
     }
 
-    #[test]
-    fn find_dat_files() {
-        let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
-        let files = dat_files(&iso).collect::<Vec<_>>();
-        insta::assert_debug_snapshot!(files);
-    }
+    // #[test]
+    // fn find_dat_files() {
+    //     let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
+    //     let files = dat_files(&iso).collect::<Vec<_>>();
+    //     insta::assert_debug_snapshot!(files);
+    // }
 
     // #[test]
     // fn try_replace_dat_same_size() {
@@ -479,23 +509,10 @@ mod tests {
             },
         ];
 
-        // rebuild FST using replacements
         let updates = rebuild_fst(ISO_PATH, &replacements);
+        std::fs::write("potemkin-fst.bin", &updates.new_fst).expect("failed to write file");
 
-        std::fs::write("potemkin-fst.bin", updates).expect("failed to write file");
-
-        // calculate hashes for each FST
-        // let mut hasher1 = DefaultHasher::new();
-        // let mut hasher2 = DefaultHasher::new();
-        // iso.fst_bytes.hash(&mut hasher1);
-        // new_fst.hash(&mut hasher2);
-        // let original_hash = hasher1.finish();
-        // let new_hash = hasher2.finish();
-
-        // // fst should be modified, hashes shoule be different
-        // assert_ne!(original_hash, new_hash);
-
-        // // store hash, it should remain the same
-        // insta::assert_debug_snapshot!("modified_fst_hash", new_hash)
+        let rebuilt_iso = build_iso(ISO_PATH, &updates);
+        std::fs::write("potemkin-melee.iso", rebuilt_iso).expect("failed to write file");
     }
 }
