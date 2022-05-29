@@ -81,13 +81,15 @@ struct UpdateFST {
 
 impl fmt::Debug for UpdateFST {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("UpdateFST")
-            .field("name", &self.name)
-            .field("original_offset", &self.original_offset)
-            .field("updated_offset", &self.updated_offset)
-            .field("original_size", &self.original_size)
-            .field("updated_size", &self.updated_size)
-            .finish()
+        write!(
+            f,
+            "UpdateFST [offset {:#0x} -> {:#0x}] [size {:#0x} -> {:#0x}] {}",
+            self.original_offset,
+            self.updated_offset,
+            self.original_size,
+            self.updated_size,
+            self.name
+        )
     }
 }
 
