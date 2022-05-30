@@ -1,22 +1,23 @@
-/*
-potemkin FST entries
-[0x00458780]> px (0x0c * 4)
-- offset -   0 1  2 3  4 5  6 7  8 9  A B
-0x00458780  0000 1c6b 4f5b 0000 0008 05cb
-0x0045878c  0000 1c76 49ea 0000 0000 2766
-0x00458798  0000 1c88 4f63 8000 0006 22eb
-0x004587a4  0000 1c93 4f6a 1d40 0008 058b
+/'
+ ' potemkin FST entries
+ ' [0x00458780]> px (0x0c * 4)
+ ' - offset -   0 1  2 3  4 5  6 7  8 9  A B
+ ' 0x00458780  0000 1c6b 4f5b 0000 0008 05cb
+ ' 0x0045878c  0000 1c76 49ea 0000 0000 2766
+ ' 0x00458798  0000 1c88 4f63 8000 0006 22eb
+ ' 0x004587a4  0000 1c93 4f6a 1d40 0008 058b
+ '
+ ' vanilla FST entries
+ ' [0x00458780]> px (0x0c * 4)
+ ' - offset -   0 1  2 3  4 5  6 7  8 9  A B  0123456789AB
+ ' 0x00458780  0000 1c6b 4f5b 0000 0008 05cb  ...kO[......
+ ' 0x0045878c  0000 1c76 49ea 0000 0000 2766  ...vI.....'f
+ ' 0x00458798  0000 1c88 4f63 8000 0008 05ab  ....Oc......
+ ' 0x004587a4  0000 1c93 4f6c 0000 0008 058b  ....Ol......
+ '/
 
-vanilla FST entries
-[0x00458780]> px (0x0c * 4)
-- offset -   0 1  2 3  4 5  6 7  8 9  A B  0123456789AB
-0x00458780  0000 1c6b 4f5b 0000 0008 05cb  ...kO[......
-0x0045878c  0000 1c76 49ea 0000 0000 2766  ...vI.....'f
-0x00458798  0000 1c88 4f63 8000 0008 05ab  ....Oc......
-0x004587a4  0000 1c93 4f6c 0000 0008 058b  ....Ol......
-*/
-
-digraph {
+@startdot
+digraph foo {
   rankdir=LR;
 
   node [ shape=record, fontname="Monospace" ];
@@ -58,3 +59,4 @@ digraph {
   PlCaBu:size -> PlCaBuNew:size [ label="+ 0x00", fontname="Monospace" ];
 
 }
+@enddot
