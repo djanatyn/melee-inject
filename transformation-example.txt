@@ -26,35 +26,46 @@ digraph foo {
 
   subgraph cluster_melee {
     label = "ssbm.iso";
-    PlCaGy [
-        label = "PlCaGy.dat (Grey Falcon)|<offset>offset: 0x4f6c0000|<size>size: 0x08058b";
-    ];
 
+
+    PlCaBu [
+        label = "PlCaBu.dat (Blue Falcon)|{pos|<offset>0x4f5b0000}|{len|<size>0x000805cb}";
+    ];
 
     PlCaGr [
         style = filled,
-        label = "PlCaGr.dat (Green Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0805cb";
+        label = "<label>PlCaGr.dat (Green Falcon)\n[REPLACED]|{pos|<offset>0x4f638000}|{len|<size>0x000805cb}";
     ];
 
-    PlCaBu [
-        label = "PlCaBu.dat (Blue Falcon)|<offset>0x4f5b0000|<size>0x0805cb";
+    PlCaGy [
+        label = "PlCaGy.dat (Grey Falcon)|{pos|<offset>0x4f6c0000}|{len|<size>0x0008058b}";
     ];
+
 
   }
+
+  /'
+   ' replacement [
+   '   style = filled,
+   '   label = "Replacement|{<target>target|CaptainFalcon(PlCaGr)}|{replacement|falcon/POTEMKIN FALCON.dat}"
+   ' ]
+   ' replacement -> PlCaGr:label;
+   '/
+
   subgraph cluster_potemkin {
     label = "potemkin.iso";
-    PlCaGyNew [
-        label = "PlCaGy.dat (Grey Falcon)|<offset>offset: 0x4f6a1d40|<size>size: 0x08058b";
-    ];
 
+    PlCaBuNew [
+        label = "PlCaBu.dat (Blue Falcon)|{<offset>pos|0x4f5b0000}|{<size>len|0x000805cb}";
+    ];
 
     PlCaGrNew [
         style = filled,
-        label = "PlCaGr.dat (Potemkin Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0622eb";
+        label = "PlCaGr.dat (Potemkin Falcon)\n[REPLACED]|{<offset>pos|0x4f638000}|{<size>len|0x000622eb}";
     ];
 
-    PlCaBuNew [
-        label = "PlCaBu.dat (Blue Falcon)|<offset>0x4f5b0000|<size>0x0805cb";
+    PlCaGyNew [
+        label = "PlCaGy.dat (Grey Falcon)|{<offset>pos|0x4f6a1d40}|{<size>len|0x0008058b}";
     ];
   }
 
