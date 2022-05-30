@@ -1,3 +1,4 @@
+@startuml
 /'
  ' potemkin FST entries
  ' [0x00458780]> px (0x0c * 4)
@@ -30,7 +31,7 @@ digraph foo {
   ];
 
   PlCaGy:offset -> PlCaGyNew:offset [ color = red, fontcolor=red, label="- 0x01e2e0", fontname="Monospace" ];
-  PlCaGy:size -> PlCaGyNew:size [ label="+ 0x00", fontname="Monospace" ];
+  PlCaGy:size -> PlCaGyNew:size;
 
 
   PlCaGr [
@@ -44,7 +45,7 @@ digraph foo {
       label = "PlCaGr.dat (Green Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0622eb";
   ];
 
-  PlCaGr:offset -> PlCaGrNew:offset [ label="+ 0x0", fontname="Monospace" ];
+  PlCaGr:offset -> PlCaGrNew:offset;
   PlCaGr:size -> PlCaGrNew:size [ color = red, fontcolor=red, label="- 0x01e2e0", fontname="Monospace" ];
 
   PlCaBu [
@@ -55,8 +56,8 @@ digraph foo {
       label = "PlCaBu.dat (Blue Falcon)|<offset>0x4f5b0000|<size>0x0805cb";
   ];
 
-  PlCaBu:offset -> PlCaBuNew:offset [ label="+ 0x00", fontname="Monospace" ];
-  PlCaBu:size -> PlCaBuNew:size [ label="+ 0x00", fontname="Monospace" ];
+  PlCaBu:offset -> PlCaBuNew:offset;
+  PlCaBu:size -> PlCaBuNew:size;
 
 }
 @enddot
