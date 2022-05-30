@@ -20,41 +20,49 @@
 @startdot
 digraph foo {
   rankdir=LR;
+  fontname="Monospace";
 
   node [ shape=record, fontname="Monospace" ];
-  PlCaGy [
-      label = "PlCaGy.dat (Grey Falcon)|<offset>offset: 0x4f6c0000|<size>size: 0x08058b";
-  ];
 
-  PlCaGyNew [
-      label = "PlCaGy.dat (Grey Falcon)|<offset>offset: 0x4f6a1d40|<size>size: 0x08058b";
-  ];
+  subgraph cluster_melee {
+    label = "ssbm.iso";
+    PlCaGy [
+        label = "PlCaGy.dat (Grey Falcon)|<offset>offset: 0x4f6c0000|<size>size: 0x08058b";
+    ];
+
+
+    PlCaGr [
+        style = filled,
+        label = "PlCaGr.dat (Green Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0805cb";
+    ];
+
+    PlCaBu [
+        label = "PlCaBu.dat (Blue Falcon)|<offset>0x4f5b0000|<size>0x0805cb";
+    ];
+
+  }
+  subgraph cluster_potemkin {
+    label = "potemkin.iso";
+    PlCaGyNew [
+        label = "PlCaGy.dat (Grey Falcon)|<offset>offset: 0x4f6a1d40|<size>size: 0x08058b";
+    ];
+
+
+    PlCaGrNew [
+        style = filled,
+        label = "PlCaGr.dat (Potemkin Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0622eb";
+    ];
+
+    PlCaBuNew [
+        label = "PlCaBu.dat (Blue Falcon)|<offset>0x4f5b0000|<size>0x0805cb";
+    ];
+  }
 
   PlCaGy:offset -> PlCaGyNew:offset [ color = red, fontcolor=red, label="- 0x01e2e0", fontname="Monospace" ];
   PlCaGy:size -> PlCaGyNew:size;
 
-
-  PlCaGr [
-      style = filled,
-      label = "PlCaGr.dat (Green Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0805cb";
-  ];
-
-
-  PlCaGrNew [
-      style = filled,
-      label = "PlCaGr.dat (Potemkin Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0622eb";
-  ];
-
   PlCaGr:offset -> PlCaGrNew:offset;
   PlCaGr:size -> PlCaGrNew:size [ color = red, fontcolor=red, label="- 0x01e2e0", fontname="Monospace" ];
-
-  PlCaBu [
-      label = "PlCaBu.dat (Blue Falcon)|<offset>0x4f5b0000|<size>0x0805cb";
-  ];
-
-  PlCaBuNew [
-      label = "PlCaBu.dat (Blue Falcon)|<offset>0x4f5b0000|<size>0x0805cb";
-  ];
 
   PlCaBu:offset -> PlCaBuNew:offset;
   PlCaBu:size -> PlCaBuNew:size;
