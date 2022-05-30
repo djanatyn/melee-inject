@@ -42,7 +42,7 @@ digraph foo {
 
   PlCaGrNew [
       style = filled,
-      label = "PlCaGr.dat (Green Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0622eb";
+      label = "PlCaGr.dat (Potemkin Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0622eb";
   ];
 
   PlCaGr:offset -> PlCaGrNew:offset;
