@@ -1,0 +1,60 @@
+/*
+potemkin FST entries
+[0x00458780]> px (0x0c * 4)
+- offset -   0 1  2 3  4 5  6 7  8 9  A B
+0x00458780  0000 1c6b 4f5b 0000 0008 05cb
+0x0045878c  0000 1c76 49ea 0000 0000 2766
+0x00458798  0000 1c88 4f63 8000 0006 22eb
+0x004587a4  0000 1c93 4f6a 1d40 0008 058b
+
+vanilla FST entries
+[0x00458780]> px (0x0c * 4)
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  0123456789AB
+0x00458780  0000 1c6b 4f5b 0000 0008 05cb  ...kO[......
+0x0045878c  0000 1c76 49ea 0000 0000 2766  ...vI.....'f
+0x00458798  0000 1c88 4f63 8000 0008 05ab  ....Oc......
+0x004587a4  0000 1c93 4f6c 0000 0008 058b  ....Ol......
+*/
+
+digraph {
+  rankdir=LR;
+
+  node [ shape=record, fontname="Monospace" ];
+  PlCaGy [
+      label = "PlCaGy.dat (Grey Falcon)|<offset>offset: 0x4f6c0000|<size>size: 0x08058b";
+  ];
+
+  PlCaGyNew [
+      label = "PlCaGy.dat (Grey Falcon)|<offset>offset: 0x4f6a1d40|<size>size: 0x08058b";
+  ];
+
+  PlCaGy:offset -> PlCaGyNew:offset [ color = red, fontcolor=red, label="- 0x01e2e0", fontname="Monospace" ];
+  PlCaGy:size -> PlCaGyNew:size [ label="+ 0x00", fontname="Monospace" ];
+
+
+  PlCaGr [
+      style = filled,
+      label = "PlCaGr.dat (Green Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0805cb";
+  ];
+
+
+  PlCaGrNew [
+      style = filled,
+      label = "PlCaGr.dat (Green Falcon)\n[REPLACED]|<offset>offset: 0x4f638000|<size>size: 0x0622eb";
+  ];
+
+  PlCaGr:offset -> PlCaGrNew:offset [ label="+ 0x0", fontname="Monospace" ];
+  PlCaGr:size -> PlCaGrNew:size [ color = red, fontcolor=red, label="- 0x01e2e0", fontname="Monospace" ];
+
+  PlCaBu [
+      label = "PlCaBu.dat (Blue Falcon)|<offset>0x4f5b0000|<size>0x0805cb";
+  ];
+
+  PlCaBuNew [
+      label = "PlCaBu.dat (Blue Falcon)|<offset>0x4f5b0000|<size>0x0805cb";
+  ];
+
+  PlCaBu:offset -> PlCaBuNew:offset [ label="+ 0x00", fontname="Monospace" ];
+  PlCaBu:size -> PlCaBuNew:size [ label="+ 0x00", fontname="Monospace" ];
+
+}
