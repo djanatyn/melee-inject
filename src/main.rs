@@ -418,8 +418,16 @@ fn dat_files(iso: &GcmFile) -> impl Iterator<Item = &FsNode> {
 }
 
 fn show_fst(iso: &PathBuf) -> io::Result<()> {
-    let iso = GcmFile::open(iso).expect("could not open ISO");
-    io::stdout().write(&iso.fst_bytes[0..(0x04bc * 0x0c)])?;
+    let mut file = std::fs::File::open(&iso).expect("failed to open ISO");
+    let mut fst = Vec::new();
+    file.seek(SeekFrom::Start(0x456e00))
+        .expect("failed to seek to fst");
+    Read::by_ref(&mut file)
+        .take(0x07529)
+        .read_to_end(&mut fst)
+        .expect("failed to read fst");
+
+    io::stdout().write(&fst)?;
 
     Ok(())
 }
@@ -459,26 +467,12 @@ fn search_dat(iso_path: &PathBuf, args: &SearchDAT) -> io::Result<()> {
 }
 
 fn main() -> io::Result<()> {
-    let replacements = vec![
-        // replace potemkin
-        Replacement {
-            target: Character::CaptainFalcon(CaptainFalconFile::PlCaGr),
-            replacement: PathBuf::from("falcon/POTEMKIN FALCON.dat"),
-        },
-    ];
+    let args: Args = Args::parse();
 
-    let updates = rebuild_fst(ISO_PATH, &replacements);
-    let rebuilt_iso = build_iso(ISO_PATH, &updates);
-    std::fs::write("potemkin-melee.iso", rebuilt_iso).expect("failed to write file");
-
-    Ok(())
-
-    // let args: Args = Args::parse();
-
-    // match args.subcmd {
-    //     SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
-    //     SubCommand::ShowFST => show_fst(&args.melee_iso),
-    // }
+    match args.subcmd {
+        SubCommand::SearchDAT(query) => search_dat(&args.melee_iso, &query),
+        SubCommand::ShowFST => show_fst(&args.melee_iso),
+    }
 }
 
 #[cfg(test)]
@@ -500,33 +494,37 @@ mod tests {
         GcmFile::open(ISO_PATH).expect("could not open ISO");
     }
 
-    // #[test]
-    // fn find_dat_files() {
-    //     let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
-    //     let files = dat_files(&iso).collect::<Vec<_>>();
-    //     insta::assert_debug_snapshot!(files);
-    // }
+    #[test]
+    fn find_dat_files() {
+        let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
+        let files = dat_files(&iso).collect::<Vec<_>>();
+        insta::assert_debug_snapshot!(files);
+    }
 
-    // #[test]
-    // fn try_replace_dat_same_size() {
-    //     let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
+    #[test]
+    fn try_replace_dat_same_size() {
+        let iso = GcmFile::open(ISO_PATH).expect("could not open ISO");
 
-    //     let replacements = vec![
-    //         // replace common files
-    //         Replacement {
-    //             target: Character::CaptainFalcon(CaptainFalconFile::PlCa),
-    //             replacement: PathBuf::from("n64-falcon/PlCa.dat"),
-    //         },
-    //         // replace neutral skin
-    //         Replacement {
-    //             target: Character::CaptainFalcon(CaptainFalconFile::PlCaNr),
-    //             replacement: PathBuf::from("n64-falcon/PlCaNr.dat"),
-    //         },
-    //     ];
+        let replacements = vec![
+            // replace common files
+            Replacement {
+                target: Character::CaptainFalcon(CaptainFalconFile::PlCa),
+                replacement: PathBuf::from("n64-falcon/PlCa.dat"),
+            },
+            // replace neutral skin
+            Replacement {
+                target: Character::CaptainFalcon(CaptainFalconFile::PlCaNr),
+                replacement: PathBuf::from("n64-falcon/PlCaNr.dat"),
+            },
+        ];
 
-    //     // rebuild FST using replacements
-    //     let updates = rebuild_fst(&iso, &replacements);
-    // }
+        // rebuild FST using replacements
+        let updates = rebuild_fst(ISO_PATH, &replacements);
+        std::fs::write("n64-falcon-fst.bin", &updates.new_fst).expect("failed to write file");
+
+        let rebuilt_iso = build_iso(ISO_PATH, &updates);
+        std::fs::write("n64-falcon-melee.iso", rebuilt_iso).expect("failed to write file");
+    }
 
     #[test]
     fn try_replace_dat_diff_size() {
