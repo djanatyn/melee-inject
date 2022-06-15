@@ -28,12 +28,29 @@ pub mod characters {
 
 mod parse {
     //! Parsing functions for filesystem table entries.
+    //!
+    //! 13.4.1 Format of a File Entry
+    //! =============================
+    //! +-----------+---------+----------+------------------------------+
+    //! |   start   |   end   |   size   |   Description                |
+    //! +-----------+---------+----------+------------------------------+
+    //! |   0x00    |         |   1      | flags; 0: file 1: directory  |
+    //! +-----------+---------+----------+------------------------------+
+    //! |   0x01    |         |   3      | filename, offset into string |
+    //! |           |         |          | table                        |
+    //! +-----------+---------+----------+------------------------------+
+    //! |   0x04    |         |   4      | file_offset or parent_offset |
+    //! |           |         |          | (dir)                        |
+    //! +-----------+---------+----------+------------------------------+
+    //! |   0x08    |         |   4      | file_length or num_entries   |
+    //! |           |         |          | (root) or next_offset (dir)  |
+    //! +-----------+---------+----------+------------------------------+
 
     use std::io::{self, Read, Seek, SeekFrom, Write};
     use std::path::Path;
 
+    /// Read bytes 0x04 -> 0x08 as a u32 (filename offset).
     pub fn node_file_offset(node: [u8; 0x0c]) -> u32 {
-        // read bytes 0x04 -> 0x08 as u32 (filename offset)
         let (filename_offset_bytes, _) = &node[4..8].split_at(std::mem::size_of::<u32>());
         let bytes: [u8; 4] = (*filename_offset_bytes)
             .try_into()
@@ -41,8 +58,8 @@ mod parse {
         u32::from_be_bytes(bytes)
     }
 
+    /// Read bytes 0x08 -> 0x0c as u32 (num_entries).
     pub fn root_node_num_entries(node: [u8; 0x0c]) -> u32 {
-        // read bytes 0x08 -> 0x0c as u32 (num_entries)
         let (num_entries_bytes, _) = &node[8..0xc].split_at(std::mem::size_of::<u32>());
         let bytes: [u8; 4] = (*num_entries_bytes)
             .try_into()
@@ -50,8 +67,8 @@ mod parse {
         u32::from_be_bytes(bytes)
     }
 
+    /// Read bytes 0x00 -> 0x01 as u8 (directory flag).
     pub fn node_is_directory(node: [u8; 0x0c]) -> bool {
-        // read bytes 0x00 -> 0x01 as u8 (directory flag)
         let (file_or_directory, _) = &node[0..1].split_at(std::mem::size_of::<u8>());
         let bytes: [u8; 1] = (*file_or_directory)
             .try_into()
@@ -62,6 +79,9 @@ mod parse {
     }
 
     #[allow(unused)]
+    /// Output full filesystem table within the ISO on io::stdout.
+    ///
+    /// Assumes v1.02 NTSC GALE01.
     pub fn show_fst<P: AsRef<Path>>(iso: P) -> io::Result<()> {
         let mut file = std::fs::File::open(&iso).expect("failed to open ISO");
         let mut fst = Vec::new();
@@ -79,6 +99,9 @@ mod parse {
 }
 
 pub mod replace {
+    //! Replace characters and stage assets within the game.
+    //!
+    //! This library only handles replacing DAT files currently.
     use super::parse;
     use gc_gcm::{FsNode, GcmFile};
     use std::collections::HashMap;
@@ -130,6 +153,9 @@ pub mod replace {
         pub replacements: HashMap<u32, UpdateFST>,
     }
 
+    /// Look up and read a file entry within an ISO, returning a no-op UpdateFST action.
+    ///
+    /// TODO: this function opens the ISO for every node! it should only open the file once
     pub fn read_file<P: AsRef<Path>>(iso: P, file: &FsNode) -> io::Result<UpdateFST> {
         match file {
             FsNode::File { size, offset, name } => {
@@ -156,43 +182,6 @@ pub mod replace {
     }
 
     /// Given a set of potential replacements, attempt to rebuild the FST.
-    ///
-    /// This function should:
-    /// - update offsets for files after the replacement, and
-    /// - apply padding between files (4 bytes)
-    ///
-    /// 13.4 Format of the FST
-    /// ======================
-    /// +-----------+---------+----------+---------------------------------+
-    /// |   start   |   end   |   size   |   Description                   |
-    /// +-----------+---------+----------+---------------------------------+
-    /// |  0x00     |  0x0c   |  0x0c    | Root Directory Entry            |
-    /// +-----------+---------+----------+---------------------------------+
-    /// |  0x0c     |  ...    |  0x0c    | more File- or Directory Entries |
-    /// +-----------+---------+----------+---------------------------------+
-    /// |  ...      |  ...    |  ...     | String table                    |
-    /// +-----------+---------+----------+---------------------------------+
-    ///
-    /// 13.4.1 Format of a File Entry
-    /// =============================
-    /// +-----------+---------+----------+------------------------------+
-    /// |   start   |   end   |   size   |   Description                |
-    /// +-----------+---------+----------+------------------------------+
-    /// |   0x00    |         |   1      | flags; 0: file 1: directory  |
-    /// +-----------+---------+----------+------------------------------+
-    /// |   0x01    |         |   3      | filename, offset into string |
-    /// |           |         |          | table                        |
-    /// +-----------+---------+----------+------------------------------+
-    /// |   0x04    |         |   4      | file_offset or parent_offset |
-    /// |           |         |          | (dir)                        |
-    /// +-----------+---------+----------+------------------------------+
-    /// |   0x08    |         |   4      | file_length or num_entries   |
-    /// |           |         |          | (root) or next_offset (dir)  |
-    /// +-----------+---------+----------+------------------------------+
-    ///
-    /// (information from YAGCD)
-    /// $ pandoc -f html -t haddock 'https://www.gc-forever.com/yagcd/chap13.html'
-    ///
     pub fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> RebuiltFST {
         let iso = GcmFile::open(&path).expect("could not open ISO");
 
@@ -271,6 +260,20 @@ pub mod replace {
             }
         }
 
+        // 13.4 Format of the FST
+        // ======================
+        // +-----------+---------+----------+---------------------------------+
+        // |   start   |   end   |   size   |   Description                   |
+        // +-----------+---------+----------+---------------------------------+
+        // |  0x00     |  0x0c   |  0x0c    | Root Directory Entry            |
+        // +-----------+---------+----------+---------------------------------+
+        // |  0x0c     |  ...    |  0x0c    | more File- or Directory Entries |
+        // +-----------+---------+----------+---------------------------------+
+        // |  ...      |  ...    |  ...     | String table                    |
+        // +-----------+---------+----------+---------------------------------+
+        //
+        //  ^-- https://www.gc-forever.com/yagcd/chap13.html
+        //
         // v1.02 NTSC GALE01 Root Directory Entry
         // ======================================
         // 0001 0203 0405 0607 0809 0a0b
@@ -287,8 +290,7 @@ pub mod replace {
         // create cursor over filesystem table
         let mut cursor = Cursor::new(new_fst);
 
-        // read the root node:
-        // 0100 0000 0000 0000 0000 04bc
+        // read the root node
         let mut root = [0; 0xc];
         cursor.read(&mut root).expect("failed to read root node");
 
@@ -351,6 +353,10 @@ pub mod replace {
         }
     }
 
+    /// Rebuild an ISO, given an updated filesystem table.
+    ///
+    /// The filesystem table has already been replaced with new data,
+    /// so this function just writes a new disc image.
     pub fn build_iso<P: AsRef<Path>>(path: P, fst: &RebuiltFST) -> Vec<u8> {
         let mut new_iso = Vec::with_capacity(0x456e00);
 
