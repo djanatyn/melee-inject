@@ -16,62 +16,43 @@ use std::str::pattern::Pattern;
 const ISO_PATH: &str = "ssbm.iso";
 
 pub mod characters {
+    #![allow(non_upper_case_globals)]
     //! Supported character files for replacement.
 
     /// DAT files for Captain Falcon, used as replacement targets.
-    #[allow(dead_code)]
+    #[non_exhaustive]
     #[derive(Debug, Clone)]
-    pub enum CaptainFalconFile {
+    pub struct CaptainFalcon;
+    impl CaptainFalcon {
         /// NTSC data & shared textures.
-        PlCa,
+        pub const PlCa: &'static str = "PlCa.dat";
         /// Blue costume.
-        PlCaBu,
+        pub const PlCaBu: &'static str = "PlCaBu.dat";
         /// Green costume.
-        PlCaGr,
+        pub const PlCaGr: &'static str = "PlCaGr.dat";
         /// Gray costume.
-        PlCaGy,
+        pub const PlCaGy: &'static str = "PlCaGu.dat";
         /// Neutral costume.
-        PlCaNr,
+        pub const PlCaNr: &'static str = "PlCaNr.dat";
         /// Red costume.
-        PlCaRe,
+        pub const PlCaRe: &'static str = "PlCaRe.dat";
         /// White costume.
-        PlCaWh,
-    }
-
-    #[derive(Debug, Clone)]
-    pub enum Character {
-        CaptainFalcon(CaptainFalconFile),
-    }
-
-    impl Character {
-        pub fn filename(character: &Self) -> &'static str {
-            match character {
-                Character::CaptainFalcon(CaptainFalconFile::PlCa) => "PlCa.dat",
-                Character::CaptainFalcon(CaptainFalconFile::PlCaNr) => "PlCaNr.dat",
-                Character::CaptainFalcon(CaptainFalconFile::PlCaGr) => "PlCaGr.dat",
-                _ => todo!(),
-            }
-        }
+        pub const PlCaWh: &'static str = "PlCaWh.dat";
     }
 }
 
-use characters::{CaptainFalconFile, Character};
-
 /// A queued replacement to be executed later.
-///
-/// This potential replacement is guaranteed to match a file in the FST.
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Replacement {
     /// Which file to replace?
-    pub target: Character,
+    pub target_file: &'static str,
     /// Path to replacement data.
     pub replacement: PathBuf,
 }
 
 /// An update to execute against the GCM FST.
 #[derive(Clone)]
-struct UpdateFST {
+pub struct UpdateFST {
     name: String,
     original_offset: u32,
     updated_offset: u32,
@@ -92,6 +73,14 @@ impl fmt::Debug for UpdateFST {
             self.name
         )
     }
+}
+
+/// Struct containing a rebuilt FST, with offsets adjusted.
+///
+/// Can be used to create a bootable ISO.
+pub struct RebuiltFST {
+    new_fst: Vec<u8>,
+    replacements: HashMap<u32, UpdateFST>,
 }
 
 #[derive(Parser, Debug)]
@@ -143,15 +132,7 @@ fn read_file(file: &FsNode) -> io::Result<UpdateFST> {
     }
 }
 
-/// Struct containing a rebuilt FST, with offsets adjusted.
-///
-/// Can be used to create a bootable ISO.
-struct RebuiltFST {
-    new_fst: Vec<u8>,
-    replacements: HashMap<u32, UpdateFST>,
-}
-
-fn build_iso<P: AsRef<Path>>(path: P, fst: &RebuiltFST) -> Vec<u8> {
+pub fn build_iso<P: AsRef<Path>>(path: P, fst: &RebuiltFST) -> Vec<u8> {
     let mut new_iso = Vec::with_capacity(0x456e00);
 
     let mut melee = std::fs::File::open(&path).expect("failed to open ISO");
@@ -172,7 +153,9 @@ fn build_iso<P: AsRef<Path>>(path: P, fst: &RebuiltFST) -> Vec<u8> {
         cursor
             .seek(SeekFrom::Start(update.updated_offset as u64))
             .expect("failed to seek");
-        cursor.write(&update.data);
+        cursor
+            .write(&update.data)
+            .expect("failed to write {update:?}");
     }
 
     let end_position = cursor
@@ -259,7 +242,7 @@ fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Rebu
         let search = replacement_map.clone();
         let mut found = search
             .values()
-            .filter(|update: &&UpdateFST| update.name == Character::filename(&replacement.target))
+            .filter(|update: &&UpdateFST| update.name == replacement.target_file)
             .collect::<Vec<_>>();
 
         // we should find exactly one entry for each replacement
@@ -268,7 +251,7 @@ fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> Rebu
         if num_found != 1 {
             panic!(
                 "did not match character {:?}: {num_found} found",
-                Character::filename(&replacement.target)
+                replacement.target_file
             );
         }
         let matching: &UpdateFST = found.pop().expect("failed to match character");
@@ -478,9 +461,7 @@ fn main() -> io::Result<()> {
 #[cfg(test)]
 mod tests {
     use super::{
-        build_iso,
-        characters::{CaptainFalconFile, Character},
-        dat_files, rebuild_fst, Replacement, ISO_PATH,
+        build_iso, characters::CaptainFalcon, dat_files, rebuild_fst, Replacement, ISO_PATH,
     };
     use gc_gcm::{FsNode, GcmFile};
     use insta;
@@ -508,12 +489,12 @@ mod tests {
         let replacements = vec![
             // replace common files
             Replacement {
-                target: Character::CaptainFalcon(CaptainFalconFile::PlCa),
+                target_file: CaptainFalcon::PlCa,
                 replacement: PathBuf::from("n64-falcon/PlCa.dat"),
             },
             // replace neutral skin
             Replacement {
-                target: Character::CaptainFalcon(CaptainFalconFile::PlCaNr),
+                target_file: CaptainFalcon::PlCaNr
                 replacement: PathBuf::from("n64-falcon/PlCaNr.dat"),
             },
         ];
@@ -531,7 +512,7 @@ mod tests {
         let replacements = vec![
             // replace potemkin
             Replacement {
-                target: Character::CaptainFalcon(CaptainFalconFile::PlCaGr),
+                target_file: CaptainFalcon::PlCaGr,
                 replacement: PathBuf::from("falcon/POTEMKIN FALCON.dat"),
             },
         ];
