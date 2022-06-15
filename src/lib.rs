@@ -1,8 +1,5 @@
 // TODO: output logs with tracing
 
-use std::io;
-use std::path::PathBuf;
-
 pub mod characters {
     #![allow(non_upper_case_globals)]
     //! Supported character files for replacement.
@@ -81,7 +78,7 @@ mod parse {
     }
 }
 
-mod replace {
+pub mod replace {
     use super::parse;
     use gc_gcm::{FsNode, GcmFile};
     use std::collections::HashMap;
@@ -391,27 +388,6 @@ mod replace {
             .expect("failed to write extra padding");
         cursor.get_mut().to_vec()
     }
-}
-
-use characters::CaptainFalcon;
-use replace::{build_iso, rebuild_fst, Replacement};
-
-fn main() -> io::Result<()> {
-    let replacements = vec![
-        // replace potemkin
-        Replacement {
-            target_file: CaptainFalcon::PlCaGr,
-            replacement: PathBuf::from("falcon/POTEMKIN FALCON.dat"),
-        },
-    ];
-
-    let updates = rebuild_fst("ssbm.iso", &replacements);
-    std::fs::write("potemkin-fst.bin", &updates.new_fst).expect("failed to write file");
-
-    let rebuilt_iso = build_iso("ssbm.iso", &updates);
-    std::fs::write("potemkin-melee.iso", rebuilt_iso).expect("failed to write file");
-
-    Ok(())
 }
 
 #[cfg(test)]

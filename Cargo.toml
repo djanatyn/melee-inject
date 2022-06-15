@@ -1,7 +1,11 @@
 [package]
-name = "melee-dat"
+name = "melee_inject"
 version = "0.1.0"
 edition = "2021"
+
+[lib]
+name = "melee_inject"
+path = "src/lib.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
