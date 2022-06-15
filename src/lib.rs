@@ -45,6 +45,8 @@ mod parse {
     //! |   0x08    |         |   4      | file_length or num_entries   |
     //! |           |         |          | (root) or next_offset (dir)  |
     //! +-----------+---------+----------+------------------------------+
+    //!
+    //!  ^-- https://www.gc-forever.com/yagcd/chap13.html
 
     use std::io::{self, Read, Seek, SeekFrom, Write};
     use std::path::Path;
