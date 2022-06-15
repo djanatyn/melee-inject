@@ -1,5 +1,3 @@
-extern crate melee_inject;
-
 use melee_inject::characters::CaptainFalcon;
 use melee_inject::replace::{build_iso, rebuild_fst, Replacement};
 use std::io;
