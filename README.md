@@ -11,6 +11,9 @@ this is a presentation i gave at [The Recurse Center](https://www.recurse.com/ab
 
 ## usage
 
+this example is using `dang3r` potemkin inspired animelee falcon:
+* https://ssbmtextures.com/characters/potemkin-inspired-animelee-falcon/
+
 `Cargo.toml`:
 
 ``` toml
