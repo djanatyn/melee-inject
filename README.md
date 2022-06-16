@@ -1,5 +1,7 @@
 # melee-inject
 
+replace DAT files within v1.02 NTSC GALE01 using rust
+
 ## introduction
 
 ### Dispatches from RC: Parsing and Transforming Super Smash Bros. Melee
