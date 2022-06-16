@@ -11,6 +11,3 @@ path = "src/lib.rs"
 
 [dependencies]
 gc-gcm = "0.10"
-insta = "1.14.0"
-binrw = "0.8"
-clap = { version = "3.1", features = ["derive"] }
