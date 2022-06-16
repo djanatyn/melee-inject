@@ -26,9 +26,10 @@ pub mod characters {
     }
 }
 
-mod parse {
+pub mod parse {
     //! Parsing functions for filesystem table entries.
     //!
+    //! ````text
     //! 13.4.1 Format of a File Entry
     //! =============================
     //! +-----------+---------+----------+------------------------------+
@@ -45,8 +46,8 @@ mod parse {
     //! |   0x08    |         |   4      | file_length or num_entries   |
     //! |           |         |          | (root) or next_offset (dir)  |
     //! +-----------+---------+----------+------------------------------+
-    //!
-    //!  ^-- https://www.gc-forever.com/yagcd/chap13.html
+    //! ````
+    //! <https://www.gc-forever.com/yagcd/chap13.html>
 
     use std::io::{self, Read, Seek, SeekFrom, Write};
     use std::path::Path;
@@ -184,6 +185,36 @@ pub mod replace {
     }
 
     /// Given a set of potential replacements, attempt to rebuild the FST.
+    ///
+    /// ```text
+    /// 13.4 Format of the FST
+    /// ======================
+    /// +-----------+---------+----------+---------------------------------+
+    /// |   start   |   end   |   size   |   Description                   |
+    /// +-----------+---------+----------+---------------------------------+
+    /// |  0x00     |  0x0c   |  0x0c    | Root Directory Entry            |
+    /// +-----------+---------+----------+---------------------------------+
+    /// |  0x0c     |  ...    |  0x0c    | more File- or Directory Entries |
+    /// +-----------+---------+----------+---------------------------------+
+    /// |  ...      |  ...    |  ...     | String table                    |
+    /// +-----------+---------+----------+---------------------------------+
+    /// ```
+    ///  <https://www.gc-forever.com/yagcd/chap13.html>
+    ///
+    /// v1.02 NTSC GALE01 Root Entry
+    /// ============================
+    /// ```text
+    /// 0001 0203 0405 0607 0809 0a0b
+    /// ---- ---- ---- ---- ---- ----
+    /// 0100 0000 0000 0000 0000 04bc
+    /// ^ ^       ^         ^-------- num_entries (0x04bc) (1212 entries)
+    /// | |       \------------------ filename or parent_offset (0x00)
+    /// | \-------------------------- filename string table offset (0x00)
+    /// \---------------------------- flag (directory)
+    /// ```
+    ///
+    /// - there are 0x4bc entries, each 0x0c long
+    /// - string table offset starts at (0x04bc * 0x0c) = 0x38d0
     pub fn rebuild_fst<P: AsRef<Path>>(path: P, replacements: &Vec<Replacement>) -> RebuiltFST {
         let iso = GcmFile::open(&path).expect("could not open ISO");
 
@@ -261,33 +292,6 @@ pub mod replace {
                 }
             }
         }
-
-        // 13.4 Format of the FST
-        // ======================
-        // +-----------+---------+----------+---------------------------------+
-        // |   start   |   end   |   size   |   Description                   |
-        // +-----------+---------+----------+---------------------------------+
-        // |  0x00     |  0x0c   |  0x0c    | Root Directory Entry            |
-        // +-----------+---------+----------+---------------------------------+
-        // |  0x0c     |  ...    |  0x0c    | more File- or Directory Entries |
-        // +-----------+---------+----------+---------------------------------+
-        // |  ...      |  ...    |  ...     | String table                    |
-        // +-----------+---------+----------+---------------------------------+
-        //
-        //  ^-- https://www.gc-forever.com/yagcd/chap13.html
-        //
-        // v1.02 NTSC GALE01 Root Directory Entry
-        // ======================================
-        // 0001 0203 0405 0607 0809 0a0b
-        // ---- ---- ---- ---- ---- ----
-        // 0100 0000 0000 0000 0000 04bc
-        // ^ ^       ^         ^-------- num_entries (0x04bc) (1212 entries)
-        // | |       \------------------ filename or parent_offset (0x00)
-        // | \-------------------------- filename string table offset (0x00)
-        // \---------------------------- flag (directory)
-        //
-        // there are 0x4bc entries, each 0x0c long
-        // string table offset starts at (0x04bc * 0x0c) = 0x38d0
 
         // create cursor over filesystem table
         let mut cursor = Cursor::new(new_fst);
