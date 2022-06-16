@@ -1,5 +1,10 @@
 # melee-inject
 
+## introduction
+
+* [(YouTube) Dispatches from RC: Jonathan Strickland, "Parsing and Transforming Super Smash Bros. Melee"]( https://www.youtube.com/watch?v=KejJrmT590g)
+  * [(slides)](https://docs.google.com/presentation/d/1sEnkbk3dOctiymV7YUATbzXb3zh2dj_D302XuHYNHi8/edit?usp=sharing)
+
 ## usage
 
 ``` rust
