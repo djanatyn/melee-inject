@@ -5,7 +5,7 @@
 ### Dispatches from RC: Parsing and Transforming Super Smash Bros. Melee
 ![slide-cover](/assets/slide-cover.png)
 
-this is a presentation i gave at [recurse center](https://www.recurse.com/about)!
+this is a presentation i gave at [The Recurse Center](https://www.recurse.com/about)!
 * [(YouTube) Dispatches from RC: Jonathan Strickland, "Parsing and Transforming Super Smash Bros. Melee"](https://www.youtube.com/watch?v=KejJrmT590g)
 * [(slides)](https://docs.google.com/presentation/d/1sEnkbk3dOctiymV7YUATbzXb3zh2dj_D302XuHYNHi8/edit?usp=sharing)
 
