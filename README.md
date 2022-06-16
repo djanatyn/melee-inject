@@ -11,21 +11,43 @@ this is a presentation i gave at [The Recurse Center](https://www.recurse.com/ab
 
 ## usage
 
-``` rust
-let replacements = vec![
-    // replace potemkin
-    Replacement {
-        target_file: CaptainFalcon::PlCaGr,
-        replacement: PathBuf::from("falcon/POTEMKIN FALCON.dat"),
-    },
-];
+`Cargo.toml`:
 
-let updates = rebuild_fst("ssbm.iso", &replacements);
-std::fs::write("potemkin-fst.bin", &updates.new_fst).expect("failed to write file");
-
-let rebuilt_iso = build_iso("ssbm.iso", &updates);
-std::fs::write("potemkin-melee.iso", rebuilt_iso).expect("failed to write file");
+``` toml
+[dependencies]
+melee_inject = { git = "https://github.com/djanatyn/melee-inject" }
 ```
+
+`src/main.rs`:
+
+``` rust
+use melee_inject::characters::CaptainFalcon;
+use melee_inject::replace::{build_iso, rebuild_fst, Replacement};
+use std::io;
+use std::path::PathBuf;
+
+const SSBM_ISO: &str = "<path-to-ssbm.iso>";
+
+fn main() -> io::Result<()> {
+    let replacements = vec![
+        // replace potemkin
+        Replacement {
+            target_file: CaptainFalcon::PlCaGr,
+            replacement: PathBuf::from("<path-to-skin.dat>"),
+        },
+    ];
+
+    let updates = rebuild_fst(SSBM_ISO, &replacements);
+    std::fs::write("modified-fst.bin", &updates.new_fst).expect("failed to write file");
+
+    let rebuilt_iso = build_iso(SSBM_ISO, &updates);
+    std::fs::write("modified-melee.iso", rebuilt_iso).expect("failed to write file");
+
+    Ok(())
+}
+```
+
+`cargo run`:
 
 ```
 [src/main.rs:226] matching.original_size - new_data_length as u32 = 123584
