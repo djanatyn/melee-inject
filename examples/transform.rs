@@ -13,10 +13,10 @@ fn main() -> io::Result<()> {
     ];
 
     let updates = rebuild_fst("ssbm.iso", &replacements);
-    std::fs::write("potemkin-fst.bin", &updates.new_fst).expect("failed to write file");
+    std::fs::write("potemkin-fst.bin", &updates.new_fst)?;
 
     let rebuilt_iso = build_iso("ssbm.iso", &updates);
-    std::fs::write("potemkin-melee.iso", rebuilt_iso).expect("failed to write file");
+    std::fs::write("potemkin-melee.iso", rebuilt_iso)?;
 
     Ok(())
 }

@@ -43,10 +43,10 @@ fn main() -> io::Result<()> {
     ];
 
     let updates = rebuild_fst(SSBM_ISO, &replacements);
-    std::fs::write("modified-fst.bin", &updates.new_fst).expect("failed to write file");
+    std::fs::write("modified-fst.bin", &updates.new_fst)?;
 
     let rebuilt_iso = build_iso(SSBM_ISO, &updates);
-    std::fs::write("modified-melee.iso", rebuilt_iso).expect("failed to write file");
+    std::fs::write("modified-melee.iso", rebuilt_iso)?;
 
     Ok(())
 }
