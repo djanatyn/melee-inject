@@ -1,23 +1,21 @@
-# melee-dat
+# melee-inject
 
 ## usage
 
 ``` rust
-fn main() -> io::Result<()> {
-    let replacements = vec![
-        // replace potemkin
-        Replacement {
-            target: Character::CaptainFalcon(CaptainFalconFile::PlCaGr),
-            replacement: PathBuf::from("falcon/POTEMKIN FALCON.dat"),
-        },
-    ];
+let replacements = vec![
+    // replace potemkin
+    Replacement {
+        target_file: CaptainFalcon::PlCaGr,
+        replacement: PathBuf::from("falcon/POTEMKIN FALCON.dat"),
+    },
+];
 
-    let updates = rebuild_fst(ISO_PATH, &replacements);
-    let rebuilt_iso = build_iso(ISO_PATH, &updates);
-    std::fs::write("potemkin-melee.iso", rebuilt_iso).expect("failed to write file");
+let updates = rebuild_fst("ssbm.iso", &replacements);
+std::fs::write("potemkin-fst.bin", &updates.new_fst).expect("failed to write file");
 
-    Ok(())
-}
+let rebuilt_iso = build_iso("ssbm.iso", &updates);
+std::fs::write("potemkin-melee.iso", rebuilt_iso).expect("failed to write file");
 ```
 
 ```
