@@ -1,0 +1,6 @@
+---
+source: src/main.rs
+assertion_line: 302
+expression: hash.finish()
+---
+12314797784417435484

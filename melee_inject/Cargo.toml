@@ -1,0 +1,12 @@
+[package]
+name = "melee_inject"
+version = "0.1.0"
+edition = "2021"
+description = "Replace DAT files within v1.02 NTSC GALE01 GCM images."
+
+[lib]
+name = "melee_inject"
+path = "src/lib.rs"
+
+[dependencies]
+gc-gcm = "0.10"

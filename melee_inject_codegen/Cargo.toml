@@ -1,0 +1,7 @@
+[package]
+name = "melee_inject_codegen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gc-gcm = "0.10"
