@@ -1,3 +1,5 @@
+#![feature(slice_group_by)]
+
 use codegen::Scope;
 use gc_gcm::{FsNode, GcmFile};
 
@@ -111,7 +113,11 @@ fn main() {
         // scope.new_struct(&name);
     }
 
-    println!("{characters:#?}");
+    let groupings = characters
+        .group_by(|a, b| a.name == b.name)
+        .collect::<Vec<_>>();
+
+    println!("{groupings:#?}");
 
     // let output = scope.to_string();
 }
