@@ -5,3 +5,5 @@ edition = "2021"
 
 [dependencies]
 gc-gcm = "0.10"
+codegen = "0.1.3"
+phf = { version = "0.10", features = ["macros"] }
