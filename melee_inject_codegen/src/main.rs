@@ -54,18 +54,18 @@ const CHARACTER_PREFIXES: phf::Map<&'static str, &'static str> = phf_map! {
 };
 
 const COLORS: phf::Map<&'static str, &'static str> = phf_map! {
-    "Aq" => "aqua",
-    "Bk" => "black",
-    "Bu" => "blue",
-    "Gr" => "green",
-    "Gy" => "gray",
-    "La" => "lavender",
-    "Nr" => "neutral",
-    "Or" => "orange",
-    "Pi" => "pink",
-    "Re" => "red",
-    "Wh" => "white",
-    "Ye" => "yellow",
+    "Aq" => "Aqua",
+    "Bk" => "Black",
+    "Bu" => "Blue",
+    "Gr" => "Green",
+    "Gy" => "Gray",
+    "La" => "Lavender",
+    "Nr" => "Neutral",
+    "Or" => "Orange",
+    "Pi" => "Pink",
+    "Re" => "Red",
+    "Wh" => "White",
+    "Ye" => "Yellow",
 };
 
 #[derive(Debug)]
@@ -73,6 +73,7 @@ struct CharacterFile {
     filename: String,
     name: String,
     color: Option<String>,
+    kirby_copy: Option<String>,
 }
 
 impl FromStr for CharacterFile {
@@ -107,6 +108,7 @@ impl FromStr for CharacterFile {
                 filename: filename.to_string(),
                 name: name.to_string(),
                 color: None,
+                kirby_copy: None,
             });
         }
 
@@ -127,6 +129,7 @@ impl FromStr for CharacterFile {
                         filename: filename.to_string(),
                         name: name.to_string(),
                         color: Some(color.to_string()),
+                        kirby_copy: None,
                     })
                 }
                 // Cp<CHAR_CODE>
@@ -141,8 +144,9 @@ impl FromStr for CharacterFile {
 
                     Ok(CharacterFile {
                         filename: filename.to_string(),
-                        name: format!("Kirby Copy Power [{copied_char}]"),
+                        name: name.to_string(),
                         color: None,
+                        kirby_copy: Some(copied_char.to_string()),
                     })
                 }
                 // <COLOR>Cp<CHAR_CODE>
@@ -162,8 +166,9 @@ impl FromStr for CharacterFile {
 
                     Ok(CharacterFile {
                         filename: filename.to_string(),
-                        name: format!("Kirby Copy Power [{copied_char}]"),
+                        name: name.to_string(),
                         color: Some(color.to_string()),
+                        kirby_copy: Some(copied_char.to_string()),
                     })
                 }
                 _ => panic!("unexpected kirby file"),
@@ -176,6 +181,7 @@ impl FromStr for CharacterFile {
             filename: filename.to_string(),
             name: name.to_string(),
             color: Some(color.to_string()),
+            kirby_copy: None,
         })
     }
 }
@@ -213,11 +219,45 @@ fn main() {
                 }
             };
         }
-
-        // scope.new_struct(&name);
     }
 
     println!("{characters:#?}");
 
-    // let output = scope.to_string();
+    for (character, files) in &characters {
+        scope
+            .new_struct(character)
+            .derive("Debug")
+            .derive("Clone")
+            .vis("pub")
+            .doc(format!("Supported files for {character}.").as_str());
+
+        // start impl block
+        scope.raw(format!("impl {character} {{").as_str());
+
+        for file in files {
+            if file.filename.ends_with("AJ.dat") {
+                continue;
+            }
+
+            let name = file.filename.strip_suffix(".dat").expect("failed to strip");
+            let filename = &file.filename;
+
+            if let Some(color) = &file.color {
+                let doc = format!("    /// {color} costume. ");
+                scope.raw(&doc);
+            } else {
+                let doc = format!("    /// Shared textures. ");
+                scope.raw(&doc);
+            }
+
+            let def = format!("    pub const {name}: &'static str = \"{filename}\"");
+            scope.raw(&def);
+        }
+
+        // end impl block
+        scope.raw("}");
+    }
+
+    let output = scope.to_string();
+    println!("{output}")
 }
