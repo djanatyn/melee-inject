@@ -24,6 +24,621 @@ pub mod characters {
         /// White costume.
         pub const PlCaWh: &'static str = "PlCaWh.dat";
     }
+
+    /// Supported files for Young Link.
+    #[derive(Debug, Clone)]
+    pub struct YoungLink;
+    impl YoungLink {
+        /// Shared textures.
+        pub const PlCl: &'static str = "PlCl.dat";
+        /// Black costume.
+        pub const PlClBk: &'static str = "PlClBk.dat";
+        /// Blue costume.
+        pub const PlClBu: &'static str = "PlClBu.dat";
+        /// Neutral costume.
+        pub const PlClNr: &'static str = "PlClNr.dat";
+        /// Red costume.
+        pub const PlClRe: &'static str = "PlClRe.dat";
+        /// White costume.
+        pub const PlClWh: &'static str = "PlClWh.dat";
+    }
+
+    /// Supported files for Male Wireframe.
+    #[derive(Debug, Clone)]
+    pub struct MaleWireframe;
+    impl MaleWireframe {
+        /// Shared textures.
+        pub const PlBo: &'static str = "PlBo.dat";
+        /// Neutral costume.
+        pub const PlBoNr: &'static str = "PlBoNr.dat";
+    }
+
+    /// Supported files for Falco.
+    #[derive(Debug, Clone)]
+    pub struct Falco;
+    impl Falco {
+        /// Shared textures.
+        pub const PlFc: &'static str = "PlFc.dat";
+        /// Blue costume.
+        pub const PlFcBu: &'static str = "PlFcBu.dat";
+        /// Green costume.
+        pub const PlFcGr: &'static str = "PlFcGr.dat";
+        /// Neutral costume.
+        pub const PlFcNr: &'static str = "PlFcNr.dat";
+        /// Red costume.
+        pub const PlFcRe: &'static str = "PlFcRe.dat";
+    }
+
+    /// Supported files for Master Hand.
+    #[derive(Debug, Clone)]
+    pub struct MasterHand;
+    impl MasterHand {
+        /// Shared textures.
+        pub const PlMh: &'static str = "PlMh.dat";
+        /// Neutral costume.
+        pub const PlMhNr: &'static str = "PlMhNr.dat";
+    }
+
+    /// Supported files for Peach.
+    #[derive(Debug, Clone)]
+    pub struct Peach;
+    impl Peach {
+        /// Shared textures.
+        pub const PlPe: &'static str = "PlPe.dat";
+        /// Blue costume.
+        pub const PlPeBu: &'static str = "PlPeBu.dat";
+        /// Green costume.
+        pub const PlPeGr: &'static str = "PlPeGr.dat";
+        /// Neutral costume.
+        pub const PlPeNr: &'static str = "PlPeNr.dat";
+        /// White costume.
+        pub const PlPeWh: &'static str = "PlPeWh.dat";
+        /// Yellow costume.
+        pub const PlPeYe: &'static str = "PlPeYe.dat";
+    }
+
+    /// Supported files for Game 'n Watch.
+    #[derive(Debug, Clone)]
+    pub struct GameNWatch;
+    impl GameNWatch {
+        /// Shared textures.
+        pub const PlGw: &'static str = "PlGw.dat";
+        /// Neutral costume.
+        pub const PlGwNr: &'static str = "PlGwNr.dat";
+    }
+
+    /// Supported files for Luigi.
+    #[derive(Debug, Clone)]
+    pub struct Luigi;
+
+    impl Luigi {
+        /// Shared textures.
+        pub const PlLg: &'static str = "PlLg.dat";
+        /// Aqua costume.
+        pub const PlLgAq: &'static str = "PlLgAq.dat";
+        /// Neutral costume.
+        pub const PlLgNr: &'static str = "PlLgNr.dat";
+        /// Pink costume.
+        pub const PlLgPi: &'static str = "PlLgPi.dat";
+        /// White costume.
+        pub const PlLgWh: &'static str = "PlLgWh.dat";
+    }
+
+    /// Supported files for Pikachu.
+    #[derive(Debug, Clone)]
+    pub struct Pikachu;
+
+    impl Pikachu {
+        /// Shared textures.
+        pub const PlPk: &'static str = "PlPk.dat";
+        /// Blue costume.
+        pub const PlPkBu: &'static str = "PlPkBu.dat";
+        /// Green costume.
+        pub const PlPkGr: &'static str = "PlPkGr.dat";
+        /// Neutral costume.
+        pub const PlPkNr: &'static str = "PlPkNr.dat";
+        /// Red costume.
+        pub const PlPkRe: &'static str = "PlPkRe.dat";
+    }
+
+    /// Supported files for Fox.
+    #[derive(Debug, Clone)]
+    pub struct Fox;
+    impl Fox {
+        /// Shared textures.
+        pub const PlFx: &'static str = "PlFx.dat";
+        /// Green costume.
+        pub const PlFxGr: &'static str = "PlFxGr.dat";
+        /// Lavender costume.
+        pub const PlFxLa: &'static str = "PlFxLa.dat";
+        /// Neutral costume.
+        pub const PlFxNr: &'static str = "PlFxNr.dat";
+        /// Orange costume.
+        pub const PlFxOr: &'static str = "PlFxOr.dat";
+    }
+
+    /// Supported files for Jigglypuff.
+    #[derive(Debug, Clone)]
+    pub struct Jigglypuff;
+
+    impl Jigglypuff {
+        /// Shared textures.
+        pub const PlPr: &'static str = "PlPr.dat";
+        /// Blue costume.
+        pub const PlPrBu: &'static str = "PlPrBu.dat";
+        /// Green costume.
+        pub const PlPrGr: &'static str = "PlPrGr.dat";
+        /// Neutral costume.
+        pub const PlPrNr: &'static str = "PlPrNr.dat";
+        /// Red costume.
+        pub const PlPrRe: &'static str = "PlPrRe.dat";
+        /// Yellow costume.
+        pub const PlPrYe: &'static str = "PlPrYe.dat";
+    }
+
+    /// Supported files for SandBag.
+    #[derive(Debug, Clone)]
+    pub struct SandBag;
+    impl SandBag {
+        /// Shared textures.
+        pub const PlSb: &'static str = "PlSb.dat";
+        /// Neutral costume.
+        pub const PlSbNr: &'static str = "PlSbNr.dat";
+    }
+
+    /// Supported files for Marth.
+    #[derive(Debug, Clone)]
+    pub struct Marth;
+    impl Marth {
+        /// Shared textures.
+        pub const PlMs: &'static str = "PlMs.dat";
+        /// Black costume.
+        pub const PlMsBk: &'static str = "PlMsBk.dat";
+        /// Green costume.
+        pub const PlMsGr: &'static str = "PlMsGr.dat";
+        /// Neutral costume.
+        pub const PlMsNr: &'static str = "PlMsNr.dat";
+        /// Red costume.
+        pub const PlMsRe: &'static str = "PlMsRe.dat";
+        /// White costume.
+        pub const PlMsWh: &'static str = "PlMsWh.dat";
+    }
+
+    /// Supported files for Samus.
+    #[derive(Debug, Clone)]
+    pub struct Samus;
+    impl Samus {
+        /// Shared textures.
+        pub const PlSs: &'static str = "PlSs.dat";
+        /// Black costume.
+        pub const PlSsBk: &'static str = "PlSsBk.dat";
+        /// Green costume.
+        pub const PlSsGr: &'static str = "PlSsGr.dat";
+        /// Lavender costume.
+        pub const PlSsLa: &'static str = "PlSsLa.dat";
+        /// Neutral costume.
+        pub const PlSsNr: &'static str = "PlSsNr.dat";
+        /// Pink costume.
+        pub const PlSsPi: &'static str = "PlSsPi.dat";
+    }
+
+    /// Supported files for GigaBowser.
+    #[derive(Debug, Clone)]
+    pub struct GigaBowser;
+    impl GigaBowser {
+        /// Shared textures.
+        pub const PlGk: &'static str = "PlGk.dat";
+        /// Neutral costume.
+        pub const PlGkNr: &'static str = "PlGkNr.dat";
+    }
+
+    /// Supported files for Ness.
+    #[derive(Debug, Clone)]
+    pub struct Ness;
+    impl Ness {
+        /// Shared textures.
+        pub const PlNs: &'static str = "PlNs.dat";
+        /// Blue costume.
+        pub const PlNsBu: &'static str = "PlNsBu.dat";
+        /// Green costume.
+        pub const PlNsGr: &'static str = "PlNsGr.dat";
+        /// Neutral costume.
+        pub const PlNsNr: &'static str = "PlNsNr.dat";
+        /// Yellow costume.
+        pub const PlNsYe: &'static str = "PlNsYe.dat";
+    }
+
+    /// Supported files for Zelda.
+    #[derive(Debug, Clone)]
+    pub struct Zelda;
+    impl Zelda {
+        /// Shared textures.
+        pub const PlZd: &'static str = "PlZd.dat";
+        /// Blue costume.
+        pub const PlZdBu: &'static str = "PlZdBu.dat";
+        /// Green costume.
+        pub const PlZdGr: &'static str = "PlZdGr.dat";
+        /// Neutral costume.
+        pub const PlZdNr: &'static str = "PlZdNr.dat";
+        /// Red costume.
+        pub const PlZdRe: &'static str = "PlZdRe.dat";
+        /// White costume.
+        pub const PlZdWh: &'static str = "PlZdWh.dat";
+    }
+
+    /// Supported files for [Nana] Ice Climbers.
+    #[derive(Debug, Clone)]
+    pub struct IceClimbersNana;
+    impl IceClimbersNana {
+        /// Shared textures.
+        pub const PlNn: &'static str = "PlNn.dat";
+        /// Aqua costume.
+        pub const PlNnAq: &'static str = "PlNnAq.dat";
+        /// Neutral costume.
+        pub const PlNnNr: &'static str = "PlNnNr.dat";
+        /// White costume.
+        pub const PlNnWh: &'static str = "PlNnWh.dat";
+        /// Yellow costume.
+        pub const PlNnYe: &'static str = "PlNnYe.dat";
+    }
+
+    /// Supported files for Pichu.
+    #[derive(Debug, Clone)]
+    pub struct Pichu;
+    impl Pichu {
+        /// Shared textures.
+        pub const PlPc: &'static str = "PlPc.dat";
+        /// Blue costume.
+        pub const PlPcBu: &'static str = "PlPcBu.dat";
+        /// Green costume.
+        pub const PlPcGr: &'static str = "PlPcGr.dat";
+        /// Neutral costume.
+        pub const PlPcNr: &'static str = "PlPcNr.dat";
+        /// Red costume.
+        pub const PlPcRe: &'static str = "PlPcRe.dat";
+    }
+
+    /// Supported files for Crazy Hand.
+    #[derive(Debug, Clone)]
+    pub struct CrazyHand;
+    impl CrazyHand {
+        /// Shared textures.
+        pub const PlCh: &'static str = "PlCh.dat";
+        /// Neutral costume.
+        pub const PlChNr: &'static str = "PlChNr.dat";
+    }
+
+    /// Supported files for Sheik.
+    #[derive(Debug, Clone)]
+    pub struct Sheik;
+    impl Sheik {
+        /// Shared textures.
+        pub const PlSk: &'static str = "PlSk.dat";
+        /// Blue costume.
+        pub const PlSkBu: &'static str = "PlSkBu.dat";
+        /// Green costume.
+        pub const PlSkGr: &'static str = "PlSkGr.dat";
+        /// Neutral costume.
+        pub const PlSkNr: &'static str = "PlSkNr.dat";
+        /// Red costume.
+        pub const PlSkRe: &'static str = "PlSkRe.dat";
+        /// White costume.
+        pub const PlSkWh: &'static str = "PlSkWh.dat";
+    }
+
+    /// Supported files for Female Wireframe.
+    #[derive(Debug, Clone)]
+    pub struct FemaleWireframe;
+    impl FemaleWireframe {
+        /// Shared textures.
+        pub const PlGl: &'static str = "PlGl.dat";
+        /// Neutral costume.
+        pub const PlGlNr: &'static str = "PlGlNr.dat";
+    }
+
+    /// Supported files for Yoshi.
+    #[derive(Debug, Clone)]
+    pub struct Yoshi;
+    impl Yoshi {
+        /// Shared textures.
+        pub const PlYs: &'static str = "PlYs.dat";
+        /// Aqua costume.
+        pub const PlYsAq: &'static str = "PlYsAq.dat";
+        /// Blue costume.
+        pub const PlYsBu: &'static str = "PlYsBu.dat";
+        /// Neutral costume.
+        pub const PlYsNr: &'static str = "PlYsNr.dat";
+        /// Pink costume.
+        pub const PlYsPi: &'static str = "PlYsPi.dat";
+        /// Red costume.
+        pub const PlYsRe: &'static str = "PlYsRe.dat";
+        /// Yellow costume.
+        pub const PlYsYe: &'static str = "PlYsYe.dat";
+    }
+
+    /// Supported files for Donkey Kong.
+    #[derive(Debug, Clone)]
+    pub struct DonkeyKong;
+    impl DonkeyKong {
+        /// Shared textures.
+        pub const PlDk: &'static str = "PlDk.dat";
+        /// Black costume.
+        pub const PlDkBk: &'static str = "PlDkBk.dat";
+        /// Blue costume.
+        pub const PlDkBu: &'static str = "PlDkBu.dat";
+        /// Green costume.
+        pub const PlDkGr: &'static str = "PlDkGr.dat";
+        /// Neutral costume.
+        pub const PlDkNr: &'static str = "PlDkNr.dat";
+        /// Red costume.
+        pub const PlDkRe: &'static str = "PlDkRe.dat";
+    }
+
+    /// Supported files for Mario.
+    #[derive(Debug, Clone)]
+    pub struct Mario;
+    impl Mario {
+        /// Shared textures.
+        pub const PlMr: &'static str = "PlMr.dat";
+        /// Black costume.
+        pub const PlMrBk: &'static str = "PlMrBk.dat";
+        /// Blue costume.
+        pub const PlMrBu: &'static str = "PlMrBu.dat";
+        /// Green costume.
+        pub const PlMrGr: &'static str = "PlMrGr.dat";
+        /// Neutral costume.
+        pub const PlMrNr: &'static str = "PlMrNr.dat";
+        /// Yellow costume.
+        pub const PlMrYe: &'static str = "PlMrYe.dat";
+    }
+
+    /// Supported files for Ganondorf.
+    #[derive(Debug, Clone)]
+    pub struct Ganondorf;
+    impl Ganondorf {
+        /// Shared textures.
+        pub const PlGn: &'static str = "PlGn.dat";
+        /// Blue costume.
+        pub const PlGnBu: &'static str = "PlGnBu.dat";
+        /// Green costume.
+        pub const PlGnGr: &'static str = "PlGnGr.dat";
+        /// Lavender costume.
+        pub const PlGnLa: &'static str = "PlGnLa.dat";
+        /// Neutral costume.
+        pub const PlGnNr: &'static str = "PlGnNr.dat";
+        /// Red costume.
+        pub const PlGnRe: &'static str = "PlGnRe.dat";
+    }
+
+    /// Supported files for Dr. Mario.
+    #[derive(Debug, Clone)]
+    pub struct DrMario;
+    impl DrMario {
+        /// Shared textures.
+        pub const PlDr: &'static str = "PlDr.dat";
+        /// Black costume.
+        pub const PlDrBk: &'static str = "PlDrBk.dat";
+        /// Blue costume.
+        pub const PlDrBu: &'static str = "PlDrBu.dat";
+        /// Green costume.
+        pub const PlDrGr: &'static str = "PlDrGr.dat";
+        /// Neutral costume.
+        pub const PlDrNr: &'static str = "PlDrNr.dat";
+        /// Red costume.
+        pub const PlDrRe: &'static str = "PlDrRe.dat";
+    }
+
+    /// Supported files for Kirby.
+    #[derive(Debug, Clone)]
+    pub struct Kirby;
+    impl Kirby {
+        /// Shared textures.
+        pub const PlKb: &'static str = "PlKb.dat";
+        /// Blue costume.
+        pub const PlKbBu: &'static str = "PlKbBu.dat";
+        /// Blue costume.
+        pub const PlKbBuCpDk: &'static str = "PlKbBuCpDk.dat";
+        /// Blue costume.
+        pub const PlKbBuCpFc: &'static str = "PlKbBuCpFc.dat";
+        /// Blue costume.
+        pub const PlKbBuCpMt: &'static str = "PlKbBuCpMt.dat";
+        /// Blue costume.
+        pub const PlKbBuCpPr: &'static str = "PlKbBuCpPr.dat";
+        /// Shared textures.
+        pub const PlKbCpCa: &'static str = "PlKbCpCa.dat";
+        /// Shared textures.
+        pub const PlKbCpCl: &'static str = "PlKbCpCl.dat";
+        /// Shared textures.
+        pub const PlKbCpDk: &'static str = "PlKbCpDk.dat";
+        /// Shared textures.
+        pub const PlKbCpDr: &'static str = "PlKbCpDr.dat";
+        /// Shared textures.
+        pub const PlKbCpFc: &'static str = "PlKbCpFc.dat";
+        /// Shared textures.
+        pub const PlKbCpFe: &'static str = "PlKbCpFe.dat";
+        /// Shared textures.
+        pub const PlKbCpFx: &'static str = "PlKbCpFx.dat";
+        /// Shared textures.
+        pub const PlKbCpGn: &'static str = "PlKbCpGn.dat";
+        /// Shared textures.
+        pub const PlKbCpGw: &'static str = "PlKbCpGw.dat";
+        /// Shared textures.
+        pub const PlKbCpKp: &'static str = "PlKbCpKp.dat";
+        /// Shared textures.
+        pub const PlKbCpLg: &'static str = "PlKbCpLg.dat";
+        /// Shared textures.
+        pub const PlKbCpLk: &'static str = "PlKbCpLk.dat";
+        /// Shared textures.
+        pub const PlKbCpMr: &'static str = "PlKbCpMr.dat";
+        /// Shared textures.
+        pub const PlKbCpMs: &'static str = "PlKbCpMs.dat";
+        /// Shared textures.
+        pub const PlKbCpMt: &'static str = "PlKbCpMt.dat";
+        /// Shared textures.
+        pub const PlKbCpNs: &'static str = "PlKbCpNs.dat";
+        /// Shared textures.
+        pub const PlKbCpPc: &'static str = "PlKbCpPc.dat";
+        /// Shared textures.
+        pub const PlKbCpPe: &'static str = "PlKbCpPe.dat";
+        /// Shared textures.
+        pub const PlKbCpPk: &'static str = "PlKbCpPk.dat";
+        /// Shared textures.
+        pub const PlKbCpPp: &'static str = "PlKbCpPp.dat";
+        /// Shared textures.
+        pub const PlKbCpPr: &'static str = "PlKbCpPr.dat";
+        /// Shared textures.
+        pub const PlKbCpSk: &'static str = "PlKbCpSk.dat";
+        /// Shared textures.
+        pub const PlKbCpSs: &'static str = "PlKbCpSs.dat";
+        /// Shared textures.
+        pub const PlKbCpYs: &'static str = "PlKbCpYs.dat";
+        /// Shared textures.
+        pub const PlKbCpZd: &'static str = "PlKbCpZd.dat";
+        /// Green costume.
+        pub const PlKbGr: &'static str = "PlKbGr.dat";
+        /// Green costume.
+        pub const PlKbGrCpDk: &'static str = "PlKbGrCpDk.dat";
+        /// Green costume.
+        pub const PlKbGrCpFc: &'static str = "PlKbGrCpFc.dat";
+        /// Green costume.
+        pub const PlKbGrCpMt: &'static str = "PlKbGrCpMt.dat";
+        /// Green costume.
+        pub const PlKbGrCpPr: &'static str = "PlKbGrCpPr.dat";
+        /// Neutral costume.
+        pub const PlKbNr: &'static str = "PlKbNr.dat";
+        /// Neutral costume.
+        pub const PlKbNrCpDk: &'static str = "PlKbNrCpDk.dat";
+        /// Neutral costume.
+        pub const PlKbNrCpFc: &'static str = "PlKbNrCpFc.dat";
+        /// Neutral costume.
+        pub const PlKbNrCpGw: &'static str = "PlKbNrCpGw.dat";
+        /// Neutral costume.
+        pub const PlKbNrCpMt: &'static str = "PlKbNrCpMt.dat";
+        /// Neutral costume.
+        pub const PlKbNrCpPr: &'static str = "PlKbNrCpPr.dat";
+        /// Red costume.
+        pub const PlKbRe: &'static str = "PlKbRe.dat";
+        /// Red costume.
+        pub const PlKbReCpDk: &'static str = "PlKbReCpDk.dat";
+        /// Red costume.
+        pub const PlKbReCpFc: &'static str = "PlKbReCpFc.dat";
+        /// Red costume.
+        pub const PlKbReCpMt: &'static str = "PlKbReCpMt.dat";
+        /// Red costume.
+        pub const PlKbReCpPr: &'static str = "PlKbReCpPr.dat";
+        /// White costume.
+        pub const PlKbWh: &'static str = "PlKbWh.dat";
+        /// White costume.
+        pub const PlKbWhCpDk: &'static str = "PlKbWhCpDk.dat";
+        /// White costume.
+        pub const PlKbWhCpFc: &'static str = "PlKbWhCpFc.dat";
+        /// White costume.
+        pub const PlKbWhCpMt: &'static str = "PlKbWhCpMt.dat";
+        /// White costume.
+        pub const PlKbWhCpPr: &'static str = "PlKbWhCpPr.dat";
+        /// Yellow costume.
+        pub const PlKbYe: &'static str = "PlKbYe.dat";
+        /// Yellow costume.
+        pub const PlKbYeCpDk: &'static str = "PlKbYeCpDk.dat";
+        /// Yellow costume.
+        pub const PlKbYeCpFc: &'static str = "PlKbYeCpFc.dat";
+        /// Yellow costume.
+        pub const PlKbYeCpMt: &'static str = "PlKbYeCpMt.dat";
+        /// Yellow costume.
+        pub const PlKbYeCpPr: &'static str = "PlKbYeCpPr.dat";
+    }
+
+    /// Supported files for Roy.
+    #[derive(Debug, Clone)]
+    pub struct Roy;
+    impl Roy {
+        /// Shared textures.
+        pub const PlFe: &'static str = "PlFe.dat";
+        /// Blue costume.
+        pub const PlFeBu: &'static str = "PlFeBu.dat";
+        /// Green costume.
+        pub const PlFeGr: &'static str = "PlFeGr.dat";
+        /// Neutral costume.
+        pub const PlFeNr: &'static str = "PlFeNr.dat";
+        /// Red costume.
+        pub const PlFeRe: &'static str = "PlFeRe.dat";
+        /// Yellow costume.
+        pub const PlFeYe: &'static str = "PlFeYe.dat";
+    }
+
+    /// Supported files for Bowser.
+    #[derive(Debug, Clone)]
+    pub struct Bowser;
+    impl Bowser {
+        /// Shared textures.
+        pub const PlKp: &'static str = "PlKp.dat";
+        /// Black costume.
+        pub const PlKpBk: &'static str = "PlKpBk.dat";
+        /// Blue costume.
+        pub const PlKpBu: &'static str = "PlKpBu.dat";
+        /// Neutral costume.
+        pub const PlKpNr: &'static str = "PlKpNr.dat";
+        /// Red costume.
+        pub const PlKpRe: &'static str = "PlKpRe.dat";
+    }
+
+    /// Supported files for Mewtwo.
+    #[derive(Debug, Clone)]
+    pub struct Mewtwo;
+    impl Mewtwo {
+        /// Shared textures.
+        pub const PlMt: &'static str = "PlMt.dat";
+        /// Blue costume.
+        pub const PlMtBu: &'static str = "PlMtBu.dat";
+        /// Green costume.
+        pub const PlMtGr: &'static str = "PlMtGr.dat";
+        /// Neutral costume.
+        pub const PlMtNr: &'static str = "PlMtNr.dat";
+        /// Red costume.
+        pub const PlMtRe: &'static str = "PlMtRe.dat";
+    }
+
+    /// Supported files for [Popo] Ice Climbers.
+    #[derive(Debug, Clone)]
+    pub struct IceClimbersPopo;
+    impl IceClimbersPopo {
+        /// Shared textures.
+        pub const PlPp: &'static str = "PlPp.dat";
+        /// Green costume.
+        pub const PlPpGr: &'static str = "PlPpGr.dat";
+        /// Neutral costume.
+        pub const PlPpNr: &'static str = "PlPpNr.dat";
+        /// Orange costume.
+        pub const PlPpOr: &'static str = "PlPpOr.dat";
+        /// Red costume.
+        pub const PlPpRe: &'static str = "PlPpRe.dat";
+    }
+
+    /// Supported files for Common.
+    #[derive(Debug, Clone)]
+    pub struct Common;
+    impl Common {
+        /// Shared textures.
+        pub const PlCo: &'static str = "PlCo.dat";
+    }
+
+    /// Supported files for Link.
+    #[derive(Debug, Clone)]
+    pub struct Link;
+    impl Link {
+        /// Shared textures.
+        pub const PlLk: &'static str = "PlLk.dat";
+        /// Black costume.
+        pub const PlLkBk: &'static str = "PlLkBk.dat";
+        /// Blue costume.
+        pub const PlLkBu: &'static str = "PlLkBu.dat";
+        /// Neutral costume.
+        pub const PlLkNr: &'static str = "PlLkNr.dat";
+        /// Red costume.
+        pub const PlLkRe: &'static str = "PlLkRe.dat";
+        /// White costume.
+        pub const PlLkWh: &'static str = "PlLkWh.dat";
+    }
 }
 
 pub mod parse {
