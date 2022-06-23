@@ -2,12 +2,14 @@
 name = "melee_inject"
 version = "0.1.0"
 edition = "2021"
+author = "djanatyn <djanatyn@gmail.com>"
 description = "Replace DAT files within v1.02 NTSC GALE01 GCM images."
 homepage = "https://github.com/djanatyn/melee-inject"
 repository = "https://github.com/djanatyn/melee-inject"
 license = "MIT"
 keywords = ["melee", "ssbm", "dat", "gale01"]
 categories = ["games"]
+readme = "README.md"
 
 [lib]
 name = "melee_inject"
