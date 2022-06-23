@@ -9,7 +9,7 @@ repository = "https://github.com/djanatyn/melee-inject"
 license = "MIT"
 keywords = ["melee", "ssbm", "dat", "gale01"]
 categories = ["games"]
-readme = "../README.md"
+readme = "README.md"
 
 [lib]
 name = "melee_inject"
