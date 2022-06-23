@@ -1,15 +1,13 @@
-// TODO: output logs with tracing
-
 pub mod characters {
     #![allow(non_upper_case_globals)]
     //! Supported character files for replacement.
 
-    /// DAT files for Captain Falcon, used as replacement targets.
+    /// Supported files for Captain Falcon.
     #[non_exhaustive]
     #[derive(Debug, Clone)]
     pub struct CaptainFalcon;
     impl CaptainFalcon {
-        /// NTSC data & shared textures.
+        /// Shared textures.
         pub const PlCa: &'static str = "PlCa.dat";
         /// Blue costume.
         pub const PlCaBu: &'static str = "PlCaBu.dat";
@@ -110,7 +108,6 @@ pub mod characters {
     /// Supported files for Luigi.
     #[derive(Debug, Clone)]
     pub struct Luigi;
-
     impl Luigi {
         /// Shared textures.
         pub const PlLg: &'static str = "PlLg.dat";
@@ -127,7 +124,6 @@ pub mod characters {
     /// Supported files for Pikachu.
     #[derive(Debug, Clone)]
     pub struct Pikachu;
-
     impl Pikachu {
         /// Shared textures.
         pub const PlPk: &'static str = "PlPk.dat";
@@ -160,7 +156,6 @@ pub mod characters {
     /// Supported files for Jigglypuff.
     #[derive(Debug, Clone)]
     pub struct Jigglypuff;
-
     impl Jigglypuff {
         /// Shared textures.
         pub const PlPr: &'static str = "PlPr.dat";
