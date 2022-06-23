@@ -436,115 +436,115 @@ pub mod characters {
         pub const PlKb: &'static str = "PlKb.dat";
         /// Blue costume.
         pub const PlKbBu: &'static str = "PlKbBu.dat";
-        /// Blue costume.
+        /// Blue costume, Copy Power (Donkey Kong).
         pub const PlKbBuCpDk: &'static str = "PlKbBuCpDk.dat";
-        /// Blue costume.
+        /// Blue costume, Copy Power (Falco).
         pub const PlKbBuCpFc: &'static str = "PlKbBuCpFc.dat";
-        /// Blue costume.
+        /// Blue costume, Copy Power (Mewtwo).
         pub const PlKbBuCpMt: &'static str = "PlKbBuCpMt.dat";
-        /// Blue costume.
+        /// Blue costume, Copy Power (Jigglypuff).
         pub const PlKbBuCpPr: &'static str = "PlKbBuCpPr.dat";
-        /// Shared textures.
+        /// Copy Power (Captain Falcon).
         pub const PlKbCpCa: &'static str = "PlKbCpCa.dat";
-        /// Shared textures.
+        /// Copy Power (Young Link).
         pub const PlKbCpCl: &'static str = "PlKbCpCl.dat";
-        /// Shared textures.
+        /// Copy Power (Donkey Kong).
         pub const PlKbCpDk: &'static str = "PlKbCpDk.dat";
-        /// Shared textures.
+        /// Copy Power (Dr. Mario).
         pub const PlKbCpDr: &'static str = "PlKbCpDr.dat";
-        /// Shared textures.
+        /// Copy Power (Falco).
         pub const PlKbCpFc: &'static str = "PlKbCpFc.dat";
-        /// Shared textures.
+        /// Copy Power (Roy).
         pub const PlKbCpFe: &'static str = "PlKbCpFe.dat";
-        /// Shared textures.
+        /// Copy Power (Fox).
         pub const PlKbCpFx: &'static str = "PlKbCpFx.dat";
-        /// Shared textures.
+        /// Copy Power (Ganondorf).
         pub const PlKbCpGn: &'static str = "PlKbCpGn.dat";
-        /// Shared textures.
+        /// Copy Power (Game 'n Watch).
         pub const PlKbCpGw: &'static str = "PlKbCpGw.dat";
-        /// Shared textures.
+        /// Copy Power (Bowser).
         pub const PlKbCpKp: &'static str = "PlKbCpKp.dat";
-        /// Shared textures.
+        /// Copy Power (Luigi).
         pub const PlKbCpLg: &'static str = "PlKbCpLg.dat";
-        /// Shared textures.
+        /// Copy Power (Link).
         pub const PlKbCpLk: &'static str = "PlKbCpLk.dat";
-        /// Shared textures.
+        /// Copy Power (Mario).
         pub const PlKbCpMr: &'static str = "PlKbCpMr.dat";
-        /// Shared textures.
+        /// Copy Power (Marth).
         pub const PlKbCpMs: &'static str = "PlKbCpMs.dat";
-        /// Shared textures.
+        /// Copy Power (Mewtwo).
         pub const PlKbCpMt: &'static str = "PlKbCpMt.dat";
-        /// Shared textures.
+        /// Copy Power (Ness).
         pub const PlKbCpNs: &'static str = "PlKbCpNs.dat";
-        /// Shared textures.
+        /// Copy Power (Pichu).
         pub const PlKbCpPc: &'static str = "PlKbCpPc.dat";
-        /// Shared textures.
+        /// Copy Power (Peach).
         pub const PlKbCpPe: &'static str = "PlKbCpPe.dat";
-        /// Shared textures.
+        /// Copy Power (Pikachu).
         pub const PlKbCpPk: &'static str = "PlKbCpPk.dat";
-        /// Shared textures.
+        /// Copy Power ([Popo] Ice Climbers).
         pub const PlKbCpPp: &'static str = "PlKbCpPp.dat";
-        /// Shared textures.
+        /// Copy Power (Jigglypuff).
         pub const PlKbCpPr: &'static str = "PlKbCpPr.dat";
-        /// Shared textures.
+        /// Copy Power (Sheik).
         pub const PlKbCpSk: &'static str = "PlKbCpSk.dat";
-        /// Shared textures.
+        /// Copy Power (Samus).
         pub const PlKbCpSs: &'static str = "PlKbCpSs.dat";
-        /// Shared textures.
+        /// Copy Power (Yoshi).
         pub const PlKbCpYs: &'static str = "PlKbCpYs.dat";
-        /// Shared textures.
+        /// Copy Power (Zelda).
         pub const PlKbCpZd: &'static str = "PlKbCpZd.dat";
         /// Green costume.
         pub const PlKbGr: &'static str = "PlKbGr.dat";
-        /// Green costume.
+        /// Green costume, Copy Power (Donkey Kong).
         pub const PlKbGrCpDk: &'static str = "PlKbGrCpDk.dat";
-        /// Green costume.
+        /// Green costume, Copy Power (Falco).
         pub const PlKbGrCpFc: &'static str = "PlKbGrCpFc.dat";
-        /// Green costume.
+        /// Green costume, Copy Power (Mewtwo).
         pub const PlKbGrCpMt: &'static str = "PlKbGrCpMt.dat";
-        /// Green costume.
+        /// Green costume, Copy Power (Jigglypuff).
         pub const PlKbGrCpPr: &'static str = "PlKbGrCpPr.dat";
         /// Neutral costume.
         pub const PlKbNr: &'static str = "PlKbNr.dat";
-        /// Neutral costume.
+        /// Neutral costume, Copy Power (Donkey Kong).
         pub const PlKbNrCpDk: &'static str = "PlKbNrCpDk.dat";
-        /// Neutral costume.
+        /// Neutral costume, Copy Power (Falco).
         pub const PlKbNrCpFc: &'static str = "PlKbNrCpFc.dat";
-        /// Neutral costume.
+        /// Neutral costume, Copy Power (Game 'n Watch).
         pub const PlKbNrCpGw: &'static str = "PlKbNrCpGw.dat";
-        /// Neutral costume.
+        /// Neutral costume, Copy Power (Mewtwo).
         pub const PlKbNrCpMt: &'static str = "PlKbNrCpMt.dat";
-        /// Neutral costume.
+        /// Neutral costume, Copy Power (Jigglypuff).
         pub const PlKbNrCpPr: &'static str = "PlKbNrCpPr.dat";
         /// Red costume.
         pub const PlKbRe: &'static str = "PlKbRe.dat";
-        /// Red costume.
+        /// Red costume, Copy Power (Donkey Kong).
         pub const PlKbReCpDk: &'static str = "PlKbReCpDk.dat";
-        /// Red costume.
+        /// Red costume, Copy Power (Falco).
         pub const PlKbReCpFc: &'static str = "PlKbReCpFc.dat";
-        /// Red costume.
+        /// Red costume, Copy Power (Mewtwo).
         pub const PlKbReCpMt: &'static str = "PlKbReCpMt.dat";
-        /// Red costume.
+        /// Red costume, Copy Power (Jigglypuff).
         pub const PlKbReCpPr: &'static str = "PlKbReCpPr.dat";
         /// White costume.
         pub const PlKbWh: &'static str = "PlKbWh.dat";
-        /// White costume.
+        /// White costume, Copy Power (Donkey Kong).
         pub const PlKbWhCpDk: &'static str = "PlKbWhCpDk.dat";
-        /// White costume.
+        /// White costume, Copy Power (Falco).
         pub const PlKbWhCpFc: &'static str = "PlKbWhCpFc.dat";
-        /// White costume.
+        /// White costume, Copy Power (Mewtwo).
         pub const PlKbWhCpMt: &'static str = "PlKbWhCpMt.dat";
-        /// White costume.
+        /// White costume, Copy Power (Jigglypuff).
         pub const PlKbWhCpPr: &'static str = "PlKbWhCpPr.dat";
         /// Yellow costume.
         pub const PlKbYe: &'static str = "PlKbYe.dat";
-        /// Yellow costume.
+        /// Yellow costume, Copy Power (Donkey Kong).
         pub const PlKbYeCpDk: &'static str = "PlKbYeCpDk.dat";
-        /// Yellow costume.
+        /// Yellow costume, Copy Power (Falco).
         pub const PlKbYeCpFc: &'static str = "PlKbYeCpFc.dat";
-        /// Yellow costume.
+        /// Yellow costume, Copy Power (Mewtwo).
         pub const PlKbYeCpMt: &'static str = "PlKbYeCpMt.dat";
-        /// Yellow costume.
+        /// Yellow costume, Copy Power (Jigglypuff).
         pub const PlKbYeCpPr: &'static str = "PlKbYeCpPr.dat";
     }
 

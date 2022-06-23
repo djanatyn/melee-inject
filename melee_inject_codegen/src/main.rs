@@ -242,16 +242,39 @@ fn main() {
             let name = file.filename.strip_suffix(".dat").expect("failed to strip");
             let filename = &file.filename;
 
-            if let Some(color) = &file.color {
-                let doc = format!("    /// {color} costume. ");
-                scope.raw(&doc);
-            } else {
-                let doc = format!("    /// Shared textures. ");
-                scope.raw(&doc);
+            // special handling for kirby
+            if character == "Kirby" {
+                // check for character
+                if let Some(copied_char) = &file.kirby_copy {
+                    // check for color
+                    if let Some(color) = &file.color {
+                        scope.raw(
+                            format!("    /// {color} costume, Copy Power ({copied_char}). ")
+                                .as_str(),
+                        );
+                    } else {
+                        scope.raw(format!("    /// Copy Power ({copied_char}).").as_str());
+                    }
+                } else {
+                    // check for color
+                    if let Some(color) = &file.color {
+                        scope.raw(format!("    /// {color} costume. ").as_str());
+                    } else {
+                        scope.raw(format!("    /// Shared textures. ").as_str());
+                    }
+                }
+
+                scope.raw(format!("    pub const {name}: &'static str = \"{filename}\";").as_str());
+                continue;
             }
 
-            let def = format!("    pub const {name}: &'static str = \"{filename}\"");
-            scope.raw(&def);
+            if let Some(color) = &file.color {
+                scope.raw(format!("    /// {color} costume. ").as_str());
+            } else {
+                scope.raw(format!("    /// Shared textures. ").as_str());
+            }
+
+            scope.raw(format!("    pub const {name}: &'static str = \"{filename}\";").as_str());
         }
 
         // end impl block
